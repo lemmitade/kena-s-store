@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { Header } from '@/components/storefront/Header';
 import { Footer } from '@/components/storefront/Footer';
 import { ProductCard } from '@/components/storefront/ProductCard';
+import { HeroCarousel } from '@/components/storefront/HeroCarousel';
 import {
   getStoreSettings,
   getSections,
@@ -38,50 +39,12 @@ export default async function HomePage() {
 
       <main className="flex-1">
         {/* =====================================================================
-            1. EDITORIAL HERO SECTION
+            1. EDITORIAL HERO SECTION CAROUSEL (IMAGES & VIDEO SUPPORT)
             ===================================================================== */}
-        <section className="relative h-[85vh] min-h-[580px] w-full bg-stone-900 overflow-hidden flex items-end">
-          <Image
-            src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=2000&q=85"
-            alt="Editorial Ethiopian Fashion"
-            fill
-            priority
-            className="object-cover object-top opacity-85 scale-105 transition-transform duration-1000 ease-out"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
-
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24 w-full">
-            <div className="max-w-2xl space-y-6">
-              <span className="inline-block text-xs uppercase tracking-[0.3em] font-mono text-stone-300">
-                Autumn / Winter 2026 Collection
-              </span>
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-light text-[#FAF9F6] leading-[1.08] tracking-tight">
-                Quiet Tailoring. <br />
-                Artisanal Roots.
-              </h1>
-              <p className="text-stone-300 text-sm sm:text-base leading-relaxed max-w-lg font-light">
-                Understated luxury tailored in Addis Ababa. Pure linen drapes, Highland calfskin, and ancient Shemma weaving reinterpreted for the modern wardrobe.
-              </p>
-              <div className="pt-2 flex flex-wrap gap-4">
-                <Link
-                  href="/shop"
-                  className="bg-[#FAF9F6] text-[#121212] px-8 py-4 text-xs tracking-widest uppercase font-semibold hover:bg-stone-200 transition-colors inline-flex items-center gap-2 group"
-                >
-                  <span>Explore Catalog</span>
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-                {activeCompetition && (
-                  <Link
-                    href={`/bids/${activeCompetition.slug}`}
-                    className="border border-white/60 text-white backdrop-blur-sm px-6 py-4 text-xs tracking-widest uppercase font-semibold hover:bg-white/10 transition-colors inline-flex items-center gap-2"
-                  >
-                    <span>Competition: {activeCompetition.prize_name}</span>
-                  </Link>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
+        <HeroCarousel
+          slides={settings.hero_slides || []}
+          activeCompetition={activeCompetition}
+        />
 
         {/* =====================================================================
             2. DYNAMIC STORE SECTIONS (GRID)

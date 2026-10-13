@@ -48,8 +48,101 @@ const INITIAL_STORE_SETTINGS: StoreSettings = {
   chapa_enabled: false,
   telegram_notifications_enabled: false,
   competitions_enabled: true,
-  paid_competitions_unlocked: false,
+  paid_competitions_unlocked: true,
   tax_percentage: 0,
+  admin_credentials: {
+    email: 'admin@kenastore.et',
+    password: 'admin123',
+  },
+  hero_slides: [
+    {
+      id: 'slide-1',
+      tag: 'Autumn / Winter 2026 Collection',
+      title: 'Quiet Tailoring.\nArtisanal Roots.',
+      description:
+        'Understated luxury tailored in Addis Ababa. Pure linen drapes, Highland calfskin, and ancient Shemma weaving reinterpreted for the modern wardrobe.',
+      media_type: 'image',
+      media_url:
+        'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=2000&q=85',
+      cta_primary_label: 'Explore Catalog',
+      cta_primary_link: '/shop',
+      cta_secondary_label: 'View Competitions',
+      cta_secondary_link: '/bids',
+      is_active: true,
+      display_order: 1,
+    },
+    {
+      id: 'slide-2',
+      tag: 'Cinematic Fashion Showcase',
+      title: 'Modern Craftsmanship in Motion.',
+      description:
+        'Experience the drape and texture of handwoven Ethiopian textiles and bespoke leather essentials in high motion.',
+      media_type: 'video',
+      media_url:
+        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      cta_primary_label: 'Shop New Arrivals',
+      cta_primary_link: '/shop',
+      cta_secondary_label: 'Artisanal Story',
+      cta_secondary_link: '/about',
+      is_active: true,
+      display_order: 2,
+    },
+    {
+      id: 'slide-3',
+      tag: 'Handspun Luxury',
+      title: 'Tibeb & Heritage Fusion.',
+      description:
+        'Celebrating centuries of handspun Ethiopian cotton tradition elevated into relaxed luxury silhouettes.',
+      media_type: 'image',
+      media_url:
+        'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1600&q=85',
+      cta_primary_label: 'Discover Heritage',
+      cta_primary_link: '/shop/heritage-fusion',
+      cta_secondary_label: 'Track Order',
+      cta_secondary_link: '/track-order',
+      is_active: true,
+      display_order: 3,
+    },
+  ],
+  popup_ad: {
+    is_enabled: true,
+    headline: 'Welcome to Kena Store',
+    description:
+      'Order & Relax. Enjoy 10% off your first curated Ethiopian sartorial order with complimentary Addis Ababa doorstep delivery.',
+    badge_text: 'Limited First Order Privilege',
+    promo_code: 'RELAX10',
+    image_url:
+      'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80',
+    button_label: 'Explore Catalog Now',
+    button_link: '/shop',
+    trigger_delay_seconds: 3,
+    trigger_scroll_percent: 25,
+  },
+  seo_settings: {
+    meta_title: 'Kena Store | Curated Ethiopian Fashion & Modern Essentials',
+    meta_description:
+      'Luxury artisanal Ethiopian fashion, handcrafted highland leather bags, linen garments, and Shemma heritage essentials. Order & relax.',
+    keywords:
+      'Kena Store, Ethiopian fashion, Habesha clothing, Shemma dress, Addis Ababa shopping, Highland leather, Tibeb, artisan menswear',
+    og_image_url: '/logo.png',
+    canonical_url: 'https://kenastore.et',
+    twitter_handle: '@kenastore',
+    allow_indexing: true,
+    google_site_verification: '',
+  },
+  bidding_preferences: {
+    competitions_enabled: true,
+    require_payment_to_bid: true,
+    default_entry_fee_etb: 100,
+    payment_instructions:
+      'A participation entry fee of 100 ETB is required per bid. Securely payable via Chapa, Telebirr, or CBE Birr.',
+    accepted_payment_methods: ['chapa', 'telebirr', 'cbe_birr'],
+    min_bid_limit_etb: 10,
+    max_bid_limit_etb: 5000,
+    winner_pays_bid_amount: true,
+    rules_overview:
+      'The winning bid is the lowest amount that is submitted by only ONE participant. All bids are verified deterministically.',
+  },
 };
 
 const INITIAL_SECTIONS: StoreSection[] = [
@@ -1403,6 +1496,8 @@ export async function submitCompetitionBid(input: {
   participant_name: string;
   participant_phone: string;
   bid_amount_etb: number;
+  payment_method?: string;
+  payment_reference?: string;
 }): Promise<{ success: boolean; error?: string }> {
   const comp = db.competitions.find((c) => c.id === input.competition_id);
   if (!comp) return { success: false, error: 'Competition not found.' };
@@ -1414,6 +1509,25 @@ export async function submitCompetitionBid(input: {
   const now = new Date().getTime();
   if (now > new Date(comp.ends_at).getTime()) {
     return { success: false, error: 'This competition has ended.' };
+  }
+
+  const settings = db.storeSettings;
+  const isPaidRequired = settings.bidding_preferences?.require_payment_to_bid || comp.entry_fee_etb > 0;
+  const requiredFee = comp.entry_fee_etb > 0 ? comp.entry_fee_etb : (settings.bidding_preferences?.default_entry_fee_etb || 100);
+
+  if (isPaidRequired) {
+    if (!input.payment_method) {
+      return {
+        success: false,
+        error: `An entry fee of ${requiredFee} ETB is required to place a bid. Please select your payment method.`,
+      };
+    }
+    if (!input.payment_reference || input.payment_reference.trim().length < 4) {
+      return {
+        success: false,
+        error: 'Please enter a valid payment transaction reference / receipt code.',
+      };
+    }
   }
 
   if (input.bid_amount_etb < comp.min_bid_etb || input.bid_amount_etb > comp.max_bid_etb) {
@@ -1440,9 +1554,9 @@ export async function submitCompetitionBid(input: {
       participant_name: input.participant_name,
       participant_phone: phoneVal.localFormat,
       participant_phone_normalized: phoneVal.normalized,
-      entry_fee_etb: comp.entry_fee_etb,
-      payment_status: comp.entry_fee_etb === 0 ? 'paid' : 'pending',
-      is_eligible: comp.entry_fee_etb === 0,
+      entry_fee_etb: isPaidRequired ? requiredFee : 0,
+      payment_status: 'paid',
+      is_eligible: true,
       entered_at: new Date().toISOString(),
     };
     db.competitionEntries.push(entry);

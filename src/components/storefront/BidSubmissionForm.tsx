@@ -1,8 +1,8 @@
 'use client';
 
 // ============================================================================
-// INTERACTIVE BID SUBMISSION FORM
-// Validates phone number, enforces minimum and maximum bounds in ETB
+// INTERACTIVE BID SUBMISSION FORM WITH MANDATORY ENTRY PAYMENT
+// Validates phone number, enforces minimum and maximum bounds, requires fee
 // ============================================================================
 
 import React, { useState } from 'react';
@@ -10,16 +10,22 @@ import { Competition } from '@/types';
 import { formatETB } from '@/lib/utils/format';
 import { normalizeEthiopianPhone } from '@/lib/utils/phone';
 import { submitBidAction } from '@/app/actions/bids';
-import { Check, AlertCircle, Lock } from 'lucide-react';
+import { Check, AlertCircle, Lock, CreditCard, ShieldCheck, Smartphone, Landmark } from 'lucide-react';
 
 interface BidSubmissionFormProps {
   competition: Competition;
+  entryFee?: number;
 }
 
-export function BidSubmissionForm({ competition }: BidSubmissionFormProps) {
+export function BidSubmissionForm({ competition, entryFee = 100 }: BidSubmissionFormProps) {
+  const effectiveFee = competition.entry_fee_etb > 0 ? competition.entry_fee_etb : entryFee;
+  const requirePayment = effectiveFee > 0;
+
   const [participantName, setParticipantName] = useState('');
   const [participantPhone, setParticipantPhone] = useState('');
   const [bidAmount, setBidAmount] = useState<number>(competition.min_bid_etb);
+  const [paymentMethod, setPaymentMethod] = useState<'chapa' | 'telebirr' | 'cbe_birr'>('telebirr');
+  const [paymentReference, setPaymentReference] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
 
   const [loading, setLoading] = useState(false);
@@ -49,6 +55,13 @@ export function BidSubmissionForm({ competition }: BidSubmissionFormProps) {
       return;
     }
 
+    if (requirePayment && (!paymentReference.trim() || paymentReference.trim().length < 4)) {
+      setErrorMessage(
+        `Please provide your ${paymentMethod.toUpperCase()} transaction reference / payment receipt ID for the ${effectiveFee} ETB entry fee.`
+      );
+      return;
+    }
+
     if (!agreeTerms) {
       setErrorMessage('Please confirm your acknowledgement of the unique-lowest-bid rules.');
       return;
@@ -62,6 +75,8 @@ export function BidSubmissionForm({ competition }: BidSubmissionFormProps) {
         participant_name: participantName.trim(),
         participant_phone: participantPhone.trim(),
         bid_amount_etb: Math.round(bidAmount),
+        payment_method: paymentMethod,
+        payment_reference: paymentReference.trim(),
       });
 
       setLoading(false);
@@ -71,6 +86,7 @@ export function BidSubmissionForm({ competition }: BidSubmissionFormProps) {
       } else {
         setSuccessMessage(res.message || 'Bid submitted successfully!');
         setBidAmount(competition.min_bid_etb);
+        setPaymentReference('');
       }
     } catch (err) {
       setLoading(false);
@@ -81,8 +97,13 @@ export function BidSubmissionForm({ competition }: BidSubmissionFormProps) {
   return (
     <div className="bg-white border border-[#E7E5E4] p-6 sm:p-8 space-y-6">
       <div className="border-b border-stone-200 pb-4">
-        <h3 className="text-base font-serif font-semibold text-stone-900">
-          Submit Private Bid
+        <h3 className="text-base font-serif font-semibold text-stone-900 flex items-center justify-between">
+          <span>Submit Private Bid</span>
+          {requirePayment && (
+            <span className="text-xs font-mono bg-rose-50 text-rose-800 border border-rose-200 px-2.5 py-1 rounded">
+              Entry Fee: {formatETB(effectiveFee)}
+            </span>
+          )}
         </h3>
         <p className="text-xs font-mono text-stone-500 mt-1">
           Your bid amount is encrypted and calculated deterministically upon competition closure.
@@ -103,83 +124,180 @@ export function BidSubmissionForm({ competition }: BidSubmissionFormProps) {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <div className="space-y-1.5">
-          <label className="text-[11px] font-mono uppercase tracking-wider text-stone-500">
-            Participant Full Name *
-          </label>
-          <input
-            type="text"
-            required
-            value={participantName}
-            onChange={(e) => setParticipantName(e.target.value)}
-            placeholder="Abebe Kebede"
-            className="w-full bg-[#FAF9F6] border border-stone-300 px-4 py-3 text-sm focus:outline-none focus:border-stone-900"
-          />
-        </div>
-
-        <div className="space-y-1.5">
-          <label className="text-[11px] font-mono uppercase tracking-wider text-stone-500">
-            Ethiopian Phone Number *
-          </label>
-          <input
-            type="tel"
-            required
-            value={participantPhone}
-            onChange={(e) => setParticipantPhone(e.target.value)}
-            placeholder="09... or 07..."
-            className="w-full bg-[#FAF9F6] border border-stone-300 px-4 py-3 text-sm font-mono focus:outline-none focus:border-stone-900"
-          />
-          <span className="text-[10px] font-mono text-stone-400">
-            Used to contact the verified winner upon audited calculation.
+      <form onSubmit={handleSubmit} className="space-y-6 font-mono text-xs">
+        {/* Step 1: Participant Info */}
+        <div className="space-y-4">
+          <span className="text-[10px] uppercase font-bold text-stone-400 tracking-wider block">
+            1. Participant Identification
           </span>
-        </div>
 
-        <div className="space-y-1.5">
-          <label className="text-[11px] font-mono uppercase tracking-wider text-stone-500 flex justify-between">
-            <span>Your Bid Amount in ETB *</span>
-            <span className="text-stone-900 font-semibold font-mono">{formatETB(bidAmount)}</span>
-          </label>
-          <input
-            type="number"
-            required
-            min={competition.min_bid_etb}
-            max={competition.max_bid_etb}
-            step={competition.bid_increment_etb || 1}
-            value={bidAmount}
-            onChange={(e) => setBidAmount(parseFloat(e.target.value) || competition.min_bid_etb)}
-            className="w-full bg-[#FAF9F6] border border-stone-300 px-4 py-3 text-base font-mono focus:outline-none focus:border-stone-900 font-bold"
-          />
-          <div className="flex justify-between text-[10px] font-mono text-stone-400 pt-0.5">
-            <span>Min: {competition.min_bid_etb} ETB</span>
-            <span>Max: {competition.max_bid_etb} ETB</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="uppercase text-stone-500 block">Full Name *</label>
+              <input
+                type="text"
+                required
+                value={participantName}
+                onChange={(e) => setParticipantName(e.target.value)}
+                placeholder="Abebe Kebede"
+                className="w-full bg-[#FAF9F6] border border-stone-300 p-3 text-sm focus:outline-none focus:border-stone-900 font-sans"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="uppercase text-stone-500 block">Mobile Phone (SMS Winner Alerts) *</label>
+              <input
+                type="tel"
+                required
+                value={participantPhone}
+                onChange={(e) => setParticipantPhone(e.target.value)}
+                placeholder="0911 22 33 44"
+                className="w-full bg-[#FAF9F6] border border-stone-300 p-3 text-sm focus:outline-none focus:border-stone-900 font-mono"
+              />
+            </div>
           </div>
         </div>
 
-        <label className="flex items-start gap-3 cursor-pointer text-xs text-stone-600 pt-2">
-          <input
-            type="checkbox"
-            checked={agreeTerms}
-            onChange={(e) => setAgreeTerms(e.target.checked)}
-            className="mt-0.5 rounded border-stone-300 text-stone-900 focus:ring-0"
-          />
-          <span>
-            I understand that the winning bid must be the lowest unique amount. If another participant bids the same amount, neither of us wins.
+        {/* Step 2: Bid Amount */}
+        <div className="space-y-3 pt-2 border-t border-stone-100">
+          <span className="text-[10px] uppercase font-bold text-stone-400 tracking-wider block">
+            2. Secret Bid Value (ETB)
           </span>
-        </label>
+
+          <div className="space-y-1.5">
+            <label className="uppercase text-stone-500 block">
+              Your Secret Lowest Bid (Between {formatETB(competition.min_bid_etb)} and {formatETB(competition.max_bid_etb)}) *
+            </label>
+            <div className="relative">
+              <input
+                type="number"
+                required
+                min={competition.min_bid_etb}
+                max={competition.max_bid_etb}
+                value={bidAmount}
+                onChange={(e) => setBidAmount(parseFloat(e.target.value) || 0)}
+                className="w-full bg-[#FAF9F6] border border-stone-300 p-3 text-lg font-bold text-stone-900 focus:outline-none focus:border-stone-900"
+              />
+              <span className="absolute right-4 top-3 text-stone-400 font-bold">ETB</span>
+            </div>
+            <span className="text-[10px] text-stone-400">
+              Only unique bid amounts will be eligible. If two people pick the same amount, both are disqualified.
+            </span>
+          </div>
+        </div>
+
+        {/* Step 3: Mandatory Payment Step */}
+        {requirePayment && (
+          <div className="space-y-4 pt-2 border-t border-stone-100">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] uppercase font-bold text-stone-400 tracking-wider block">
+                3. Mandatory Entry Fee Payment ({formatETB(effectiveFee)})
+              </span>
+              <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold">
+                Fee Required
+              </span>
+            </div>
+
+            {/* Payment method tabs */}
+            <div className="grid grid-cols-3 gap-2">
+              <button
+                type="button"
+                onClick={() => setPaymentMethod('telebirr')}
+                className={`p-3 border text-center transition-all ${
+                  paymentMethod === 'telebirr'
+                    ? 'border-stone-900 bg-stone-900 text-white font-bold'
+                    : 'border-stone-300 bg-[#FAF9F6] text-stone-700 hover:border-stone-500'
+                }`}
+              >
+                <Smartphone className="w-4 h-4 mx-auto mb-1" />
+                <span className="text-[11px] block">Telebirr</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setPaymentMethod('cbe_birr')}
+                className={`p-3 border text-center transition-all ${
+                  paymentMethod === 'cbe_birr'
+                    ? 'border-stone-900 bg-stone-900 text-white font-bold'
+                    : 'border-stone-300 bg-[#FAF9F6] text-stone-700 hover:border-stone-500'
+                }`}
+              >
+                <Landmark className="w-4 h-4 mx-auto mb-1" />
+                <span className="text-[11px] block">CBE Birr</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setPaymentMethod('chapa')}
+                className={`p-3 border text-center transition-all ${
+                  paymentMethod === 'chapa'
+                    ? 'border-stone-900 bg-stone-900 text-white font-bold'
+                    : 'border-stone-300 bg-[#FAF9F6] text-stone-700 hover:border-stone-500'
+                }`}
+              >
+                <CreditCard className="w-4 h-4 mx-auto mb-1" />
+                <span className="text-[11px] block">Chapa Card</span>
+              </button>
+            </div>
+
+            {/* Payment instructions box */}
+            <div className="bg-stone-50 border border-stone-200 p-3.5 space-y-1.5 text-[11px] text-stone-600">
+              <div className="flex items-center gap-1.5 font-bold text-stone-900">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                <span>
+                  Payment Account: {paymentMethod === 'telebirr' ? 'Telebirr 0911234567 (Kena Store)' : paymentMethod === 'cbe_birr' ? 'CBE 1000123456789 (Kena Store)' : 'Chapa Instant Card Gateway'}
+                </span>
+              </div>
+              <p>
+                Transfer exactly <strong>{formatETB(effectiveFee)}</strong> and enter your transaction SMS receipt number below to validate eligibility.
+              </p>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="uppercase text-stone-500 block">
+                Transaction Reference ID / Receipt Code *
+              </label>
+              <input
+                type="text"
+                required
+                value={paymentReference}
+                onChange={(e) => setPaymentReference(e.target.value.toUpperCase())}
+                placeholder="e.g. TXN-94827104 or Telebirr Receipt Code"
+                className="w-full bg-[#FAF9F6] border border-stone-300 p-3 text-xs uppercase font-mono font-bold tracking-wider focus:outline-none focus:border-stone-900"
+              />
+            </div>
+          </div>
+        )}
+
+        <div className="pt-2">
+          <label className="flex items-start gap-2.5 cursor-pointer">
+            <input
+              type="checkbox"
+              required
+              checked={agreeTerms}
+              onChange={(e) => setAgreeTerms(e.target.checked)}
+              className="mt-0.5 rounded border-stone-300"
+            />
+            <span className="text-[11px] text-stone-600 leading-relaxed">
+              I acknowledge that this bid is binding under the Unique-Lowest-Bid terms. If I am the verified unique winner, I agree to claim the item within 48 hours.
+            </span>
+          </label>
+        </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#121212] text-white py-4 text-xs font-mono uppercase tracking-widest font-semibold hover:bg-stone-800 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full bg-[#121212] text-white py-4 px-6 text-xs uppercase tracking-widest font-semibold hover:bg-stone-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
         >
-          <Lock className="w-3.5 h-3.5" />
-          <span>{loading ? 'Submitting Bid...' : `Record Bid (${formatETB(bidAmount)})`}</span>
+          <Lock className="w-4 h-4" />
+          <span>
+            {loading
+              ? 'Verifying & Submitting...'
+              : requirePayment
+              ? `Pay ${formatETB(effectiveFee)} & Submit Bid`
+              : 'Submit Official Bid'}
+          </span>
         </button>
-
-        <div className="text-[11px] font-mono text-center text-stone-400">
-          <span>Authoritative server timestamp enforced • Idempotent audit trail</span>
-        </div>
       </form>
     </div>
   );

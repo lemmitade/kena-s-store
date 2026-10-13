@@ -6,7 +6,10 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { headers } from 'next/headers';
 import { getStoreSettings } from '@/lib/db/repository';
+import { getAdminSession } from '@/lib/auth/admin';
+import { logoutAdminAction } from '@/app/actions/auth';
 import {
   LayoutDashboard,
   Shirt,
@@ -25,6 +28,11 @@ import {
   History,
   ExternalLink,
   BarChart3,
+  LogOut,
+  Sparkles,
+  Megaphone,
+  Search,
+  Lock,
 } from 'lucide-react';
 
 export default async function AdminLayout({
@@ -32,7 +40,16 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const headerList = await headers();
+  const isLoginPage = headerList.get('x-is-admin-login') === 'true';
+
+  // If on /admin/login, render without sidebar shell
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
+
   const settings = await getStoreSettings();
+  const session = await getAdminSession();
 
   const navGroups = [
     {
@@ -43,9 +60,15 @@ export default async function AdminLayout({
       ],
     },
     {
+      title: 'Hero & Content Editor',
+      items: [
+        { label: 'Hero Slides & Video', href: '/admin/content/hero', icon: Sparkles },
+      ],
+    },
+    {
       title: 'Catalog & Inventory',
       items: [
-        { label: 'Products', href: '/admin/products', icon: Shirt },
+        { label: 'Products & Variants', href: '/admin/products', icon: Shirt },
         { label: 'Inventory Matrix', href: '/admin/inventory', icon: Boxes },
         { label: 'Store Sections', href: '/admin/catalog/sections', icon: Layers },
         { label: 'Categories', href: '/admin/catalog/categories', icon: FolderTree },
@@ -61,17 +84,21 @@ export default async function AdminLayout({
     {
       title: 'Marketing & Bids',
       items: [
+        { label: 'Pop Ads (Scroll/Enter)', href: '/admin/marketing/pop-ads', icon: Megaphone },
         { label: 'Coupons & Vouchers', href: '/admin/marketing/coupons', icon: Tag },
         { label: 'Unique-Lowest-Bid', href: '/admin/bids', icon: Trophy },
+        { label: 'Bidding Preferences', href: '/admin/bids/settings', icon: Sliders },
       ],
     },
     {
       title: 'Settings & Security',
       items: [
+        { label: 'SEO Management', href: '/admin/seo', icon: Search },
         { label: 'Store & Branding', href: '/admin/settings/store', icon: Sliders },
         { label: 'Payment Gateway', href: '/admin/settings/payments', icon: CreditCard },
         { label: 'Delivery Zones', href: '/admin/settings/delivery', icon: Truck },
         { label: 'Pickup Locations', href: '/admin/settings/pickup-locations', icon: MapPin },
+        { label: 'Admin Login & Security', href: '/admin/settings/security', icon: Lock },
         { label: 'Staff Roles & RBAC', href: '/admin/staff', icon: ShieldAlert },
         { label: 'Audit Logs', href: '/admin/audit-logs', icon: History },
       ],
@@ -109,7 +136,7 @@ export default async function AdminLayout({
           </div>
 
           {/* Navigation Links */}
-          <nav className="p-4 space-y-6 overflow-y-auto max-h-[calc(100vh-140px)]">
+          <nav className="p-4 space-y-6 overflow-y-auto max-h-[calc(100vh-180px)]">
             {navGroups.map((group) => (
               <div key={group.title} className="space-y-1">
                 <span className="text-[10px] font-mono uppercase tracking-widest text-stone-500 px-3 block mb-1">
@@ -133,20 +160,40 @@ export default async function AdminLayout({
           </nav>
         </div>
 
-        {/* Bottom user badge & live store link */}
-        <div className="p-4 border-t border-stone-800 bg-black/40 text-xs font-mono">
-          <div className="flex items-center justify-between text-stone-400 mb-2">
-            <span>Role: Super Admin</span>
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+        {/* Bottom User Badge & Logout */}
+        <div className="p-4 border-t border-stone-800 bg-black/40 text-xs font-mono space-y-3">
+          <div className="flex items-center justify-between text-stone-400">
+            <div className="truncate max-w-[170px]">
+              <span className="block text-[10px] text-stone-500 uppercase">Logged In:</span>
+              <span className="text-stone-300 truncate block text-[11px]">
+                {session.email || 'admin@kenastore.et'}
+              </span>
+            </div>
+            <span className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0" title="Active" />
           </div>
-          <Link
-            href="/"
-            target="_blank"
-            className="flex items-center justify-between text-white hover:underline text-[11px] pt-1"
-          >
-            <span>View Live Storefront</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </Link>
+
+          <div className="flex items-center justify-between pt-1 border-t border-stone-800/60">
+            <Link
+              href="/"
+              target="_blank"
+              className="flex items-center gap-1.5 text-stone-400 hover:text-white text-[11px] transition-colors"
+              title="Open Live Storefront"
+            >
+              <span>Storefront</span>
+              <ExternalLink className="w-3 h-3" />
+            </Link>
+
+            <form action={logoutAdminAction}>
+              <button
+                type="submit"
+                className="flex items-center gap-1.5 text-rose-400 hover:text-rose-300 text-[11px] transition-colors py-1 px-1.5"
+                title="Sign out of Admin Dashboard"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Logout</span>
+              </button>
+            </form>
+          </div>
         </div>
       </aside>
 
@@ -159,12 +206,12 @@ export default async function AdminLayout({
             </span>
             <span className="text-stone-300">•</span>
             <span className="text-xs font-mono font-semibold text-stone-900">
-              Addis Ababa Operations
+              Kena Store Staff Management
             </span>
           </div>
 
           <div className="flex items-center gap-4 text-xs font-mono text-stone-500">
-            <span>Server Clock: {new Date().toLocaleTimeString('en-ET')}</span>
+            <span className="hidden sm:inline">Addis Ababa Operations</span>
           </div>
         </header>
 

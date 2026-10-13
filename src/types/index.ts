@@ -40,6 +40,62 @@ export type CompetitionStatus =
   | 'published'
   | 'cancelled';
 
+export interface HeroSlide {
+  id: string;
+  tag: string;
+  title: string;
+  description: string;
+  media_type: 'image' | 'video';
+  media_url: string;
+  cta_primary_label: string;
+  cta_primary_link: string;
+  cta_secondary_label?: string;
+  cta_secondary_link?: string;
+  is_active: boolean;
+  display_order: number;
+}
+
+export interface PopupAdSettings {
+  is_enabled: boolean;
+  headline: string;
+  description: string;
+  badge_text?: string;
+  promo_code?: string;
+  image_url?: string;
+  button_label: string;
+  button_link: string;
+  trigger_delay_seconds: number;
+  trigger_scroll_percent: number;
+}
+
+export interface SeoSettings {
+  meta_title: string;
+  meta_description: string;
+  keywords: string;
+  og_image_url: string;
+  canonical_url: string;
+  twitter_handle?: string;
+  allow_indexing: boolean;
+  google_site_verification?: string;
+}
+
+export interface BiddingPreferences {
+  competitions_enabled: boolean;
+  require_payment_to_bid: boolean;
+  default_entry_fee_etb: number;
+  payment_instructions?: string;
+  accepted_payment_methods: string[];
+  min_bid_limit_etb: number;
+  max_bid_limit_etb: number;
+  winner_pays_bid_amount: boolean;
+  rules_overview: string;
+}
+
+export interface AdminCredentials {
+  email: string;
+  password: string;
+}
+
 export interface StoreSettings {
   id: string;
   store_name: string;
@@ -71,6 +127,11 @@ export interface StoreSettings {
   competitions_enabled: boolean;
   paid_competitions_unlocked: boolean;
   tax_percentage: number;
+  hero_slides?: HeroSlide[];
+  popup_ad?: PopupAdSettings;
+  seo_settings?: SeoSettings;
+  bidding_preferences?: BiddingPreferences;
+  admin_credentials?: AdminCredentials;
 }
 
 export interface StoreSection {

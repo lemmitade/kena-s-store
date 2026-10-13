@@ -122,8 +122,12 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
               </div>
               <div className="flex items-center justify-between pb-3 border-b border-stone-200">
                 <span className="text-stone-500">Entry Participation Fee</span>
-                <span className="text-stone-900 font-semibold">
-                  {competition.entry_fee_etb === 0 ? 'FREE ENTRY' : formatETB(competition.entry_fee_etb)}
+                <span className="text-stone-900 font-semibold text-rose-700">
+                  {formatETB(
+                    competition.entry_fee_etb > 0
+                      ? competition.entry_fee_etb
+                      : settings.bidding_preferences?.default_entry_fee_etb || 100
+                  )}
                 </span>
               </div>
               <div className="flex items-center justify-between">
@@ -148,7 +152,10 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                 </Link>
               </div>
             ) : (
-              <BidSubmissionForm competition={competition} />
+              <BidSubmissionForm
+                competition={competition}
+                entryFee={settings.bidding_preferences?.default_entry_fee_etb || 100}
+              />
             )}
           </div>
         </div>
