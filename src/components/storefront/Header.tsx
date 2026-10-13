@@ -7,6 +7,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useCart } from '@/lib/cart/cart-context';
 import { StoreSection, StoreSettings } from '@/types';
 import { ShoppingBag, Search, Menu, X, ArrowRight } from 'lucide-react';
@@ -44,9 +45,22 @@ export function Header({ sections, settings }: HeaderProps) {
           {/* Logo / Brand Name */}
           <div className="flex items-center">
             <Link href="/" className="group flex items-center gap-2">
-              <span className="font-serif tracking-widest text-xl sm:text-2xl font-bold uppercase text-[#121212] group-hover:opacity-80 transition-opacity">
-                {settings.store_name}
-              </span>
+              {settings.logo_url ? (
+                <div className="relative h-12 w-36 sm:h-14 sm:w-44 flex items-center">
+                  <Image
+                    src={settings.logo_url}
+                    alt={settings.store_name}
+                    width={180}
+                    height={55}
+                    priority
+                    className="object-contain h-full w-auto"
+                  />
+                </div>
+              ) : (
+                <span className="font-serif tracking-widest text-xl sm:text-2xl font-bold uppercase text-[#121212] group-hover:opacity-80 transition-opacity">
+                  {settings.store_name}
+                </span>
+              )}
             </Link>
           </div>
 

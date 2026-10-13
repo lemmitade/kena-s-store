@@ -29,18 +29,18 @@ import { normalizeEthiopianPhone } from '@/lib/utils/phone';
 // ----------------------------------------------------------------------------
 const INITIAL_STORE_SETTINGS: StoreSettings = {
   id: 'default',
-  store_name: 'YOUR BRAND',
-  tagline: 'Curated Ethiopian Fashion & Modern Essentials',
-  logo_url: '',
+  store_name: 'Kena Store',
+  tagline: 'Order & Relax',
+  logo_url: '/logo.png',
   primary_color: '#121212',
-  accent_color: '#78716C',
+  accent_color: '#E51E25',
   background_color: '#FAF9F6',
   contact_phone: '+251 91 123 4567',
-  contact_email: 'hello@yourbrand.et',
+  contact_email: 'hello@kenastore.et',
   contact_address: 'Bole Sub-City, Cameroon St, Addis Ababa, Ethiopia',
   social_links: {
-    telegram: 'https://t.me/yourbrand',
-    instagram: 'https://instagram.com/yourbrand',
+    telegram: 'https://t.me/kenastore',
+    instagram: 'https://instagram.com/kenastore',
   },
   currency_code: 'ETB',
   currency_symbol: 'ETB',
@@ -955,6 +955,16 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   };
 }
 
+export async function getProductById(id: string): Promise<Product | null> {
+  const p = db.products.find((prod) => prod.id === id);
+  if (!p) return null;
+  return {
+    ...p,
+    section: db.sections.find((s) => s.id === p.primary_section_id),
+    category: db.categories.find((c) => c.id === p.primary_category_id),
+  };
+}
+
 export async function createProduct(data: Omit<Product, 'id' | 'created_at' | 'updated_at'>): Promise<Product> {
   const newProduct: Product = {
     ...data,
@@ -971,6 +981,13 @@ export async function updateProduct(id: string, data: Partial<Product>): Promise
   if (index === -1) return null;
   db.products[index] = { ...db.products[index], ...data, updated_at: new Date().toISOString() };
   return db.products[index];
+}
+
+export async function deleteProduct(id: string): Promise<boolean> {
+  const index = db.products.findIndex((p) => p.id === id);
+  if (index === -1) return false;
+  db.products.splice(index, 1);
+  return true;
 }
 
 export async function getPickupLocations(onlyActive = true): Promise<PickupLocation[]> {

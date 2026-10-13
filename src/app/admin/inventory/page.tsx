@@ -7,7 +7,7 @@ import React from 'react';
 import Link from 'next/link';
 import { getProducts } from '@/lib/db/repository';
 import { formatETB } from '@/lib/utils/format';
-import { AlertTriangle, CheckCircle2, ArrowUpDown } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, ArrowUpDown, Edit } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -82,14 +82,22 @@ export default async function AdminInventoryPage({ searchParams }: InventoryPage
                 <th className="pb-3 font-normal">Color</th>
                 <th className="pb-3 font-normal">Current Quantity</th>
                 <th className="pb-3 font-normal">Alert Threshold</th>
-                <th className="pb-3 font-normal text-right">Status</th>
+                <th className="pb-3 font-normal">Status</th>
+                <th className="pb-3 font-normal text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100">
               {displayed.map(({ product, variant, isLow }) => (
                 <tr key={variant.id} className="hover:bg-stone-50/70">
                   <td className="py-3 font-bold text-stone-900">{variant.sku}</td>
-                  <td className="py-3 text-stone-900 font-sans">{product.name}</td>
+                  <td className="py-3 text-stone-900 font-sans">
+                    <Link
+                      href={`/admin/products/${product.id}`}
+                      className="hover:underline font-medium"
+                    >
+                      {product.name}
+                    </Link>
+                  </td>
                   <td className="py-3 text-stone-600">{variant.size || 'STD'}</td>
                   <td className="py-3 text-stone-600">{variant.color || 'STD'}</td>
                   <td className="py-3">
@@ -106,7 +114,7 @@ export default async function AdminInventoryPage({ searchParams }: InventoryPage
                     </span>
                   </td>
                   <td className="py-3 text-stone-400">{product.low_stock_threshold} units</td>
-                  <td className="py-3 text-right">
+                  <td className="py-3">
                     {variant.stock_quantity === 0 ? (
                       <span className="px-2 py-0.5 bg-rose-50 text-rose-700 uppercase font-bold text-[10px]">
                         Sold Out
@@ -121,6 +129,16 @@ export default async function AdminInventoryPage({ searchParams }: InventoryPage
                         Adequate
                       </span>
                     )}
+                  </td>
+                  <td className="py-3 text-right">
+                    <Link
+                      href={`/admin/products/${product.id}`}
+                      className="bg-stone-100 hover:bg-stone-900 hover:text-white text-stone-800 px-2.5 py-1 text-[11px] font-sans font-medium transition-colors inline-flex items-center gap-1"
+                      title="Edit Variant & Stock"
+                    >
+                      <Edit className="w-3 h-3" />
+                      <span>Edit</span>
+                    </Link>
                   </td>
                 </tr>
               ))}

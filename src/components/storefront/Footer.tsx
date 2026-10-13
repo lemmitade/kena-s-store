@@ -6,6 +6,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { StoreSettings } from '@/types';
 import { ArrowRight, Check } from 'lucide-react';
 
@@ -43,9 +44,21 @@ export function Footer({ settings }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-16 pb-16 border-b border-stone-800">
           {/* Brand Column */}
           <div className="md:col-span-4 space-y-6">
-            <h2 className="font-serif tracking-widest text-2xl font-bold uppercase text-[#FAF9F6]">
-              {settings.store_name}
-            </h2>
+            {settings.logo_url ? (
+              <Link href="/" className="inline-block bg-white px-3.5 py-1.5 rounded">
+                <Image
+                  src={settings.logo_url}
+                  alt={settings.store_name}
+                  width={160}
+                  height={50}
+                  className="h-10 w-auto object-contain"
+                />
+              </Link>
+            ) : (
+              <h2 className="font-serif tracking-widest text-2xl font-bold uppercase text-[#FAF9F6]">
+                {settings.store_name}
+              </h2>
+            )}
             <p className="text-stone-400 text-sm leading-relaxed max-w-sm">
               {settings.tagline ||
                 'Modern sartorial silhouettes tailored in Ethiopia. We craft enduring pieces from highland calfskin, natural flax linen, and artisanal Shemma textiles.'}

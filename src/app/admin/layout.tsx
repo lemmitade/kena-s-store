@@ -5,6 +5,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getStoreSettings } from '@/lib/db/repository';
 import {
   LayoutDashboard,
@@ -84,14 +85,27 @@ export default async function AdminLayout({
         <div>
           {/* Admin Header */}
           <div className="p-6 border-b border-stone-800 flex items-center justify-between">
-            <div>
-              <span className="font-serif tracking-widest text-lg font-bold uppercase text-white block">
-                {settings.store_name}
-              </span>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-stone-400">
+            <Link href="/admin/dashboard" className="block hover:opacity-90 transition-opacity">
+              {settings.logo_url ? (
+                <div className="bg-white px-3 py-1.5 rounded inline-block mb-1.5">
+                  <Image
+                    src={settings.logo_url}
+                    alt={settings.store_name}
+                    width={130}
+                    height={40}
+                    priority
+                    className="h-7 w-auto object-contain"
+                  />
+                </div>
+              ) : (
+                <span className="font-serif tracking-widest text-lg font-bold uppercase text-white block">
+                  {settings.store_name}
+                </span>
+              )}
+              <span className="text-[10px] font-mono uppercase tracking-widest text-stone-400 block">
                 Staff Control Center
               </span>
-            </div>
+            </Link>
           </div>
 
           {/* Navigation Links */}
