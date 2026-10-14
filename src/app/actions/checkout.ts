@@ -7,6 +7,7 @@
 
 import { createOrder, CreateOrderInput, getStoreSettings } from '@/lib/db/repository';
 import { sendTelegramMessage, buildNewOrderAlert } from '@/lib/telegram/bot';
+import { revalidatePath } from 'next/cache';
 
 export interface CheckoutResult {
   success: boolean;
@@ -48,6 +49,16 @@ export async function processCheckoutAction(input: CreateOrderInput): Promise<Ch
       }
     } catch (notifErr) {
       console.error('[Checkout Telegram Notification] Unexpected error:', notifErr);
+    }
+
+    // Revalidate paths so Orders & Dispatch table displays the new order immediately
+    try {
+      revalidatePath('/admin/orders');
+      revalidatePath('/admin/dashboard');
+      revalidatePath('/admin');
+      revalidatePath('/order-confirmation/[orderNumber]', 'page');
+    } catch {
+      // ignore in tests
     }
 
     return {

@@ -23,6 +23,8 @@ import {
 } from '@/types';
 import { generateOrderNumber, generatePickupCode, generateTrackingToken } from '@/lib/utils/format';
 import { normalizeEthiopianPhone } from '@/lib/utils/phone';
+import fs from 'fs';
+import path from 'path';
 
 // ----------------------------------------------------------------------------
 // INITIAL SEED STATE (AUTHENTIC ETHIOPIAN FASHION CATALOG & LOGISTICS)
@@ -821,6 +823,7 @@ class MemoryStore {
 
   constructor() {
     this.seedDemoCustomersAndOrders();
+    loadStoreState(this);
   }
 
   private seedDemoCustomersAndOrders() {
@@ -928,10 +931,57 @@ class MemoryStore {
   }
 }
 
-// Global instance to preserve data across server actions / reloads in dev
+function getStoreDataFilePath(): string {
+  try {
+    const dir = path.join(process.cwd(), '.data');
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    return path.join(dir, 'store_state.json');
+  } catch {
+    return path.join('/tmp', 'store_state.json');
+  }
+}
+
+function saveStoreState(store: MemoryStore) {
+  try {
+    const filePath = getStoreDataFilePath();
+    const data = {
+      orders: store.orders,
+      customers: store.customers,
+      storeSettings: store.storeSettings,
+    };
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+  } catch {
+    // ignore on strictly read-only envs
+  }
+}
+
+function loadStoreState(store: MemoryStore) {
+  try {
+    const filePath = getStoreDataFilePath();
+    if (fs.existsSync(filePath)) {
+      const raw = fs.readFileSync(filePath, 'utf-8');
+      const data = JSON.parse(raw);
+      if (Array.isArray(data.orders) && data.orders.length > 0) {
+        store.orders = data.orders;
+      }
+      if (Array.isArray(data.customers) && data.customers.length > 0) {
+        store.customers = data.customers;
+      }
+      if (data.storeSettings) {
+        store.storeSettings = { ...store.storeSettings, ...data.storeSettings };
+      }
+    }
+  } catch {
+    // ignore
+  }
+}
+
+// Global instance to preserve data across server actions / reloads in all environments
 const globalForStore = globalThis as unknown as { appMemoryStore?: MemoryStore };
 export const db = globalForStore.appMemoryStore ?? new MemoryStore();
-if (process.env.NODE_ENV !== 'production') globalForStore.appMemoryStore = db;
+globalForStore.appMemoryStore = db;
 
 // ----------------------------------------------------------------------------
 // REPOSITORY METHODS (ASYNC FOR PARITY WITH SUPABASE)
@@ -943,6 +993,7 @@ export async function getStoreSettings(): Promise<StoreSettings> {
 
 export async function updateStoreSettings(settings: Partial<StoreSettings>): Promise<StoreSettings> {
   db.storeSettings = { ...db.storeSettings, ...settings };
+  saveStoreState(db);
   return { ...db.storeSettings };
 }
 
@@ -1402,6 +1453,7 @@ export async function createOrder(input: CreateOrderInput): Promise<{
   };
 
   db.orders.unshift(order);
+  saveStoreState(db);
 
   // 9. Queue Telegram Notification Job
   db.notificationJobs.push({
@@ -1452,6 +1504,7 @@ export async function updateOrderStatus(
   o.order_status = status;
   if (paymentStatus) o.payment_status = paymentStatus;
   o.updated_at = new Date().toISOString();
+  saveStoreState(db);
   return o;
 }
 
@@ -1467,6 +1520,7 @@ export async function overrideOrderDeliveryFee(
   o.delivery_fee_etb = newFeeETB;
   o.total_amount_etb = Math.max(0, o.subtotal_etb - o.discount_amount_etb + newFeeETB);
   o.updated_at = new Date().toISOString();
+  saveStoreState(db);
 
   db.auditLogs.unshift({
     id: `audit-${Date.now()}`,

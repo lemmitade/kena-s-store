@@ -44,29 +44,40 @@ export function normalizeEthiopianPhone(input: string): PhoneValidationResult {
   }
 
   // Validate that nationalNumber starts with 9 (Ethio Telecom) or 7 (Safaricom)
-  // and has exactly 9 digits total (e.g. 911234567 or 712345678)
-  const isMatch = /^[79]\d{8}$/.test(nationalNumber);
+  // and has 8 or 9 digits total (e.g. 911234567 or 712345678)
+  const isEthioMatch = /^[79]\d{7,8}$/.test(nationalNumber);
 
-  if (!isMatch) {
+  if (isEthioMatch) {
+    const carrier = nationalNumber.startsWith('9') ? 'Ethio Telecom' : 'Safaricom Ethiopia';
+    const normalized = `+251${nationalNumber}`;
+    const localFormat = `0${nationalNumber}`;
+    const displayFormat = `0${nationalNumber.slice(0, 3)} ${nationalNumber.slice(3, 6)} ${nationalNumber.slice(6)}`;
+
     return {
-      isValid: false,
-      normalized: cleaned,
-      localFormat: cleaned,
-      displayFormat: cleaned,
-      error: 'Please enter a valid 10-digit Ethiopian mobile number (09... or 07...).',
+      isValid: true,
+      normalized,
+      localFormat,
+      displayFormat,
+      carrier,
     };
   }
 
-  const carrier = nationalNumber.startsWith('9') ? 'Ethio Telecom' : 'Safaricom Ethiopia';
-  const normalized = `+251${nationalNumber}`;
-  const localFormat = `0${nationalNumber}`;
-  const displayFormat = `0${nationalNumber.slice(0, 3)} ${nationalNumber.slice(3, 6)} ${nationalNumber.slice(6)}`;
+  // Fallback for general valid phone numbers (at least 8 digits)
+  const digitsOnly = cleaned.replace(/\D/g, '');
+  if (digitsOnly.length >= 8) {
+    return {
+      isValid: true,
+      normalized: cleaned.startsWith('+') ? cleaned : `+${cleaned}`,
+      localFormat: cleaned,
+      displayFormat: cleaned,
+    };
+  }
 
   return {
-    isValid: true,
-    normalized,
-    localFormat,
-    displayFormat,
-    carrier,
+    isValid: false,
+    normalized: cleaned,
+    localFormat: cleaned,
+    displayFormat: cleaned,
+    error: 'Please enter a valid mobile number (e.g. 0911234567).',
   };
 }
