@@ -62,6 +62,17 @@ export function normalizeEthiopianPhone(input: string): PhoneValidationResult {
     };
   }
 
+  // If the number was entered with local '0' prefix, it must be 09 or 07
+  if (cleaned.startsWith('0') && !cleaned.startsWith('09') && !cleaned.startsWith('07')) {
+    return {
+      isValid: false,
+      normalized: cleaned,
+      localFormat: cleaned,
+      displayFormat: cleaned,
+      error: 'Ethiopian mobile numbers must start with 09 (Ethio Telecom) or 07 (Safaricom).',
+    };
+  }
+
   // Fallback for general valid phone numbers (at least 8 digits)
   const digitsOnly = cleaned.replace(/\D/g, '');
   if (digitsOnly.length >= 8) {

@@ -7,6 +7,7 @@ import { getAllOrders } from '@/lib/db/repository';
 import { OrdersTable } from '@/components/admin/OrdersTable';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function AdminOrdersPage() {
   const orders = await getAllOrders();

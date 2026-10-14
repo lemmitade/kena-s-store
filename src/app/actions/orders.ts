@@ -4,9 +4,18 @@
 // SERVER ACTIONS: ORDER MANAGEMENT & AUDITED FEE OVERRIDES
 // ============================================================================
 
-import { updateOrderStatus, overrideOrderDeliveryFee } from '@/lib/db/repository';
+import { updateOrderStatus, overrideOrderDeliveryFee, getAllOrders } from '@/lib/db/repository';
 import { OrderStatus, PaymentStatus } from '@/types';
 import { revalidatePath } from 'next/cache';
+
+export async function fetchOrdersAction() {
+  try {
+    const orders = await getAllOrders();
+    return { success: true, orders };
+  } catch (err) {
+    return { success: false, error: (err as Error).message, orders: [] };
+  }
+}
 
 export async function updateOrderStatusAction(
   orderId: string,

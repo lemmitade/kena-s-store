@@ -946,14 +946,68 @@ function getStoreDataFilePath(): string {
 function saveStoreState(store: MemoryStore) {
   try {
     const filePath = getStoreDataFilePath();
+    let diskOrders: Order[] = [];
+    let diskCustomers: Customer[] = [];
+    let diskSettings: Partial<StoreSettings> = {};
+
+    if (fs.existsSync(filePath)) {
+      try {
+        const raw = fs.readFileSync(filePath, 'utf-8');
+        const existing = JSON.parse(raw);
+        if (Array.isArray(existing.orders)) diskOrders = existing.orders;
+        if (Array.isArray(existing.customers)) diskCustomers = existing.customers;
+        if (existing.storeSettings) diskSettings = existing.storeSettings;
+      } catch {
+        // file mid-write, ignore
+      }
+    }
+
+    // Merge orders without losing any from disk or memory
+    const orderMap = new Map<string, Order>();
+    for (const ord of diskOrders) {
+      if (ord && ord.id) orderMap.set(ord.id, ord);
+    }
+    for (const ord of store.orders) {
+      if (ord && ord.id) {
+        if (!orderMap.has(ord.id)) {
+          orderMap.set(ord.id, ord);
+        } else {
+          // Keep newer version
+          const diskOrd = orderMap.get(ord.id)!;
+          const memTime = new Date(ord.updated_at || ord.created_at || 0).getTime();
+          const diskTime = new Date(diskOrd.updated_at || diskOrd.created_at || 0).getTime();
+          if (memTime >= diskTime) {
+            orderMap.set(ord.id, ord);
+          }
+        }
+      }
+    }
+
+    const mergedOrders = Array.from(orderMap.values()).sort(
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+
+    // Merge customers
+    const custMap = new Map<string, Customer>();
+    for (const c of diskCustomers) {
+      if (c && c.id) custMap.set(c.id, c);
+    }
+    for (const c of store.customers) {
+      if (c && c.id) custMap.set(c.id, c);
+    }
+    const mergedCustomers = Array.from(custMap.values());
+
+    store.orders = mergedOrders;
+    store.customers = mergedCustomers;
+
     const data = {
-      orders: store.orders,
-      customers: store.customers,
-      storeSettings: store.storeSettings,
+      orders: mergedOrders,
+      customers: mergedCustomers,
+      storeSettings: { ...diskSettings, ...store.storeSettings },
     };
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
-  } catch {
-    // ignore on strictly read-only envs
+  } catch (err) {
+    console.error('[saveStoreState error]:', err);
   }
 }
 
@@ -964,17 +1018,37 @@ function loadStoreState(store: MemoryStore) {
       const raw = fs.readFileSync(filePath, 'utf-8');
       const data = JSON.parse(raw);
       if (Array.isArray(data.orders) && data.orders.length > 0) {
-        store.orders = data.orders;
+        const orderMap = new Map<string, Order>();
+        for (const ord of data.orders) {
+          if (ord && ord.id) orderMap.set(ord.id, ord);
+        }
+        for (const ord of store.orders) {
+          if (ord && ord.id && !orderMap.has(ord.id)) {
+            orderMap.set(ord.id, ord);
+          }
+        }
+        store.orders = Array.from(orderMap.values()).sort(
+          (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
       }
       if (Array.isArray(data.customers) && data.customers.length > 0) {
-        store.customers = data.customers;
+        const custMap = new Map<string, Customer>();
+        for (const c of data.customers) {
+          if (c && c.id) custMap.set(c.id, c);
+        }
+        for (const c of store.customers) {
+          if (c && c.id && !custMap.has(c.id)) {
+            custMap.set(c.id, c);
+          }
+        }
+        store.customers = Array.from(custMap.values());
       }
       if (data.storeSettings) {
         store.storeSettings = { ...store.storeSettings, ...data.storeSettings };
       }
     }
-  } catch {
-    // ignore
+  } catch (err) {
+    console.error('[loadStoreState error]:', err);
   }
 }
 
@@ -1230,6 +1304,8 @@ export async function createOrder(input: CreateOrderInput): Promise<{
   order?: Order;
   error?: string;
 }> {
+  loadStoreState(db);
+
   // 1. Validate Customer Phone
   const phoneVal = normalizeEthiopianPhone(input.customer_phone);
   if (!phoneVal.isValid) {
@@ -1472,18 +1548,24 @@ export async function createOrder(input: CreateOrderInput): Promise<{
 }
 
 export async function getOrderByNumber(orderNumber: string): Promise<Order | null> {
-  return db.orders.find((o) => o.order_number === orderNumber) || null;
+  loadStoreState(db);
+  const target = orderNumber.trim().toUpperCase();
+  return db.orders.find((o) => o.order_number.toUpperCase() === target) || null;
 }
 
 export async function getOrderByTracking(orderNumber: string, phoneOrToken: string): Promise<Order | null> {
+  loadStoreState(db);
   const norm = phoneOrToken.trim();
-  const order = db.orders.find((o) => o.order_number === orderNumber.trim().toUpperCase());
+  const phoneVal = normalizeEthiopianPhone(norm);
+  const target = orderNumber.trim().toUpperCase();
+  const order = db.orders.find((o) => o.order_number.toUpperCase() === target);
   if (!order) return null;
 
   if (
     order.tracking_token === norm ||
     order.customer_phone === norm ||
-    order.customer_phone_normalized === norm
+    order.customer_phone_normalized === norm ||
+    (phoneVal.isValid && (order.customer_phone_normalized === phoneVal.normalized || order.customer_phone === phoneVal.localFormat))
   ) {
     return order;
   }
@@ -1491,6 +1573,7 @@ export async function getOrderByTracking(orderNumber: string, phoneOrToken: stri
 }
 
 export async function getAllOrders(): Promise<Order[]> {
+  loadStoreState(db);
   return [...db.orders];
 }
 
@@ -1499,6 +1582,7 @@ export async function updateOrderStatus(
   status: Order['order_status'],
   paymentStatus?: Order['payment_status']
 ): Promise<Order | null> {
+  loadStoreState(db);
   const o = db.orders.find((ord) => ord.id === orderId);
   if (!o) return null;
   o.order_status = status;
@@ -1514,6 +1598,7 @@ export async function overrideOrderDeliveryFee(
   reason: string,
   staffName: string
 ): Promise<Order | null> {
+  loadStoreState(db);
   const o = db.orders.find((ord) => ord.id === orderId);
   if (!o) return null;
   const originalFee = o.delivery_fee_etb;
