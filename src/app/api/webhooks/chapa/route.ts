@@ -60,9 +60,13 @@ export async function POST(request: NextRequest) {
       // Send Telegram alert
       try {
         const settings = await getStoreSettings();
-        if (settings.telegram_notifications_enabled && settings.telegram_bot_token && settings.telegram_chat_id) {
+        const botToken = settings.telegram_bot_token || process.env.TELEGRAM_BOT_TOKEN;
+        const chatId = settings.telegram_chat_id || process.env.TELEGRAM_CHAT_ID;
+        const isEnabled = settings.telegram_notifications_enabled || Boolean(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID);
+
+        if (isEnabled && botToken && chatId) {
           const msg = buildPaymentVerifiedAlert(order.order_number, order.total_amount_etb, txRef);
-          await sendTelegramMessage(msg, settings.telegram_bot_token, settings.telegram_chat_id);
+          await sendTelegramMessage(msg, botToken, chatId);
         }
       } catch {
         // notification errors must not fail webhook response

@@ -33,9 +33,13 @@ export async function processCheckoutAction(input: CreateOrderInput): Promise<Ch
     // Send Telegram alert in background if configured
     try {
       const settings = await getStoreSettings();
-      if (settings.telegram_notifications_enabled && settings.telegram_bot_token && settings.telegram_chat_id) {
+      const botToken = settings.telegram_bot_token || process.env.TELEGRAM_BOT_TOKEN;
+      const chatId = settings.telegram_chat_id || process.env.TELEGRAM_CHAT_ID;
+      const isEnabled = settings.telegram_notifications_enabled || Boolean(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID);
+
+      if (isEnabled && botToken && chatId) {
         const alertMsg = buildNewOrderAlert(order);
-        await sendTelegramMessage(alertMsg, settings.telegram_bot_token, settings.telegram_chat_id);
+        await sendTelegramMessage(alertMsg, botToken, chatId);
       }
     } catch {
       // Notification errors must never abort the order

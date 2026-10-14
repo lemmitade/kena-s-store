@@ -95,10 +95,14 @@ export async function publishCompetitionResultAction(competitionId: string) {
     // Send Telegram alert if enabled
     try {
       const settings = await getStoreSettings();
+      const botToken = settings.telegram_bot_token || process.env.TELEGRAM_BOT_TOKEN;
+      const chatId = settings.telegram_chat_id || process.env.TELEGRAM_CHAT_ID;
+      const isEnabled = settings.telegram_notifications_enabled || Boolean(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID);
+
       if (
-        settings.telegram_notifications_enabled &&
-        settings.telegram_bot_token &&
-        settings.telegram_chat_id &&
+        isEnabled &&
+        botToken &&
+        chatId &&
         res.hasWinner &&
         res.winning_participant_name &&
         res.winning_bid_amount_etb &&
@@ -110,7 +114,7 @@ export async function publishCompetitionResultAction(competitionId: string) {
           res.winning_bid_amount_etb,
           res.total_entries_count
         );
-        await sendTelegramMessage(msg, settings.telegram_bot_token, settings.telegram_chat_id);
+        await sendTelegramMessage(msg, botToken, chatId);
       }
     } catch {
       // ignore

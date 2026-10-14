@@ -8,8 +8,8 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { StoreSettings } from '@/types';
-import { updateStoreSettingsAction } from '@/app/actions/settings';
-import { Check, Sliders, Palette, ImageIcon, AlertCircle } from 'lucide-react';
+import { updateStoreSettingsAction, testTelegramConnectionAction } from '@/app/actions/settings';
+import { Check, Sliders, Palette, ImageIcon, AlertCircle, Send, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface StoreSettingsFormProps {
   settings: StoreSettings;
@@ -32,6 +32,38 @@ export function StoreSettingsForm({ settings }: StoreSettingsFormProps) {
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+
+  const [testingTelegram, setTestingTelegram] = useState(false);
+  const [telegramTestStatus, setTelegramTestStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [showTelegramGuide, setShowTelegramGuide] = useState(false);
+
+  const handleTestTelegram = async () => {
+    if (!telegramToken.trim() || !telegramChatId.trim()) {
+      setTelegramTestStatus({
+        type: 'error',
+        message: 'Please fill in both the Telegram Bot Token and Chat/Channel ID before testing.',
+      });
+      return;
+    }
+
+    setTestingTelegram(true);
+    setTelegramTestStatus(null);
+
+    const res = await testTelegramConnectionAction(telegramToken, telegramChatId);
+    setTestingTelegram(false);
+
+    if (res.success) {
+      setTelegramTestStatus({
+        type: 'success',
+        message: '✅ Success! Test message sent. Please check your Telegram conversation or channel!',
+      });
+    } else {
+      setTelegramTestStatus({
+        type: 'error',
+        message: `❌ Delivery failed: ${res.error || 'Unknown error'}. Make sure your bot is started (click /start in the bot) and credentials are valid.`,
+      });
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -299,9 +331,48 @@ export function StoreSettingsForm({ settings }: StoreSettingsFormProps) {
 
       {/* 4. Telegram Notifications Integration */}
       <div className="bg-white border border-[#E7E5E4] p-6 sm:p-8 space-y-6">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-stone-900 border-b border-stone-200 pb-2">
-          4. Telegram Operational Bot Integration
-        </h2>
+        <div className="border-b border-stone-200 pb-2 flex items-center justify-between">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-stone-900">
+            4. Telegram Operational Bot Integration
+          </h2>
+          <button
+            type="button"
+            onClick={() => setShowTelegramGuide(!showTelegramGuide)}
+            className="flex items-center gap-1.5 text-xs text-stone-500 hover:text-stone-900 transition-colors"
+          >
+            <HelpCircle className="w-3.5 h-3.5" />
+            <span>{showTelegramGuide ? 'Hide Bot Setup Guide' : 'How to get Token & ID'}</span>
+            {showTelegramGuide ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+          </button>
+        </div>
+
+        {/* Collapsible BotFather & Chat ID Guide */}
+        {showTelegramGuide && (
+          <div className="p-4 bg-stone-50 border border-stone-200 text-stone-700 space-y-3 font-sans text-xs rounded-sm">
+            <p className="font-semibold text-stone-900">Follow these 5 steps to create and connect your Telegram Bot:</p>
+            <ol className="list-decimal pl-4 space-y-2 leading-relaxed">
+              <li>
+                <strong>Create the Bot:</strong> Open Telegram, search for <code>@BotFather</code>, start a chat, and send <code>/newbot</code>.
+              </li>
+              <li>
+                <strong>Choose Name &amp; Username:</strong> Give your bot a display name (e.g. <em>Kena Store Alerts</em>) and a username ending in <code>bot</code> (e.g. <em>kena_store_orders_bot</em>).
+              </li>
+              <li>
+                <strong>Copy HTTP API Token:</strong> BotFather will give you a token formatted like <code>123456789:ABCdefGHIjkl...</code>. Paste it into <em>Telegram Bot Token</em> below.
+              </li>
+              <li>
+                <strong>Find your Chat ID:</strong>
+                <ul className="list-disc pl-4 mt-1 space-y-1 text-stone-600">
+                  <li><strong>For your private chat:</strong> Search <code>@userinfobot</code> on Telegram, click Start, and copy the numeric <strong>Id</strong> (e.g. <code>123456789</code>).</li>
+                  <li><strong>For a Group or Channel:</strong> Add your bot to the group/channel as an Admin, post a test message, and use the channel ID (usually starts with <code>-100...</code>).</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Start the Bot:</strong> ⚠️ Open your newly created bot on Telegram and click <strong>/start</strong> (bots cannot message you until you start them first).
+              </li>
+            </ol>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="space-y-1.5">
@@ -321,23 +392,53 @@ export function StoreSettingsForm({ settings }: StoreSettingsFormProps) {
               type="text"
               value={telegramChatId}
               onChange={(e) => setTelegramChatId(e.target.value)}
-              placeholder="e.g. -100123456789"
+              placeholder="e.g. 123456789 or -100123456789"
               className="w-full border border-stone-300 p-3 bg-[#FAF9F6] text-xs font-mono"
             />
           </div>
         </div>
 
-        <label className="flex items-center gap-2 cursor-pointer pt-2">
-          <input
-            type="checkbox"
-            checked={telegramEnabled}
-            onChange={(e) => setTelegramEnabled(e.target.checked)}
-            className="rounded border-stone-300"
-          />
-          <span className="font-semibold text-stone-900">
-            Enable Real-Time Telegram Order &amp; Winner Alerts
-          </span>
-        </label>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2 border-t border-stone-100">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={telegramEnabled}
+              onChange={(e) => setTelegramEnabled(e.target.checked)}
+              className="rounded border-stone-300"
+            />
+            <span className="font-semibold text-stone-900">
+              Enable Real-Time Telegram Order &amp; Winner Alerts
+            </span>
+          </label>
+
+          <button
+            type="button"
+            disabled={testingTelegram}
+            onClick={handleTestTelegram}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-800 border border-stone-300 text-xs font-semibold tracking-wider uppercase transition-colors disabled:opacity-50"
+          >
+            <Send className="w-3.5 h-3.5 text-stone-600" />
+            <span>{testingTelegram ? 'Sending Test...' : 'Test Bot Connection'}</span>
+          </button>
+        </div>
+
+        {/* Test Result Message */}
+        {telegramTestStatus && (
+          <div
+            className={`p-3 text-xs flex items-center gap-2 border ${
+              telegramTestStatus.type === 'success'
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                : 'bg-rose-50 border-rose-200 text-rose-800'
+            }`}
+          >
+            {telegramTestStatus.type === 'success' ? (
+              <Check className="w-4 h-4 flex-shrink-0" />
+            ) : (
+              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            )}
+            <span>{telegramTestStatus.message}</span>
+          </div>
+        )}
       </div>
 
       <button

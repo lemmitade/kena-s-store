@@ -13,7 +13,31 @@ import {
   getStoreSettings,
 } from '@/lib/db/repository';
 import { StoreSettings } from '@/types';
+import { sendTelegramMessage } from '@/lib/telegram/bot';
 import { revalidatePath } from 'next/cache';
+
+export async function testTelegramConnectionAction(token?: string, chatId?: string) {
+  try {
+    const settings = await getStoreSettings();
+    const activeToken = token?.trim() || settings.telegram_bot_token || process.env.TELEGRAM_BOT_TOKEN;
+    const activeChatId = chatId?.trim() || settings.telegram_chat_id || process.env.TELEGRAM_CHAT_ID;
+
+    if (!activeToken || !activeChatId) {
+      return {
+        success: false,
+        error: 'Please enter both the Telegram Bot Token and Destination Chat ID before testing.',
+      };
+    }
+
+    const testText = `🔔 <b>KENA STORE — BOT CONNECTION TEST</b>\n\n✅ <b>Success!</b> Your Telegram operational bot is now connected to <b>${settings.store_name || 'Kena Store'}</b>.\n\nYou will receive real-time alerts whenever a customer places an order, completes Chapa payment, or a competition winner is approved.`;
+
+    const res = await sendTelegramMessage(testText, activeToken, activeChatId);
+    return res;
+  } catch (err) {
+    return { success: false, error: (err as Error).message };
+  }
+}
+
 
 export async function updateStoreSettingsAction(data: Partial<StoreSettings>) {
   try {
