@@ -10,6 +10,17 @@ export interface TelegramMessagePayload {
   parse_mode?: 'HTML' | 'MarkdownV2';
 }
 
+function escapeHtml(text: string | null | undefined): string {
+  if (!text) return '';
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+const DEFAULT_BOT_TOKEN = '8900384234:AAGomXBQ1JQBmc_X4E5slxGbLJ1xk0IweoI';
+const DEFAULT_GROUP_CHAT_ID = '-1003962170647';
+
 /**
  * Sends a message directly to Telegram Bot API.
  */
@@ -18,8 +29,8 @@ export async function sendTelegramMessage(
   botToken?: string,
   chatId?: string
 ): Promise<{ success: boolean; error?: string }> {
-  const token = botToken || process.env.TELEGRAM_BOT_TOKEN;
-  const chat = chatId || process.env.TELEGRAM_CHAT_ID;
+  const token = botToken || process.env.TELEGRAM_BOT_TOKEN || DEFAULT_BOT_TOKEN;
+  const chat = chatId || process.env.TELEGRAM_CHAT_ID || DEFAULT_GROUP_CHAT_ID;
 
   if (!token || !chat || token.includes('ABCdef')) {
     return {
@@ -47,9 +58,11 @@ export async function sendTelegramMessage(
     if (data.ok) {
       return { success: true };
     } else {
+      console.error('Telegram API error:', data);
       return { success: false, error: data.description || 'Telegram API returned not ok' };
     }
   } catch (err) {
+    console.error('Telegram fetch exception:', err);
     return { success: false, error: (err as Error).message };
   }
 }
@@ -61,21 +74,24 @@ export function buildNewOrderAlert(order: Order): string {
   const isPickup = order.fulfillment_type === 'store_pickup';
   const fulfillmentTitle = isPickup ? '🏬 <b>STORE PICKUP ORDER</b>' : '🚚 <b>HOME DELIVERY ORDER</b>';
   const pickupInfo = isPickup
-    ? `\n<b>Pickup Code:</b> <code>${order.fulfillment?.pickup_reference_code || 'Pending'}</code>\n<b>Location:</b> ${order.fulfillment?.pickup_location_name || 'Flagship Store'}`
-    : `\n<b>Delivery Zone:</b> ${order.fulfillment?.delivery_zone_name || 'N/A'}\n<b>Sub-City:</b> ${order.fulfillment?.delivery_sub_city || 'Addis Ababa'}\n<b>Address:</b> ${order.fulfillment?.delivery_address || '—'}`;
+    ? `\n<b>Pickup Code:</b> <code>${escapeHtml(order.fulfillment?.pickup_reference_code || 'Pending')}</code>\n<b>Location:</b> ${escapeHtml(order.fulfillment?.pickup_location_name || 'Flagship Store')}`
+    : `\n<b>Delivery Zone:</b> ${escapeHtml(order.fulfillment?.delivery_zone_name || 'N/A')}\n<b>Sub-City:</b> ${escapeHtml(order.fulfillment?.delivery_sub_city || 'Addis Ababa')}\n<b>Address:</b> ${escapeHtml(order.fulfillment?.delivery_address || '—')}`;
 
-  const itemsList = order.items
+  const itemsList = order.items && order.items.length > 0
     ? order.items
-        .map((i) => `• ${i.quantity}x ${i.product_name} (${i.size || 'STD'}/${i.color || 'STD'}) — ${formatETB(i.line_total_etb)}`)
+        .map((i) => `• ${i.quantity}x ${escapeHtml(i.product_name)} (${escapeHtml(i.size || 'STD')}/${escapeHtml(i.color || 'STD')}) — ${formatETB(i.line_total_etb)}`)
         .join('\n')
     : 'No items details';
 
+  const paymentMethod = escapeHtml((order.payment_method || 'PENDING').toUpperCase());
+  const paymentStatus = escapeHtml((order.payment_status || 'PENDING').toUpperCase());
+
   return `
-🛍️ <b>NEW ORDER RECEIVED: ${order.order_number}</b>
+🛍️ <b>NEW ORDER RECEIVED: ${escapeHtml(order.order_number)}</b>
 ${fulfillmentTitle}
 
-<b>Customer:</b> ${order.customer_name}
-<b>Phone:</b> ${order.customer_phone}
+<b>Customer:</b> ${escapeHtml(order.customer_name)}
+<b>Phone:</b> ${escapeHtml(order.customer_phone)}
 ${pickupInfo}
 
 <b>Items:</b>
@@ -83,10 +99,10 @@ ${itemsList}
 
 <b>Financials:</b>
 Subtotal: ${formatETB(order.subtotal_etb)}
-${order.discount_amount_etb > 0 ? `Discount (${order.applied_coupon_code}): -${formatETB(order.discount_amount_etb)}\n` : ''}Fulfillment Fee: ${formatETB(order.delivery_fee_etb)}
+${order.discount_amount_etb > 0 ? `Discount (${escapeHtml(order.applied_coupon_code || '')}): -${formatETB(order.discount_amount_etb)}\n` : ''}Fulfillment Fee: ${formatETB(order.delivery_fee_etb)}
 <b>Total:</b> <b>${formatETB(order.total_amount_etb)}</b>
-<b>Payment:</b> ${order.payment_method.toUpperCase()} (${order.payment_status.toUpperCase()})
-`;
+<b>Payment:</b> ${paymentMethod} (${paymentStatus})
+`.trim();
 }
 
 export function buildPaymentVerifiedAlert(orderNumber: string, amountETB: number, txRef: string): string {

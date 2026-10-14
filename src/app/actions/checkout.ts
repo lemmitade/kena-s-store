@@ -35,14 +35,19 @@ export async function processCheckoutAction(input: CreateOrderInput): Promise<Ch
       const settings = await getStoreSettings();
       const botToken = settings.telegram_bot_token || process.env.TELEGRAM_BOT_TOKEN;
       const chatId = settings.telegram_chat_id || process.env.TELEGRAM_CHAT_ID;
-      const isEnabled = settings.telegram_notifications_enabled || Boolean(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID);
+      const isEnabled = settings.telegram_notifications_enabled ?? true;
 
-      if (isEnabled && botToken && chatId) {
+      if (isEnabled) {
         const alertMsg = buildNewOrderAlert(order);
-        await sendTelegramMessage(alertMsg, botToken, chatId);
+        const sendResult = await sendTelegramMessage(alertMsg, botToken, chatId);
+        if (!sendResult.success) {
+          console.error('[Checkout Telegram Notification] Delivery failed:', sendResult.error);
+        } else {
+          console.log('[Checkout Telegram Notification] Delivered order alert for', order.order_number);
+        }
       }
-    } catch {
-      // Notification errors must never abort the order
+    } catch (notifErr) {
+      console.error('[Checkout Telegram Notification] Unexpected error:', notifErr);
     }
 
     return {
