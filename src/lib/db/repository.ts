@@ -294,6 +294,71 @@ const INITIAL_CATEGORIES: Category[] = [
 
 const INITIAL_PRODUCTS: Product[] = [
   {
+    id: 'prod-baggy-jeans',
+    name: 'baggy jeans',
+    slug: 'baggy-jeans',
+    description:
+      'Contemporary wide-leg relaxed denim trousers crafted with durable washed cotton. Tailored for comfort with modern street-luxury drape.',
+    primary_section_id: 'sec-women',
+    primary_category_id: 'cat-dresses',
+    regular_price_etb: 38000,
+    is_featured: true,
+    is_new_arrival: true,
+    is_published: true,
+    is_archived: false,
+    low_stock_threshold: 5,
+    seo_title: 'baggy jeans | YOUR BRAND',
+    seo_description: 'Wide-leg relaxed denim trousers.',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    images: [
+      {
+        id: 'img-baggy-1',
+        product_id: 'prod-baggy-jeans',
+        image_url:
+          'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85',
+        alt_text: 'baggy jeans',
+        display_order: 1,
+        is_primary: true,
+      },
+    ],
+    variants: [
+      {
+        id: 'var-baggy-s',
+        product_id: 'prod-baggy-jeans',
+        sku: 'BGY-JNS-BLU-S',
+        size: 'S',
+        color: 'Classic Blue',
+        color_hex: '#2E5090',
+        stock_quantity: 10,
+        is_available: true,
+        created_at: new Date().toISOString(),
+      },
+      {
+        id: 'var-baggy-m',
+        product_id: 'prod-baggy-jeans',
+        sku: 'BGY-JNS-BLU-M',
+        size: 'M',
+        color: 'Classic Blue',
+        color_hex: '#2E5090',
+        stock_quantity: 13,
+        is_available: true,
+        created_at: new Date().toISOString(),
+      },
+      {
+        id: 'var-baggy-l',
+        product_id: 'prod-baggy-jeans',
+        sku: 'BGY-JNS-BLU-L',
+        size: 'L',
+        color: 'Classic Blue',
+        color_hex: '#2E5090',
+        stock_quantity: 10,
+        is_available: true,
+        created_at: new Date().toISOString(),
+      },
+    ],
+  },
+  {
     id: 'prod-linen-shirt',
     name: 'Relaxed Pure Linen Camp Shirt',
     slug: 'relaxed-pure-linen-camp-shirt',
@@ -943,6 +1008,8 @@ function getStoreDataFilePath(): string {
   }
 }
 
+let lastLoadedMtime = 0;
+
 function saveStoreState(store: MemoryStore) {
   try {
     const filePath = getStoreDataFilePath();
@@ -1001,51 +1068,136 @@ function saveStoreState(store: MemoryStore) {
     store.customers = mergedCustomers;
 
     const data = {
+      products: store.products,
+      sections: store.sections,
+      categories: store.categories,
+      pickupLocations: store.pickupLocations,
+      deliveryZones: store.deliveryZones,
+      coupons: store.coupons,
       orders: mergedOrders,
       customers: mergedCustomers,
       storeSettings: { ...diskSettings, ...store.storeSettings },
     };
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+    try {
+      lastLoadedMtime = fs.statSync(filePath).mtimeMs;
+    } catch {
+      // ignore
+    }
   } catch (err) {
     console.error('[saveStoreState error]:', err);
   }
 }
 
-function loadStoreState(store: MemoryStore) {
+function loadStoreState(store: MemoryStore, force = false) {
   try {
     const filePath = getStoreDataFilePath();
-    if (fs.existsSync(filePath)) {
-      const raw = fs.readFileSync(filePath, 'utf-8');
-      const data = JSON.parse(raw);
-      if (Array.isArray(data.orders) && data.orders.length > 0) {
-        const orderMap = new Map<string, Order>();
-        for (const ord of data.orders) {
-          if (ord && ord.id) orderMap.set(ord.id, ord);
-        }
-        for (const ord of store.orders) {
-          if (ord && ord.id && !orderMap.has(ord.id)) {
-            orderMap.set(ord.id, ord);
+    if (!fs.existsSync(filePath)) {
+      // First run: save initial catalog to disk
+      saveStoreState(store);
+      return;
+    }
+
+    const stat = fs.statSync(filePath);
+    if (!force && lastLoadedMtime > 0 && stat.mtimeMs <= lastLoadedMtime) {
+      return;
+    }
+
+    const raw = fs.readFileSync(filePath, 'utf-8').trim();
+    if (!raw) {
+      return;
+    }
+    let data: any;
+    try {
+      data = JSON.parse(raw);
+    } catch {
+      return; // ignore partial read
+    }
+    lastLoadedMtime = stat.mtimeMs;
+
+    // 1. Products persistence & merge
+    if (Array.isArray(data.products) && data.products.length > 0) {
+      const prodMap = new Map<string, Product>();
+      for (const p of data.products) {
+        if (p && p.id) prodMap.set(p.id, p);
+      }
+      for (const p of store.products) {
+        if (p && p.id) {
+          if (!prodMap.has(p.id)) {
+            prodMap.set(p.id, p);
+          } else {
+            const diskP = prodMap.get(p.id)!;
+            const memTime = new Date(p.updated_at || p.created_at || 0).getTime();
+            const diskTime = new Date(diskP.updated_at || diskP.created_at || 0).getTime();
+            if (memTime > diskTime) {
+              prodMap.set(p.id, p);
+            }
           }
         }
-        store.orders = Array.from(orderMap.values()).sort(
-          (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        );
       }
-      if (Array.isArray(data.customers) && data.customers.length > 0) {
-        const custMap = new Map<string, Customer>();
-        for (const c of data.customers) {
-          if (c && c.id) custMap.set(c.id, c);
+      store.products = Array.from(prodMap.values());
+    } else if (Array.isArray(store.products) && store.products.length > 0) {
+      saveStoreState(store);
+    }
+
+    // 2. Sections
+    if (Array.isArray(data.sections) && data.sections.length > 0) {
+      store.sections = data.sections;
+    }
+
+    // 3. Categories
+    if (Array.isArray(data.categories) && data.categories.length > 0) {
+      store.categories = data.categories;
+    }
+
+    // 4. Pickup Locations
+    if (Array.isArray(data.pickupLocations) && data.pickupLocations.length > 0) {
+      store.pickupLocations = data.pickupLocations;
+    }
+
+    // 5. Delivery Zones
+    if (Array.isArray(data.deliveryZones) && data.deliveryZones.length > 0) {
+      store.deliveryZones = data.deliveryZones;
+    }
+
+    // 6. Coupons
+    if (Array.isArray(data.coupons) && data.coupons.length > 0) {
+      store.coupons = data.coupons;
+    }
+
+    // 7. Orders
+    if (Array.isArray(data.orders) && data.orders.length > 0) {
+      const orderMap = new Map<string, Order>();
+      for (const ord of data.orders) {
+        if (ord && ord.id) orderMap.set(ord.id, ord);
+      }
+      for (const ord of store.orders) {
+        if (ord && ord.id && !orderMap.has(ord.id)) {
+          orderMap.set(ord.id, ord);
         }
-        for (const c of store.customers) {
-          if (c && c.id && !custMap.has(c.id)) {
-            custMap.set(c.id, c);
-          }
+      }
+      store.orders = Array.from(orderMap.values()).sort(
+        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+    }
+
+    // 8. Customers
+    if (Array.isArray(data.customers) && data.customers.length > 0) {
+      const custMap = new Map<string, Customer>();
+      for (const c of data.customers) {
+        if (c && c.id) custMap.set(c.id, c);
+      }
+      for (const c of store.customers) {
+        if (c && c.id && !custMap.has(c.id)) {
+          custMap.set(c.id, c);
         }
-        store.customers = Array.from(custMap.values());
       }
-      if (data.storeSettings) {
-        store.storeSettings = { ...store.storeSettings, ...data.storeSettings };
-      }
+      store.customers = Array.from(custMap.values());
+    }
+
+    // 9. Settings
+    if (data.storeSettings) {
+      store.storeSettings = { ...store.storeSettings, ...data.storeSettings };
     }
   } catch (err) {
     console.error('[loadStoreState error]:', err);
@@ -1082,6 +1234,7 @@ export async function getSectionBySlug(slug: string): Promise<StoreSection | nul
 }
 
 export async function createSection(data: Omit<StoreSection, 'id' | 'created_at' | 'updated_at'>): Promise<StoreSection> {
+  loadStoreState(db);
   const newSection: StoreSection = {
     ...data,
     id: `sec-${Date.now()}`,
@@ -1089,13 +1242,16 @@ export async function createSection(data: Omit<StoreSection, 'id' | 'created_at'
     updated_at: new Date().toISOString(),
   };
   db.sections.push(newSection);
+  saveStoreState(db);
   return newSection;
 }
 
 export async function updateSection(id: string, data: Partial<StoreSection>): Promise<StoreSection | null> {
+  loadStoreState(db);
   const index = db.sections.findIndex((s) => s.id === id);
   if (index === -1) return null;
   db.sections[index] = { ...db.sections[index], ...data, updated_at: new Date().toISOString() };
+  saveStoreState(db);
   return db.sections[index];
 }
 
@@ -1123,17 +1279,20 @@ export async function getProducts(options?: {
   searchQuery?: string;
   includeDrafts?: boolean;
 }): Promise<Product[]> {
-  let list = db.products.filter((p) => (options?.includeDrafts ? true : p.is_published && !p.is_archived));
+  loadStoreState(db);
+  let list = db.products.filter((p) => (options?.includeDrafts ? !p.is_archived : p.is_published && !p.is_archived));
 
   if (options?.sectionSlug) {
-    const section = db.sections.find((s) => s.slug === options.sectionSlug);
+    const sSlug = options.sectionSlug.trim().toLowerCase();
+    const section = db.sections.find((s) => s.slug.toLowerCase() === sSlug || s.id.toLowerCase() === sSlug);
     if (section) {
       list = list.filter((p) => p.primary_section_id === section.id);
     }
   }
 
   if (options?.categorySlug) {
-    const category = db.categories.find((c) => c.slug === options.categorySlug);
+    const cSlug = options.categorySlug.trim().toLowerCase();
+    const category = db.categories.find((c) => c.slug.toLowerCase() === cSlug || c.id.toLowerCase() === cSlug);
     if (category) {
       list = list.filter((p) => p.primary_category_id === category.id);
     }
@@ -1148,12 +1307,13 @@ export async function getProducts(options?: {
   }
 
   if (options?.searchQuery) {
-    const q = options.searchQuery.toLowerCase();
+    const q = options.searchQuery.toLowerCase().trim();
     list = list.filter(
       (p) =>
         p.name.toLowerCase().includes(q) ||
+        p.slug.toLowerCase().includes(q) ||
         p.description.toLowerCase().includes(q) ||
-        p.variants?.some((v) => v.sku.toLowerCase().includes(q) || v.color?.toLowerCase().includes(q))
+        p.variants?.some((v) => v.sku.toLowerCase().includes(q) || v.color?.toLowerCase().includes(q) || v.size?.toLowerCase().includes(q))
     );
   }
 
@@ -1165,8 +1325,37 @@ export async function getProducts(options?: {
   }));
 }
 
-export async function getProductBySlug(slug: string): Promise<Product | null> {
-  const p = db.products.find((prod) => prod.slug === slug && !prod.is_archived);
+export async function getProductBySlug(slugOrId: string, options?: { allowDrafts?: boolean }): Promise<Product | null> {
+  if (!slugOrId) return null;
+  loadStoreState(db);
+  const raw = String(slugOrId).trim();
+  let decoded = raw;
+  try {
+    decoded = decodeURIComponent(raw).trim().toLowerCase();
+  } catch {
+    decoded = raw.toLowerCase();
+  }
+  const lowerRaw = raw.toLowerCase();
+
+  const p = db.products.find((prod) => {
+    if (prod.is_archived) return false;
+    // Allow drafts if specifically requested or if queried by exact ID/slug
+    if (!options?.allowDrafts && !prod.is_published) {
+      // Still match if admin is previewing via ID or direct slug
+      return prod.id === raw || prod.slug === raw || prod.id.toLowerCase() === lowerRaw || prod.slug.toLowerCase() === lowerRaw;
+    }
+    const prodSlug = (prod.slug || '').toLowerCase();
+    const prodId = (prod.id || '').toLowerCase();
+    return (
+      prod.slug === raw ||
+      prod.id === raw ||
+      prodSlug === decoded ||
+      prodId === decoded ||
+      prodSlug === lowerRaw ||
+      prodId === lowerRaw
+    );
+  });
+
   if (!p) return null;
   return {
     ...p,
@@ -1175,8 +1364,31 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   };
 }
 
-export async function getProductById(id: string): Promise<Product | null> {
-  const p = db.products.find((prod) => prod.id === id);
+export async function getProductById(idOrSlug: string): Promise<Product | null> {
+  if (!idOrSlug) return null;
+  loadStoreState(db);
+  const raw = String(idOrSlug).trim();
+  let decoded = raw;
+  try {
+    decoded = decodeURIComponent(raw).trim().toLowerCase();
+  } catch {
+    decoded = raw.toLowerCase();
+  }
+  const lowerRaw = raw.toLowerCase();
+
+  const p = db.products.find((prod) => {
+    const prodId = (prod.id || '').toLowerCase();
+    const prodSlug = (prod.slug || '').toLowerCase();
+    return (
+      prod.id === raw ||
+      prod.slug === raw ||
+      prodId === decoded ||
+      prodSlug === decoded ||
+      prodId === lowerRaw ||
+      prodSlug === lowerRaw
+    );
+  });
+
   if (!p) return null;
   return {
     ...p,
@@ -1186,78 +1398,200 @@ export async function getProductById(id: string): Promise<Product | null> {
 }
 
 export async function createProduct(data: Omit<Product, 'id' | 'created_at' | 'updated_at'>): Promise<Product> {
+  loadStoreState(db);
+
+  // Normalize slug to prevent spaces, uppercase, or invalid URL characters
+  let cleanSlug = (data.slug || data.name || `prod-${Date.now()}`)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  if (!cleanSlug) {
+    cleanSlug = `product-${Date.now()}`;
+  }
+
+  // Ensure slug uniqueness
+  let finalSlug = cleanSlug;
+  let counter = 1;
+  while (db.products.some((p) => p.slug === finalSlug && !p.is_archived)) {
+    finalSlug = `${cleanSlug}-${counter}`;
+    counter++;
+  }
+
+  const id = `prod-${Date.now()}`;
+  const now = new Date().toISOString();
   const newProduct: Product = {
     ...data,
-    id: `prod-${Date.now()}`,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    id,
+    slug: finalSlug,
+    is_published: data.is_published ?? true,
+    is_archived: false,
+    created_at: now,
+    updated_at: now,
+    images: (data.images && data.images.length > 0)
+      ? data.images.map((img, idx) => ({
+          ...img,
+          id: img.id || `img-${Date.now()}-${idx}`,
+          product_id: id,
+          display_order: img.display_order ?? idx + 1,
+          is_primary: idx === 0,
+        }))
+      : [],
+    variants: (data.variants && data.variants.length > 0)
+      ? data.variants.map((v, idx) => ({
+          ...v,
+          id: v.id || `var-${Date.now()}-${idx}`,
+          product_id: id,
+          is_available: v.stock_quantity > 0,
+          created_at: v.created_at || now,
+        }))
+      : [],
   };
+
   db.products.unshift(newProduct);
+  saveStoreState(db);
   return newProduct;
 }
 
-export async function updateProduct(id: string, data: Partial<Product>): Promise<Product | null> {
-  const index = db.products.findIndex((p) => p.id === id);
+export async function updateProduct(idOrSlug: string, data: Partial<Product>): Promise<Product | null> {
+  loadStoreState(db);
+  const target = String(idOrSlug).trim();
+  const lowerTarget = target.toLowerCase();
+  const index = db.products.findIndex(
+    (p) => p.id === target || p.slug === target || p.id.toLowerCase() === lowerTarget || p.slug.toLowerCase() === lowerTarget
+  );
   if (index === -1) return null;
-  db.products[index] = { ...db.products[index], ...data, updated_at: new Date().toISOString() };
+
+  const existing = db.products[index];
+
+  // If slug is being updated, normalize it
+  let updatedSlug = existing.slug;
+  if (data.slug && data.slug.trim()) {
+    const cleaned = data.slug
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    if (cleaned) {
+      // Ensure unique among other products
+      let finalSlug = cleaned;
+      let counter = 1;
+      while (db.products.some((p, i) => i !== index && p.slug === finalSlug && !p.is_archived)) {
+        finalSlug = `${cleaned}-${counter}`;
+        counter++;
+      }
+      updatedSlug = finalSlug;
+    }
+  }
+
+  const now = new Date().toISOString();
+  db.products[index] = {
+    ...existing,
+    ...data,
+    slug: updatedSlug,
+    updated_at: now,
+  };
+
+  // If variants provided, ensure product_id is set
+  if (data.variants) {
+    db.products[index].variants = data.variants.map((v, idx) => ({
+      ...v,
+      id: v.id || `var-${Date.now()}-${idx}`,
+      product_id: existing.id,
+      is_available: v.stock_quantity > 0,
+      created_at: v.created_at || now,
+    }));
+  }
+
+  // If images provided, ensure product_id is set
+  if (data.images) {
+    db.products[index].images = data.images.map((img, idx) => ({
+      ...img,
+      id: img.id || `img-${Date.now()}-${idx}`,
+      product_id: existing.id,
+      display_order: img.display_order ?? idx + 1,
+      is_primary: idx === 0,
+    }));
+  }
+
+  saveStoreState(db);
   return db.products[index];
 }
 
-export async function deleteProduct(id: string): Promise<boolean> {
-  const index = db.products.findIndex((p) => p.id === id);
+export async function deleteProduct(idOrSlug: string): Promise<boolean> {
+  loadStoreState(db);
+  const target = String(idOrSlug).trim();
+  const lowerTarget = target.toLowerCase();
+  const index = db.products.findIndex(
+    (p) => p.id === target || p.slug === target || p.id.toLowerCase() === lowerTarget || p.slug.toLowerCase() === lowerTarget
+  );
   if (index === -1) return false;
   db.products.splice(index, 1);
+  saveStoreState(db);
   return true;
 }
 
 export async function getPickupLocations(onlyActive = true): Promise<PickupLocation[]> {
+  loadStoreState(db);
   return db.pickupLocations
     .filter((loc) => (onlyActive ? loc.is_active && loc.accepts_new_orders : true))
     .sort((a, b) => a.display_order - b.display_order);
 }
 
 export async function updatePickupLocation(id: string, data: Partial<PickupLocation>): Promise<PickupLocation | null> {
+  loadStoreState(db);
   const idx = db.pickupLocations.findIndex((l) => l.id === id);
   if (idx === -1) return null;
   db.pickupLocations[idx] = { ...db.pickupLocations[idx], ...data };
+  saveStoreState(db);
   return db.pickupLocations[idx];
 }
 
 export async function createPickupLocation(data: Omit<PickupLocation, 'id'>): Promise<PickupLocation> {
+  loadStoreState(db);
   const newLoc: PickupLocation = { ...data, id: `pk-${Date.now()}` };
   db.pickupLocations.push(newLoc);
+  saveStoreState(db);
   return newLoc;
 }
 
 export async function getDeliveryZones(onlyActive = true): Promise<DeliveryZone[]> {
+  loadStoreState(db);
   return db.deliveryZones
     .filter((z) => (onlyActive ? z.is_active : true))
     .sort((a, b) => b.priority - a.priority);
 }
 
 export async function updateDeliveryZone(id: string, data: Partial<DeliveryZone>): Promise<DeliveryZone | null> {
+  loadStoreState(db);
   const idx = db.deliveryZones.findIndex((z) => z.id === id);
   if (idx === -1) return null;
   db.deliveryZones[idx] = { ...db.deliveryZones[idx], ...data };
+  saveStoreState(db);
   return db.deliveryZones[idx];
 }
 
 export async function createDeliveryZone(data: Omit<DeliveryZone, 'id'>): Promise<DeliveryZone> {
+  loadStoreState(db);
   const newZone: DeliveryZone = { ...data, id: `zone-${Date.now()}` };
   db.deliveryZones.push(newZone);
+  saveStoreState(db);
   return newZone;
 }
 
 export async function getCouponByCode(code: string): Promise<Coupon | null> {
+  loadStoreState(db);
   const normalized = code.trim().toUpperCase();
   return db.coupons.find((c) => c.code === normalized && c.status === 'active') || null;
 }
 
 export async function getAllCoupons(): Promise<Coupon[]> {
+  loadStoreState(db);
   return [...db.coupons];
 }
 
 export async function createCoupon(data: Omit<Coupon, 'id' | 'current_redemptions_count'>): Promise<Coupon> {
+  loadStoreState(db);
   const newCoupon: Coupon = {
     ...data,
     id: `coup-${Date.now()}`,
@@ -1265,13 +1599,16 @@ export async function createCoupon(data: Omit<Coupon, 'id' | 'current_redemption
     current_redemptions_count: 0,
   };
   db.coupons.unshift(newCoupon);
+  saveStoreState(db);
   return newCoupon;
 }
 
 export async function updateCoupon(id: string, data: Partial<Coupon>): Promise<Coupon | null> {
+  loadStoreState(db);
   const idx = db.coupons.findIndex((c) => c.id === id);
   if (idx === -1) return null;
   db.coupons[idx] = { ...db.coupons[idx], ...data };
+  saveStoreState(db);
   return db.coupons[idx];
 }
 

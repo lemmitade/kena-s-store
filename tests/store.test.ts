@@ -43,10 +43,14 @@ describe('Storefront & Inventory Lifecycle', () => {
 
     const fetched = await getProducts({ searchQuery: 'Test Tailored Linen' });
     assert.equal(fetched.length >= 1, true);
+
+    // Clean up
+    await (await import('../src/lib/db/repository')).deleteProduct(prod.id);
   });
 
   test('Performs guest checkout, atomically deducts variant inventory', async () => {
-    const initialVariant = db.products[0].variants![0];
+    const testProd = db.products.find((p) => p.id === 'prod-wool-trousers') || db.products[0];
+    const initialVariant = testProd.variants![0];
     const initialStock = initialVariant.stock_quantity;
     const qtyToBuy = 2;
 
@@ -75,7 +79,8 @@ describe('Storefront & Inventory Lifecycle', () => {
   });
 
   test('Prevents overselling when requested quantity exceeds available stock', async () => {
-    const variant = db.products[0].variants![0];
+    const testProd = db.products.find((p) => p.id === 'prod-wool-trousers') || db.products[0];
+    const variant = testProd.variants![0];
     const excessiveQty = variant.stock_quantity + 999;
 
     const res = await createOrder({

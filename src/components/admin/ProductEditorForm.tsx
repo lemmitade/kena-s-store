@@ -186,7 +186,19 @@ export function ProductEditorForm({
         if (!res.success) {
           setErrorMsg(res.error || 'Failed to update product.');
         } else {
-          setSuccessMsg('Product and variants updated successfully!');
+          const updated = res.product;
+          setSuccessMsg(`✓ Product "${updated?.name || name}" and variants updated successfully!`);
+          if (updated) {
+            setName(updated.name);
+            setSlug(updated.slug);
+            setDescription(updated.description);
+            setRegularPrice(updated.regular_price_etb);
+            setSalePrice(updated.sale_price_etb);
+            setIsPublished(updated.is_published);
+            setIsFeatured(updated.is_featured);
+            setIsNewArrival(updated.is_new_arrival);
+            router.replace(`/admin/products/${updated.id}`);
+          }
           router.refresh();
         }
       } else {
@@ -211,6 +223,7 @@ export function ProductEditorForm({
         if (!res.success) {
           setErrorMsg(res.error || 'Failed to create product.');
         } else {
+          setSuccessMsg(`✓ Product "${res.product?.name || name}" created and published successfully!`);
           router.push('/admin/products');
         }
       }
@@ -593,6 +606,33 @@ export function ProductEditorForm({
           </table>
         </div>
       </div>
+
+      {/* Bottom Status Notifications (always visible to user saving at bottom of page) */}
+      {errorMsg && (
+        <div className="p-4 bg-rose-50 border border-rose-200 text-rose-800 flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <span className="font-semibold">{errorMsg}</span>
+        </div>
+      )}
+
+      {successMsg && (
+        <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Check className="w-4 h-4 flex-shrink-0" />
+            <span className="font-semibold">{successMsg}</span>
+          </div>
+          {isEditing && (
+            <Link
+              href={`/product/${slug}`}
+              target="_blank"
+              className="underline font-bold hover:text-emerald-950 inline-flex items-center gap-1 text-[11px]"
+            >
+              <Eye className="w-3.5 h-3.5" />
+              <span>Preview Live Storefront</span>
+            </Link>
+          )}
+        </div>
+      )}
 
       {/* Action Buttons */}
       <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-stone-200">

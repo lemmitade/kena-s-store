@@ -18,7 +18,19 @@ interface EditProductPageProps {
 
 export default async function EditProductPage({ params }: EditProductPageProps) {
   const { id } = await params;
-  const product = (await getProductById(id)) || (await getProductBySlug(id));
+  const rawId = String(id).trim();
+  let decodedId = rawId;
+  try {
+    decodedId = decodeURIComponent(rawId).trim();
+  } catch {
+    decodedId = rawId;
+  }
+
+  const product =
+    (await getProductById(rawId)) ||
+    (await getProductById(decodedId)) ||
+    (await getProductBySlug(rawId, { allowDrafts: true })) ||
+    (await getProductBySlug(decodedId, { allowDrafts: true }));
 
   if (!product) {
     notFound();

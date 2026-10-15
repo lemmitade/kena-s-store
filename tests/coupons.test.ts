@@ -9,8 +9,8 @@ import { createOrder, db } from '../src/lib/db/repository';
 describe('Coupon Validation & Discount Engine', () => {
   test('Enforces minimum order amount restriction for coupon', async () => {
     // WELCOME10 requires min 1000 ETB
-    // Create an order below 1000 ETB if possible or check error response
-    const variant = db.products[0].variants![0];
+    const linenProd = db.products.find((p) => p.id === 'prod-linen-shirt') || db.products[0];
+    const variant = linenProd.variants![0];
 
     const res = await createOrder({
       customer_name: 'Coupon Tester',
@@ -35,7 +35,8 @@ describe('Coupon Validation & Discount Engine', () => {
 
   test('Correctly calculates percentage discount with maximum cap', async () => {
     // WELCOME10 gives 10% with cap of 600 ETB
-    const variant = db.products[0].variants![0]; // unit price 2850 ETB
+    const linenProd = db.products.find((p) => p.id === 'prod-linen-shirt') || db.products[0];
+    const variant = linenProd.variants![0]; // unit price 2850 ETB
     // If buying 3 units: subtotal = 3 * 2850 = 8550 ETB. 10% is 855 ETB, but capped at 600 ETB!
     const res = await createOrder({
       customer_name: 'Cap Tester',

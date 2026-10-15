@@ -1,5 +1,2207 @@
 {
+  "products": [
+    {
+      "id": "prod-baggy-jeans",
+      "name": "baggy jeans",
+      "slug": "baggy-jeans",
+      "description": "Contemporary wide-leg relaxed denim trousers crafted with durable washed cotton. Tailored for comfort with modern street-luxury drape.",
+      "primary_section_id": "sec-women",
+      "primary_category_id": "cat-dresses",
+      "regular_price_etb": 38000,
+      "is_featured": true,
+      "is_new_arrival": true,
+      "is_published": true,
+      "is_archived": false,
+      "low_stock_threshold": 5,
+      "seo_title": "baggy jeans | YOUR BRAND",
+      "seo_description": "Wide-leg relaxed denim trousers.",
+      "created_at": "2026-10-15T15:34:12.735Z",
+      "updated_at": "2026-10-15T15:34:12.736Z",
+      "images": [
+        {
+          "id": "img-baggy-1",
+          "product_id": "prod-baggy-jeans",
+          "image_url": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85",
+          "alt_text": "baggy jeans",
+          "display_order": 1,
+          "is_primary": true
+        }
+      ],
+      "variants": [
+        {
+          "id": "var-baggy-s",
+          "product_id": "prod-baggy-jeans",
+          "sku": "BGY-JNS-BLU-S",
+          "size": "S",
+          "color": "Classic Blue",
+          "color_hex": "#2E5090",
+          "stock_quantity": 10,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        },
+        {
+          "id": "var-baggy-m",
+          "product_id": "prod-baggy-jeans",
+          "sku": "BGY-JNS-BLU-M",
+          "size": "M",
+          "color": "Classic Blue",
+          "color_hex": "#2E5090",
+          "stock_quantity": 13,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        },
+        {
+          "id": "var-baggy-l",
+          "product_id": "prod-baggy-jeans",
+          "sku": "BGY-JNS-BLU-L",
+          "size": "L",
+          "color": "Classic Blue",
+          "color_hex": "#2E5090",
+          "stock_quantity": 10,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        }
+      ]
+    },
+    {
+      "id": "prod-linen-shirt",
+      "name": "Relaxed Pure Linen Camp Shirt",
+      "slug": "relaxed-pure-linen-camp-shirt",
+      "description": "Spun from 100% organic lightweight flax linen. Featuring an open camp collar, mother-of-pearl buttons, and side-vent drapes tailored for effortless warmth in Addis Ababa.",
+      "primary_section_id": "sec-men",
+      "primary_category_id": "cat-linen-shirts",
+      "regular_price_etb": 2850,
+      "is_featured": true,
+      "is_new_arrival": true,
+      "is_published": true,
+      "is_archived": false,
+      "low_stock_threshold": 3,
+      "seo_title": "Relaxed Pure Linen Camp Shirt | YOUR BRAND",
+      "seo_description": "100% organic linen camp shirt tailored in Ethiopia.",
+      "created_at": "2026-10-15T15:34:12.736Z",
+      "updated_at": "2026-10-15T15:34:12.736Z",
+      "images": [
+        {
+          "id": "img-1-1",
+          "product_id": "prod-linen-shirt",
+          "image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85",
+          "alt_text": "Relaxed Pure Linen Camp Shirt in Off-White",
+          "display_order": 1,
+          "is_primary": true
+        },
+        {
+          "id": "img-1-2",
+          "product_id": "prod-linen-shirt",
+          "image_url": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=1200&q=85",
+          "alt_text": "Linen shirt texture detail",
+          "display_order": 2,
+          "is_primary": false
+        }
+      ],
+      "variants": [
+        {
+          "id": "var-1-s",
+          "product_id": "prod-linen-shirt",
+          "sku": "LNN-SHT-WHT-S",
+          "size": "S",
+          "color": "Off-White",
+          "color_hex": "#FAF9F6",
+          "stock_quantity": 8,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        },
+        {
+          "id": "var-1-m",
+          "product_id": "prod-linen-shirt",
+          "sku": "LNN-SHT-WHT-M",
+          "size": "M",
+          "color": "Off-White",
+          "color_hex": "#FAF9F6",
+          "stock_quantity": 14,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        },
+        {
+          "id": "var-1-l",
+          "product_id": "prod-linen-shirt",
+          "sku": "LNN-SHT-WHT-L",
+          "size": "L",
+          "color": "Off-White",
+          "color_hex": "#FAF9F6",
+          "stock_quantity": 10,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        },
+        {
+          "id": "var-1-olv-m",
+          "product_id": "prod-linen-shirt",
+          "sku": "LNN-SHT-OLV-M",
+          "size": "M",
+          "color": "Olive Umber",
+          "color_hex": "#556B2F",
+          "stock_quantity": 6,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        }
+      ]
+    },
+    {
+      "id": "prod-wool-trousers",
+      "name": "Pleated High-Waist Wool Trousers",
+      "slug": "pleated-high-waist-wool-trousers",
+      "description": "Double front pleats with a relaxed tapered leg. Woven from breathable tropical wool blend with concealed hook closure and internal waistband adjusters.",
+      "primary_section_id": "sec-men",
+      "primary_category_id": "cat-trousers",
+      "regular_price_etb": 3950,
+      "sale_price_etb": 3450,
+      "is_featured": true,
+      "is_new_arrival": false,
+      "is_published": true,
+      "is_archived": false,
+      "low_stock_threshold": 4,
+      "created_at": "2026-10-15T15:34:12.736Z",
+      "updated_at": "2026-10-15T15:34:12.736Z",
+      "images": [
+        {
+          "id": "img-2-1",
+          "product_id": "prod-wool-trousers",
+          "image_url": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=1200&q=85",
+          "alt_text": "Pleated High-Waist Wool Trousers in Charcoal",
+          "display_order": 1,
+          "is_primary": true
+        }
+      ],
+      "variants": [
+        {
+          "id": "var-2-30",
+          "product_id": "prod-wool-trousers",
+          "sku": "TRS-WOOL-CHR-30",
+          "size": "30",
+          "color": "Charcoal",
+          "color_hex": "#2B2B2B",
+          "stock_quantity": 3,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        },
+        {
+          "id": "var-2-32",
+          "product_id": "prod-wool-trousers",
+          "sku": "TRS-WOOL-CHR-32",
+          "size": "32",
+          "color": "Charcoal",
+          "color_hex": "#2B2B2B",
+          "stock_quantity": 9,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        },
+        {
+          "id": "var-2-34",
+          "product_id": "prod-wool-trousers",
+          "sku": "TRS-WOOL-CHR-34",
+          "size": "34",
+          "color": "Charcoal",
+          "color_hex": "#2B2B2B",
+          "stock_quantity": 7,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        }
+      ]
+    },
+    {
+      "id": "prod-column-dress",
+      "name": "Architectural Column Midi Dress",
+      "slug": "architectural-column-midi-dress",
+      "description": "A striking minimalist silhouette crafted from substantial stretch viscose crepe. Features clean seam detailing, a discreet side slit, and an invisible back zipper.",
+      "primary_section_id": "sec-women",
+      "primary_category_id": "cat-dresses",
+      "regular_price_etb": 4600,
+      "is_featured": true,
+      "is_new_arrival": true,
+      "is_published": true,
+      "is_archived": false,
+      "low_stock_threshold": 2,
+      "created_at": "2026-10-15T15:34:12.736Z",
+      "updated_at": "2026-10-15T15:34:12.736Z",
+      "images": [
+        {
+          "id": "img-3-1",
+          "product_id": "prod-column-dress",
+          "image_url": "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=85",
+          "alt_text": "Architectural Column Midi Dress in Onyx Black",
+          "display_order": 1,
+          "is_primary": true
+        }
+      ],
+      "variants": [
+        {
+          "id": "var-3-xs",
+          "product_id": "prod-column-dress",
+          "sku": "DRS-COL-BLK-XS",
+          "size": "XS",
+          "color": "Onyx Black",
+          "color_hex": "#121212",
+          "stock_quantity": 4,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        },
+        {
+          "id": "var-3-s",
+          "product_id": "prod-column-dress",
+          "sku": "DRS-COL-BLK-S",
+          "size": "S",
+          "color": "Onyx Black",
+          "color_hex": "#121212",
+          "stock_quantity": 8,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        },
+        {
+          "id": "var-3-m",
+          "product_id": "prod-column-dress",
+          "sku": "DRS-COL-BLK-M",
+          "size": "M",
+          "color": "Onyx Black",
+          "color_hex": "#121212",
+          "stock_quantity": 6,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        }
+      ]
+    },
+    {
+      "id": "prod-loafers",
+      "name": "Handcrafted Highland Leather Loafers",
+      "slug": "handcrafted-highland-leather-loafers",
+      "description": "Meticulously crafted from supple vegetable-tanned Ethiopian highland calfskin. Goodyear welted leather soles and hand-burnished finish.",
+      "primary_section_id": "sec-footwear",
+      "primary_category_id": "cat-loafers",
+      "regular_price_etb": 6200,
+      "is_featured": true,
+      "is_new_arrival": false,
+      "is_published": true,
+      "is_archived": false,
+      "low_stock_threshold": 2,
+      "created_at": "2026-10-15T15:34:12.736Z",
+      "updated_at": "2026-10-15T15:34:12.736Z",
+      "images": [
+        {
+          "id": "img-4-1",
+          "product_id": "prod-loafers",
+          "image_url": "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&w=1200&q=85",
+          "alt_text": "Handcrafted Highland Leather Loafers",
+          "display_order": 1,
+          "is_primary": true
+        }
+      ],
+      "variants": [
+        {
+          "id": "var-4-41",
+          "product_id": "prod-loafers",
+          "sku": "LFR-ETH-BRN-41",
+          "size": "41",
+          "color": "Espresso Brown",
+          "color_hex": "#3D2817",
+          "stock_quantity": 4,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        },
+        {
+          "id": "var-4-42",
+          "product_id": "prod-loafers",
+          "sku": "LFR-ETH-BRN-42",
+          "size": "42",
+          "color": "Espresso Brown",
+          "color_hex": "#3D2817",
+          "stock_quantity": 5,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        },
+        {
+          "id": "var-4-43",
+          "product_id": "prod-loafers",
+          "sku": "LFR-ETH-BRN-43",
+          "size": "43",
+          "color": "Espresso Brown",
+          "color_hex": "#3D2817",
+          "stock_quantity": 3,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        }
+      ]
+    },
+    {
+      "id": "prod-tibeb-set",
+      "name": "Modern Handwoven Tibeb Tunic Set",
+      "slug": "modern-handwoven-tibeb-tunic-set",
+      "description": "Handspun Shemma cotton tailored into a clean, modern tunic and trouser pairing. Subtle monochrome Tibeb geometric borders woven by master weavers in Gulele.",
+      "primary_section_id": "sec-heritage",
+      "primary_category_id": "cat-tibeb-sets",
+      "regular_price_etb": 7500,
+      "sale_price_etb": 6800,
+      "is_featured": true,
+      "is_new_arrival": true,
+      "is_published": true,
+      "is_archived": false,
+      "low_stock_threshold": 3,
+      "created_at": "2026-10-15T15:34:12.736Z",
+      "updated_at": "2026-10-15T15:34:12.736Z",
+      "images": [
+        {
+          "id": "img-5-1",
+          "product_id": "prod-tibeb-set",
+          "image_url": "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=85",
+          "alt_text": "Modern Handwoven Tibeb Tunic Set",
+          "display_order": 1,
+          "is_primary": true
+        }
+      ],
+      "variants": [
+        {
+          "id": "var-5-s",
+          "product_id": "prod-tibeb-set",
+          "sku": "TIB-SET-NAT-S",
+          "size": "S",
+          "color": "Natural Cream",
+          "color_hex": "#F5F5DC",
+          "stock_quantity": 3,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        },
+        {
+          "id": "var-5-m",
+          "product_id": "prod-tibeb-set",
+          "sku": "TIB-SET-NAT-M",
+          "size": "M",
+          "color": "Natural Cream",
+          "color_hex": "#F5F5DC",
+          "stock_quantity": 4,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        },
+        {
+          "id": "var-5-l",
+          "product_id": "prod-tibeb-set",
+          "sku": "TIB-SET-NAT-L",
+          "size": "L",
+          "color": "Natural Cream",
+          "color_hex": "#F5F5DC",
+          "stock_quantity": 2,
+          "is_available": true,
+          "created_at": "2026-10-15T15:34:12.736Z"
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "sec-men",
+      "name": "Men",
+      "slug": "men",
+      "description": "Tailored essentials, relaxed linen, and refined silhouettes.",
+      "display_order": 1,
+      "is_nav_visible": true,
+      "is_home_visible": true,
+      "is_active": true,
+      "is_archived": false,
+      "created_at": "2026-10-15T14:31:49.502Z",
+      "updated_at": "2026-10-15T14:31:49.504Z"
+    },
+    {
+      "id": "sec-women",
+      "name": "Women",
+      "slug": "women",
+      "description": "Contemporary drape, minimalist tailoring, and premium textiles.",
+      "display_order": 2,
+      "is_nav_visible": true,
+      "is_home_visible": true,
+      "is_active": true,
+      "is_archived": false,
+      "created_at": "2026-10-15T14:31:49.504Z",
+      "updated_at": "2026-10-15T14:31:49.504Z"
+    },
+    {
+      "id": "sec-footwear",
+      "name": "Footwear",
+      "slug": "footwear",
+      "description": "Handcrafted Ethiopian full-grain leather shoes and modern minimalist footwear.",
+      "display_order": 3,
+      "is_nav_visible": true,
+      "is_home_visible": true,
+      "is_active": true,
+      "is_archived": false,
+      "created_at": "2026-10-15T14:31:49.504Z",
+      "updated_at": "2026-10-15T14:31:49.504Z"
+    },
+    {
+      "id": "sec-heritage",
+      "name": "Tibeb & Heritage Fusion",
+      "slug": "heritage-fusion",
+      "description": "Artisanal handwoven Shemma textiles reimagined in sleek, modern cuts.",
+      "display_order": 4,
+      "is_nav_visible": true,
+      "is_home_visible": true,
+      "is_active": true,
+      "is_archived": false,
+      "created_at": "2026-10-15T14:31:49.504Z",
+      "updated_at": "2026-10-15T14:31:49.504Z"
+    },
+    {
+      "id": "sec-accessories",
+      "name": "Accessories",
+      "slug": "accessories",
+      "description": "Vegetable-tanned leather goods, scarves, and understated essentials.",
+      "display_order": 5,
+      "is_nav_visible": true,
+      "is_home_visible": true,
+      "is_active": true,
+      "is_archived": false,
+      "created_at": "2026-10-15T14:31:49.504Z",
+      "updated_at": "2026-10-15T14:31:49.504Z"
+    }
+  ],
+  "categories": [
+    {
+      "id": "cat-linen-shirts",
+      "section_id": "sec-men",
+      "name": "Linen Shirts",
+      "slug": "linen-shirts",
+      "description": "Breathable relaxed fit shirts crafted for warm days.",
+      "display_order": 1,
+      "is_active": true,
+      "is_archived": false,
+      "created_at": "2026-10-15T14:31:49.504Z",
+      "updated_at": "2026-10-15T14:31:49.504Z"
+    },
+    {
+      "id": "cat-trousers",
+      "section_id": "sec-men",
+      "name": "Tailored Trousers",
+      "slug": "tailored-trousers",
+      "description": "Clean pleats and structured wool-cotton blends.",
+      "display_order": 2,
+      "is_active": true,
+      "is_archived": false,
+      "created_at": "2026-10-15T14:31:49.504Z",
+      "updated_at": "2026-10-15T14:31:49.504Z"
+    },
+    {
+      "id": "cat-dresses",
+      "section_id": "sec-women",
+      "name": "Minimalist Dresses",
+      "slug": "minimalist-dresses",
+      "description": "Architectural silhouettes and column drapes.",
+      "display_order": 1,
+      "is_active": true,
+      "is_archived": false,
+      "created_at": "2026-10-15T14:31:49.504Z",
+      "updated_at": "2026-10-15T14:31:49.504Z"
+    },
+    {
+      "id": "cat-blazers",
+      "section_id": "sec-women",
+      "name": "Oversized Blazers",
+      "slug": "blazers",
+      "description": "Relaxed shoulders and premium structural drape.",
+      "display_order": 2,
+      "is_active": true,
+      "is_archived": false,
+      "created_at": "2026-10-15T14:31:49.504Z",
+      "updated_at": "2026-10-15T14:31:49.504Z"
+    },
+    {
+      "id": "cat-loafers",
+      "section_id": "sec-footwear",
+      "name": "Handcrafted Loafers",
+      "slug": "leather-loafers",
+      "description": "Ethiopian highland leather with Blake stitched soles.",
+      "display_order": 1,
+      "is_active": true,
+      "is_archived": false,
+      "created_at": "2026-10-15T14:31:49.504Z",
+      "updated_at": "2026-10-15T14:31:49.504Z"
+    },
+    {
+      "id": "cat-tibeb-sets",
+      "section_id": "sec-heritage",
+      "name": "Modern Tibeb Sets",
+      "slug": "modern-tibeb",
+      "description": "Subtle woven border geometry on pure handspun cotton.",
+      "display_order": 1,
+      "is_active": true,
+      "is_archived": false,
+      "created_at": "2026-10-15T14:31:49.504Z",
+      "updated_at": "2026-10-15T14:31:49.504Z"
+    }
+  ],
+  "pickupLocations": [
+    {
+      "id": "pk-bole",
+      "name": "Bole Flagship Boutique",
+      "address_line": "Cameroon St, Near Edna Mall, Bole",
+      "city": "Addis Ababa",
+      "google_maps_url": "https://maps.google.com/?q=Bole+Addis+Ababa",
+      "contact_phone": "+251 91 123 4567",
+      "opening_hours": "Mon - Sat: 9:00 AM - 8:00 PM | Sun: 10:00 AM - 6:00 PM",
+      "instructions": "Present your Pickup PIN code (PK-XXXXX) to store staff upon collection.",
+      "pickup_fee_etb": 0,
+      "is_active": true,
+      "accepts_new_orders": true,
+      "display_order": 1
+    },
+    {
+      "id": "pk-kazanchis",
+      "name": "Kazanchis Design Studio",
+      "address_line": "Menelik II Avenue, Kazanchis Business District",
+      "city": "Addis Ababa",
+      "google_maps_url": "https://maps.google.com/?q=Kazanchis+Addis+Ababa",
+      "contact_phone": "+251 91 234 5678",
+      "opening_hours": "Mon - Fri: 9:30 AM - 7:00 PM",
+      "instructions": "Enter ground floor showroom. Parking available at the rear.",
+      "pickup_fee_etb": 0,
+      "is_active": true,
+      "accepts_new_orders": true,
+      "display_order": 2
+    },
+    {
+      "id": "pk-sarbet",
+      "name": "Sarbet Old Airport Studio",
+      "address_line": "Roosevelt St, Near Pushkin Square, Sarbet",
+      "city": "Addis Ababa",
+      "contact_phone": "+251 91 345 6789",
+      "opening_hours": "Tue - Sun: 10:00 AM - 7:30 PM",
+      "instructions": "Collection desk located in the main gallery.",
+      "pickup_fee_etb": 0,
+      "is_active": true,
+      "accepts_new_orders": true,
+      "display_order": 3
+    }
+  ],
+  "deliveryZones": [
+    {
+      "id": "zone-addis-central",
+      "name": "Addis Ababa Central Zone",
+      "description": "Bole, Kirkos, Arada, Lideta, Kazanchis, Piazza",
+      "fee_etb": 200,
+      "free_delivery_threshold_etb": 2500,
+      "min_order_amount_etb": 0,
+      "estimated_delivery_time": "Same Day / Next Day (24h)",
+      "priority": 10,
+      "is_active": true,
+      "rules": [
+        {
+          "id": "r1",
+          "zone_id": "zone-addis-central",
+          "match_type": "sub_city",
+          "match_pattern": "Bole"
+        },
+        {
+          "id": "r2",
+          "zone_id": "zone-addis-central",
+          "match_type": "sub_city",
+          "match_pattern": "Kirkos"
+        },
+        {
+          "id": "r3",
+          "zone_id": "zone-addis-central",
+          "match_type": "sub_city",
+          "match_pattern": "Arada"
+        },
+        {
+          "id": "r4",
+          "zone_id": "zone-addis-central",
+          "match_type": "sub_city",
+          "match_pattern": "Lideta"
+        }
+      ]
+    },
+    {
+      "id": "zone-addis-outer",
+      "name": "Addis Ababa Greater Sub-Cities",
+      "description": "Yeka, Nifas Silk Lafto, Kolfe Keranio, Akaki Kality, Gullele",
+      "fee_etb": 300,
+      "free_delivery_threshold_etb": 3500,
+      "min_order_amount_etb": 0,
+      "estimated_delivery_time": "24 to 48 Hours",
+      "priority": 8,
+      "is_active": true,
+      "rules": [
+        {
+          "id": "r5",
+          "zone_id": "zone-addis-outer",
+          "match_type": "sub_city",
+          "match_pattern": "Yeka"
+        },
+        {
+          "id": "r6",
+          "zone_id": "zone-addis-outer",
+          "match_type": "sub_city",
+          "match_pattern": "Nifas Silk"
+        },
+        {
+          "id": "r7",
+          "zone_id": "zone-addis-outer",
+          "match_type": "sub_city",
+          "match_pattern": "Kolfe"
+        },
+        {
+          "id": "r8",
+          "zone_id": "zone-addis-outer",
+          "match_type": "sub_city",
+          "match_pattern": "Gullele"
+        },
+        {
+          "id": "r9",
+          "zone_id": "zone-addis-outer",
+          "match_type": "sub_city",
+          "match_pattern": "Akaki Kality"
+        }
+      ]
+    },
+    {
+      "id": "zone-regional",
+      "name": "Regional Express Hubs",
+      "description": "Hawassa, Adama, Bishoftu, Bahir Dar, Dire Dawa, Gondar",
+      "fee_etb": 550,
+      "free_delivery_threshold_etb": 6000,
+      "min_order_amount_etb": 500,
+      "estimated_delivery_time": "2 to 4 Business Days",
+      "priority": 5,
+      "is_active": true,
+      "rules": [
+        {
+          "id": "r10",
+          "zone_id": "zone-regional",
+          "match_type": "city",
+          "match_pattern": "Hawassa"
+        },
+        {
+          "id": "r11",
+          "zone_id": "zone-regional",
+          "match_type": "city",
+          "match_pattern": "Adama"
+        },
+        {
+          "id": "r12",
+          "zone_id": "zone-regional",
+          "match_type": "city",
+          "match_pattern": "Bishoftu"
+        },
+        {
+          "id": "r13",
+          "zone_id": "zone-regional",
+          "match_type": "city",
+          "match_pattern": "Bahir Dar"
+        }
+      ]
+    }
+  ],
+  "coupons": [
+    {
+      "id": "coup-welcome",
+      "code": "WELCOME10",
+      "discount_type": "percentage",
+      "discount_value": 10,
+      "max_discount_etb": 600,
+      "min_order_amount_etb": 1000,
+      "usage_limit_total": 500,
+      "usage_limit_per_customer": 1,
+      "current_redemptions_count": 23,
+      "is_new_customer_only": true,
+      "status": "active"
+    },
+    {
+      "id": "coup-300",
+      "code": "FASHION300",
+      "discount_type": "fixed_amount",
+      "discount_value": 300,
+      "min_order_amount_etb": 2500,
+      "usage_limit_total": 200,
+      "usage_limit_per_customer": 1,
+      "current_redemptions_count": 38,
+      "is_new_customer_only": false,
+      "status": "active"
+    },
+    {
+      "id": "coup-free-ship",
+      "code": "FREESHIP",
+      "discount_type": "free_delivery",
+      "discount_value": 0,
+      "min_order_amount_etb": 1500,
+      "usage_limit_total": 1000,
+      "usage_limit_per_customer": 2,
+      "current_redemptions_count": 52,
+      "is_new_customer_only": false,
+      "status": "active"
+    }
+  ],
   "orders": [
+    {
+      "id": "ord-1792078452774",
+      "order_number": "ORD-2026-252979",
+      "customer_id": "cust-1",
+      "customer_name": "Test Buyer",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 6900,
+      "discount_amount_etb": 0,
+      "delivery_fee_etb": 50,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 6950,
+      "tracking_token": "btzscp5bq3z85y5ayy6qrejq",
+      "created_at": "2026-10-15T15:34:12.774Z",
+      "updated_at": "2026-10-15T15:34:12.778Z",
+      "fulfillment": {
+        "id": "ful-1792078452774",
+        "order_id": "ord-1792078452774",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-B3973"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792078452774-0",
+          "order_id": "ord-1792078452774",
+          "product_id": "prod-wool-trousers",
+          "variant_id": "var-2-30",
+          "product_name": "Pleated High-Waist Wool Trousers",
+          "sku": "TRS-WOOL-CHR-30",
+          "size": "30",
+          "color": "Charcoal",
+          "unit_price_etb": 3450,
+          "quantity": 2,
+          "line_total_etb": 6900,
+          "product_image_url": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792078451146",
+      "order_number": "ORD-2026-754944",
+      "customer_id": "cust-1",
+      "customer_name": "Cap Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 8550,
+      "discount_amount_etb": 600,
+      "applied_coupon_code": "WELCOME10",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 7950,
+      "tracking_token": "48xt5vdd6b7frj8aspnmvehq",
+      "created_at": "2026-10-15T15:34:11.146Z",
+      "updated_at": "2026-10-15T15:34:11.146Z",
+      "fulfillment": {
+        "id": "ful-1792078451146",
+        "order_id": "ord-1792078451146",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-H7480"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792078451146-0",
+          "order_id": "ord-1792078451146",
+          "product_id": "prod-linen-shirt",
+          "variant_id": "var-1-s",
+          "product_name": "Relaxed Pure Linen Camp Shirt",
+          "sku": "LNN-SHT-WHT-S",
+          "size": "S",
+          "color": "Off-White",
+          "unit_price_etb": 2850,
+          "quantity": 3,
+          "line_total_etb": 8550,
+          "product_image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792078451141",
+      "order_number": "ORD-2026-493576",
+      "customer_id": "cust-1",
+      "customer_name": "Coupon Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 2850,
+      "discount_amount_etb": 300,
+      "applied_coupon_code": "FASHION300",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 2550,
+      "tracking_token": "ctjsd7msttknr7j7zdsp6efd",
+      "created_at": "2026-10-15T15:34:11.141Z",
+      "updated_at": "2026-10-15T15:34:11.141Z",
+      "fulfillment": {
+        "id": "ful-1792078451141",
+        "order_id": "ord-1792078451141",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-T1807"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792078451141-0",
+          "order_id": "ord-1792078451141",
+          "product_id": "prod-linen-shirt",
+          "variant_id": "var-1-s",
+          "product_name": "Relaxed Pure Linen Camp Shirt",
+          "sku": "LNN-SHT-WHT-S",
+          "size": "S",
+          "color": "Off-White",
+          "unit_price_etb": 2850,
+          "quantity": 1,
+          "line_total_etb": 2850,
+          "product_image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792078422922",
+      "order_number": "ORD-2026-784373",
+      "customer_id": "cust-1",
+      "customer_name": "Test Buyer",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 6900,
+      "discount_amount_etb": 0,
+      "delivery_fee_etb": 50,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 6950,
+      "tracking_token": "uksxnkb3fu6a7hptjcwp4and",
+      "created_at": "2026-10-15T15:33:42.922Z",
+      "updated_at": "2026-10-15T15:33:42.926Z",
+      "fulfillment": {
+        "id": "ful-1792078422921",
+        "order_id": "ord-1792078422922",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-P5792"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792078422922-0",
+          "order_id": "ord-1792078422922",
+          "product_id": "prod-wool-trousers",
+          "variant_id": "var-2-30",
+          "product_name": "Pleated High-Waist Wool Trousers",
+          "sku": "TRS-WOOL-CHR-30",
+          "size": "30",
+          "color": "Charcoal",
+          "unit_price_etb": 3450,
+          "quantity": 2,
+          "line_total_etb": 6900,
+          "product_image_url": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792078421133",
+      "order_number": "ORD-2026-479868",
+      "customer_id": "cust-1",
+      "customer_name": "Cap Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 8550,
+      "discount_amount_etb": 600,
+      "applied_coupon_code": "WELCOME10",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 7950,
+      "tracking_token": "gqx3yj6bhmbfu8bkseyrbg2f",
+      "created_at": "2026-10-15T15:33:41.133Z",
+      "updated_at": "2026-10-15T15:33:41.133Z",
+      "fulfillment": {
+        "id": "ful-1792078421133",
+        "order_id": "ord-1792078421133",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-Z3233"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792078421133-0",
+          "order_id": "ord-1792078421133",
+          "product_id": "prod-linen-shirt",
+          "variant_id": "var-1-s",
+          "product_name": "Relaxed Pure Linen Camp Shirt",
+          "sku": "LNN-SHT-WHT-S",
+          "size": "S",
+          "color": "Off-White",
+          "unit_price_etb": 2850,
+          "quantity": 3,
+          "line_total_etb": 8550,
+          "product_image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792078421126",
+      "order_number": "ORD-2026-194375",
+      "customer_id": "cust-1",
+      "customer_name": "Coupon Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 2850,
+      "discount_amount_etb": 300,
+      "applied_coupon_code": "FASHION300",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 2550,
+      "tracking_token": "rdvgg2tf9dp97d8mmwt8ccaj",
+      "created_at": "2026-10-15T15:33:41.126Z",
+      "updated_at": "2026-10-15T15:33:41.126Z",
+      "fulfillment": {
+        "id": "ful-1792078421126",
+        "order_id": "ord-1792078421126",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-L7366"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792078421126-0",
+          "order_id": "ord-1792078421126",
+          "product_id": "prod-linen-shirt",
+          "variant_id": "var-1-s",
+          "product_name": "Relaxed Pure Linen Camp Shirt",
+          "sku": "LNN-SHT-WHT-S",
+          "size": "S",
+          "color": "Off-White",
+          "unit_price_etb": 2850,
+          "quantity": 1,
+          "line_total_etb": 2850,
+          "product_image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792078354267",
+      "order_number": "ORD-2026-891695",
+      "customer_id": "cust-1",
+      "customer_name": "Cap Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 11700,
+      "discount_amount_etb": 600,
+      "applied_coupon_code": "WELCOME10",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 11100,
+      "tracking_token": "8n8see6yyf78bb5mq8uehpse",
+      "created_at": "2026-10-15T15:32:34.267Z",
+      "updated_at": "2026-10-15T15:32:34.267Z",
+      "fulfillment": {
+        "id": "ful-1792078354267",
+        "order_id": "ord-1792078354267",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-Z2502"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792078354267-0",
+          "order_id": "ord-1792078354267",
+          "product_id": "prod-1792078313871",
+          "variant_id": "var-sh-1",
+          "product_name": "Updated Luxury Handwoven Silk Shawl",
+          "sku": "SHWL-SILK-UPDATED",
+          "size": "L",
+          "color": "Ivory Gold",
+          "unit_price_etb": 3900,
+          "quantity": 3,
+          "line_total_etb": 11700
+        }
+      ]
+    },
+    {
+      "id": "ord-1792078354262",
+      "order_number": "ORD-2026-271405",
+      "customer_id": "cust-1",
+      "customer_name": "Coupon Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 3900,
+      "discount_amount_etb": 300,
+      "applied_coupon_code": "FASHION300",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 3600,
+      "tracking_token": "k9vsa6pm8rnvqvkfqytf7hrn",
+      "created_at": "2026-10-15T15:32:34.262Z",
+      "updated_at": "2026-10-15T15:32:34.262Z",
+      "fulfillment": {
+        "id": "ful-1792078354261",
+        "order_id": "ord-1792078354262",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-Y2555"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792078354262-0",
+          "order_id": "ord-1792078354262",
+          "product_id": "prod-1792078313871",
+          "variant_id": "var-sh-1",
+          "product_name": "Updated Luxury Handwoven Silk Shawl",
+          "sku": "SHWL-SILK-UPDATED",
+          "size": "L",
+          "color": "Ivory Gold",
+          "unit_price_etb": 3900,
+          "quantity": 1,
+          "line_total_etb": 3900
+        }
+      ]
+    },
+    {
+      "id": "ord-1792078313907",
+      "order_number": "ORD-2026-604824",
+      "customer_id": "cust-1",
+      "customer_name": "Test Buyer",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 7800,
+      "discount_amount_etb": 0,
+      "delivery_fee_etb": 50,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 7850,
+      "tracking_token": "pe7qkfv8p4x4umf2rrdfkbxt",
+      "created_at": "2026-10-15T15:31:53.907Z",
+      "updated_at": "2026-10-15T15:31:53.917Z",
+      "fulfillment": {
+        "id": "ful-1792078313906",
+        "order_id": "ord-1792078313907",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-C8832"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792078313907-0",
+          "order_id": "ord-1792078313907",
+          "product_id": "prod-1792078313871",
+          "variant_id": "var-sh-1",
+          "product_name": "Updated Luxury Handwoven Silk Shawl",
+          "sku": "SHWL-SILK-UPDATED",
+          "size": "L",
+          "color": "Ivory Gold",
+          "unit_price_etb": 3900,
+          "quantity": 2,
+          "line_total_etb": 7800
+        }
+      ]
+    },
+    {
+      "id": "ord-1792078313844",
+      "order_number": "ORD-2026-581687",
+      "customer_id": "cust-1",
+      "customer_name": "Cap Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 6000,
+      "discount_amount_etb": 600,
+      "applied_coupon_code": "WELCOME10",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 5400,
+      "tracking_token": "saaexgjjybxt2t38ejnjt8ym",
+      "created_at": "2026-10-15T15:31:53.845Z",
+      "updated_at": "2026-10-15T15:31:53.845Z",
+      "fulfillment": {
+        "id": "ful-1792078313844",
+        "order_id": "ord-1792078313844",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-B1579"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792078313844-0",
+          "order_id": "ord-1792078313844",
+          "product_id": "prod-1792078284799",
+          "variant_id": "var-sh-1",
+          "product_name": "Original Handwoven Shawl",
+          "sku": "SHWL-ORIG-1",
+          "size": "M",
+          "color": "White",
+          "unit_price_etb": 2000,
+          "quantity": 3,
+          "line_total_etb": 6000
+        }
+      ]
+    },
+    {
+      "id": "ord-1792078284820",
+      "order_number": "ORD-2026-645287",
+      "customer_id": "cust-1",
+      "customer_name": "Test Buyer",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 4000,
+      "discount_amount_etb": 0,
+      "delivery_fee_etb": 50,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 4050,
+      "tracking_token": "8rc2f7y6y7fvzgevxmyeeury",
+      "created_at": "2026-10-15T15:31:24.820Z",
+      "updated_at": "2026-10-15T15:31:24.828Z",
+      "fulfillment": {
+        "id": "ful-1792078284820",
+        "order_id": "ord-1792078284820",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-M3493"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792078284820-0",
+          "order_id": "ord-1792078284820",
+          "product_id": "prod-1792078284799",
+          "variant_id": "var-sh-1",
+          "product_name": "Original Handwoven Shawl",
+          "sku": "SHWL-ORIG-1",
+          "size": "M",
+          "color": "White",
+          "unit_price_etb": 2000,
+          "quantity": 2,
+          "line_total_etb": 4000
+        }
+      ]
+    },
+    {
+      "id": "ord-1792078284768",
+      "order_number": "ORD-2026-438008",
+      "customer_id": "cust-1",
+      "customer_name": "Cap Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 114000,
+      "discount_amount_etb": 600,
+      "applied_coupon_code": "WELCOME10",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 113400,
+      "tracking_token": "de3fkj3e38wz8ushnsqgex8e",
+      "created_at": "2026-10-15T15:31:24.768Z",
+      "updated_at": "2026-10-15T15:31:24.768Z",
+      "fulfillment": {
+        "id": "ful-1792078284768",
+        "order_id": "ord-1792078284768",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-Z8552"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792078284768-0",
+          "order_id": "ord-1792078284768",
+          "product_id": "prod-baggy-jeans",
+          "variant_id": "var-baggy-s",
+          "product_name": "baggy jeans",
+          "sku": "BGY-JNS-BLU-S",
+          "size": "S",
+          "color": "Classic Blue",
+          "unit_price_etb": 38000,
+          "quantity": 3,
+          "line_total_etb": 114000,
+          "product_image_url": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792078284759",
+      "order_number": "ORD-2026-283273",
+      "customer_id": "cust-1",
+      "customer_name": "Coupon Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 38000,
+      "discount_amount_etb": 300,
+      "applied_coupon_code": "FASHION300",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 37700,
+      "tracking_token": "wdmu8qpy6g7pucgaeavakyf8",
+      "created_at": "2026-10-15T15:31:24.759Z",
+      "updated_at": "2026-10-15T15:31:24.759Z",
+      "fulfillment": {
+        "id": "ful-1792078284759",
+        "order_id": "ord-1792078284759",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-K1056"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792078284759-0",
+          "order_id": "ord-1792078284759",
+          "product_id": "prod-baggy-jeans",
+          "variant_id": "var-baggy-s",
+          "product_name": "baggy jeans",
+          "sku": "BGY-JNS-BLU-S",
+          "size": "S",
+          "color": "Classic Blue",
+          "unit_price_etb": 38000,
+          "quantity": 1,
+          "line_total_etb": 38000,
+          "product_image_url": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792078261401",
+      "order_number": "ORD-2026-317865",
+      "customer_id": "cust-1",
+      "customer_name": "Test Buyer",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 76000,
+      "discount_amount_etb": 0,
+      "delivery_fee_etb": 50,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 76050,
+      "tracking_token": "uftfcb938nbpnm7vzru6z5x2",
+      "created_at": "2026-10-15T15:31:01.401Z",
+      "updated_at": "2026-10-15T15:31:01.406Z",
+      "fulfillment": {
+        "id": "ful-1792078261401",
+        "order_id": "ord-1792078261401",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-L6937"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792078261401-0",
+          "order_id": "ord-1792078261401",
+          "product_id": "prod-baggy-jeans",
+          "variant_id": "var-baggy-s",
+          "product_name": "baggy jeans",
+          "sku": "BGY-JNS-BLU-S",
+          "size": "S",
+          "color": "Classic Blue",
+          "unit_price_etb": 38000,
+          "quantity": 2,
+          "line_total_etb": 76000,
+          "product_image_url": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792078261299",
+      "order_number": "ORD-2026-632529",
+      "customer_id": "cust-1",
+      "customer_name": "Cap Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 114000,
+      "discount_amount_etb": 600,
+      "applied_coupon_code": "WELCOME10",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 113400,
+      "tracking_token": "u28dch6rsj2wbm98c3khfgqk",
+      "created_at": "2026-10-15T15:31:01.299Z",
+      "updated_at": "2026-10-15T15:31:01.299Z",
+      "fulfillment": {
+        "id": "ful-1792078261299",
+        "order_id": "ord-1792078261299",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-Q5487"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792078261299-0",
+          "order_id": "ord-1792078261299",
+          "product_id": "prod-baggy-jeans",
+          "variant_id": "var-baggy-s",
+          "product_name": "baggy jeans",
+          "sku": "BGY-JNS-BLU-S",
+          "size": "S",
+          "color": "Classic Blue",
+          "unit_price_etb": 38000,
+          "quantity": 3,
+          "line_total_etb": 114000,
+          "product_image_url": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792078261291",
+      "order_number": "ORD-2026-212211",
+      "customer_id": "cust-1",
+      "customer_name": "Coupon Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 38000,
+      "discount_amount_etb": 300,
+      "applied_coupon_code": "FASHION300",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 37700,
+      "tracking_token": "75mxcndzukfv6979sftaa9zu",
+      "created_at": "2026-10-15T15:31:01.291Z",
+      "updated_at": "2026-10-15T15:31:01.291Z",
+      "fulfillment": {
+        "id": "ful-1792078261291",
+        "order_id": "ord-1792078261291",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-Z3389"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792078261291-0",
+          "order_id": "ord-1792078261291",
+          "product_id": "prod-baggy-jeans",
+          "variant_id": "var-baggy-s",
+          "product_name": "baggy jeans",
+          "sku": "BGY-JNS-BLU-S",
+          "size": "S",
+          "color": "Classic Blue",
+          "unit_price_etb": 38000,
+          "quantity": 1,
+          "line_total_etb": 38000,
+          "product_image_url": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792077107007",
+      "order_number": "ORD-2026-761238",
+      "customer_id": "cust-1",
+      "customer_name": "Test Buyer",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 76000,
+      "discount_amount_etb": 0,
+      "delivery_fee_etb": 50,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 76050,
+      "tracking_token": "85y9w4rvjgrwzpmb9rbcnstk",
+      "created_at": "2026-10-15T15:11:47.007Z",
+      "updated_at": "2026-10-15T15:11:47.012Z",
+      "fulfillment": {
+        "id": "ful-1792077107007",
+        "order_id": "ord-1792077107007",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-M3802"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792077107007-0",
+          "order_id": "ord-1792077107007",
+          "product_id": "prod-baggy-jeans",
+          "variant_id": "var-baggy-s",
+          "product_name": "baggy jeans",
+          "sku": "BGY-JNS-BLU-S",
+          "size": "S",
+          "color": "Classic Blue",
+          "unit_price_etb": 38000,
+          "quantity": 2,
+          "line_total_etb": 76000,
+          "product_image_url": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792077106803",
+      "order_number": "ORD-2026-801037",
+      "customer_id": "cust-1",
+      "customer_name": "Cap Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 114000,
+      "discount_amount_etb": 600,
+      "applied_coupon_code": "WELCOME10",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 113400,
+      "tracking_token": "9xc8874p6ybmymmeqkptnsh8",
+      "created_at": "2026-10-15T15:11:46.803Z",
+      "updated_at": "2026-10-15T15:11:46.803Z",
+      "fulfillment": {
+        "id": "ful-1792077106802",
+        "order_id": "ord-1792077106803",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-N9654"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792077106803-0",
+          "order_id": "ord-1792077106803",
+          "product_id": "prod-baggy-jeans",
+          "variant_id": "var-baggy-s",
+          "product_name": "baggy jeans",
+          "sku": "BGY-JNS-BLU-S",
+          "size": "S",
+          "color": "Classic Blue",
+          "unit_price_etb": 38000,
+          "quantity": 3,
+          "line_total_etb": 114000,
+          "product_image_url": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792077106795",
+      "order_number": "ORD-2026-976353",
+      "customer_id": "cust-1",
+      "customer_name": "Coupon Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 38000,
+      "discount_amount_etb": 300,
+      "applied_coupon_code": "FASHION300",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 37700,
+      "tracking_token": "7x8zxveq9wdbekwnjbq8x98p",
+      "created_at": "2026-10-15T15:11:46.795Z",
+      "updated_at": "2026-10-15T15:11:46.795Z",
+      "fulfillment": {
+        "id": "ful-1792077106795",
+        "order_id": "ord-1792077106795",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-F5485"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792077106795-0",
+          "order_id": "ord-1792077106795",
+          "product_id": "prod-baggy-jeans",
+          "variant_id": "var-baggy-s",
+          "product_name": "baggy jeans",
+          "sku": "BGY-JNS-BLU-S",
+          "size": "S",
+          "color": "Classic Blue",
+          "unit_price_etb": 38000,
+          "quantity": 1,
+          "line_total_etb": 38000,
+          "product_image_url": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792077004265",
+      "order_number": "ORD-2026-752522",
+      "customer_id": "cust-1",
+      "customer_name": "Cap Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 114000,
+      "discount_amount_etb": 600,
+      "applied_coupon_code": "WELCOME10",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 113400,
+      "tracking_token": "xseek6j65wu28srtx579pvca",
+      "created_at": "2026-10-15T15:10:04.265Z",
+      "updated_at": "2026-10-15T15:10:04.265Z",
+      "fulfillment": {
+        "id": "ful-1792077004265",
+        "order_id": "ord-1792077004265",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-B7611"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792077004265-0",
+          "order_id": "ord-1792077004265",
+          "product_id": "prod-baggy-jeans",
+          "variant_id": "var-baggy-s",
+          "product_name": "baggy jeans",
+          "sku": "BGY-JNS-BLU-S",
+          "size": "S",
+          "color": "Classic Blue",
+          "unit_price_etb": 38000,
+          "quantity": 3,
+          "line_total_etb": 114000,
+          "product_image_url": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792077004258",
+      "order_number": "ORD-2026-454449",
+      "customer_id": "cust-1",
+      "customer_name": "Coupon Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 38000,
+      "discount_amount_etb": 300,
+      "applied_coupon_code": "FASHION300",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 37700,
+      "tracking_token": "3pun4ce26cyb2enpeyarhcek",
+      "created_at": "2026-10-15T15:10:04.258Z",
+      "updated_at": "2026-10-15T15:10:04.258Z",
+      "fulfillment": {
+        "id": "ful-1792077004258",
+        "order_id": "ord-1792077004258",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-T4361"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792077004258-0",
+          "order_id": "ord-1792077004258",
+          "product_id": "prod-baggy-jeans",
+          "variant_id": "var-baggy-s",
+          "product_name": "baggy jeans",
+          "sku": "BGY-JNS-BLU-S",
+          "size": "S",
+          "color": "Classic Blue",
+          "unit_price_etb": 38000,
+          "quantity": 1,
+          "line_total_etb": 38000,
+          "product_image_url": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792075400772",
+      "order_number": "ORD-2026-596489",
+      "customer_id": "cust-1",
+      "customer_name": "Test Buyer",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 3600,
+      "discount_amount_etb": 0,
+      "delivery_fee_etb": 50,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 3650,
+      "tracking_token": "npv35b6v9jt5j7vw5q499r4e",
+      "created_at": "2026-10-15T14:43:20.773Z",
+      "updated_at": "2026-10-15T14:43:20.781Z",
+      "fulfillment": {
+        "id": "ful-1792075400772",
+        "order_id": "ord-1792075400772",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-H2318"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792075400772-0",
+          "order_id": "ord-1792075400772",
+          "product_id": "prod-1792075400760",
+          "variant_id": "test-v-m",
+          "product_name": "Test Tailored Linen Vest",
+          "sku": "TST-VEST-M",
+          "size": "M",
+          "color": "Sand",
+          "unit_price_etb": 1800,
+          "quantity": 2,
+          "line_total_etb": 3600
+        }
+      ]
+    },
+    {
+      "id": "ord-1792075400715",
+      "order_number": "ORD-2026-310288",
+      "customer_id": "cust-1",
+      "customer_name": "Cap Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 9600,
+      "discount_amount_etb": 600,
+      "applied_coupon_code": "WELCOME10",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 9000,
+      "tracking_token": "e5kqrdgf8vt5ex32whjvucjb",
+      "created_at": "2026-10-15T14:43:20.715Z",
+      "updated_at": "2026-10-15T14:43:20.715Z",
+      "fulfillment": {
+        "id": "ful-1792075400715",
+        "order_id": "ord-1792075400715",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-P8856"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792075400715-0",
+          "order_id": "ord-1792075400715",
+          "product_id": "prod-1792074932164",
+          "variant_id": "var-test-1",
+          "product_name": "Artisanal Cashmere Scarf",
+          "sku": "CSH-SCF-NAT-OS",
+          "size": "OS",
+          "color": "Natural Cream",
+          "unit_price_etb": 3200,
+          "quantity": 3,
+          "line_total_etb": 9600,
+          "product_image_url": "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792075400705",
+      "order_number": "ORD-2026-118450",
+      "customer_id": "cust-1",
+      "customer_name": "Coupon Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 3200,
+      "discount_amount_etb": 300,
+      "applied_coupon_code": "FASHION300",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 2900,
+      "tracking_token": "dm6wz3muvvcn358pk8qccvay",
+      "created_at": "2026-10-15T14:43:20.705Z",
+      "updated_at": "2026-10-15T14:43:20.705Z",
+      "fulfillment": {
+        "id": "ful-1792075400705",
+        "order_id": "ord-1792075400705",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-S1749"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792075400705-0",
+          "order_id": "ord-1792075400705",
+          "product_id": "prod-1792074932164",
+          "variant_id": "var-test-1",
+          "product_name": "Artisanal Cashmere Scarf",
+          "sku": "CSH-SCF-NAT-OS",
+          "size": "OS",
+          "color": "Natural Cream",
+          "unit_price_etb": 3200,
+          "quantity": 1,
+          "line_total_etb": 3200,
+          "product_image_url": "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792074932039",
+      "order_number": "ORD-2026-299772",
+      "customer_id": "cust-1",
+      "customer_name": "Test Buyer",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 3600,
+      "discount_amount_etb": 0,
+      "delivery_fee_etb": 50,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 3650,
+      "tracking_token": "nkd9wccs2d6wzuzkkqqk9mx4",
+      "created_at": "2026-10-15T14:35:32.040Z",
+      "updated_at": "2026-10-15T14:35:32.045Z",
+      "fulfillment": {
+        "id": "ful-1792074932039",
+        "order_id": "ord-1792074932039",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-D4056"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792074932039-0",
+          "order_id": "ord-1792074932039",
+          "product_id": "prod-1792074932030",
+          "variant_id": "test-v-m",
+          "product_name": "Test Tailored Linen Vest",
+          "sku": "TST-VEST-M",
+          "size": "M",
+          "color": "Sand",
+          "unit_price_etb": 1800,
+          "quantity": 2,
+          "line_total_etb": 3600
+        }
+      ]
+    },
+    {
+      "id": "ord-1792074932001",
+      "order_number": "ORD-2026-600654",
+      "customer_id": "cust-1",
+      "customer_name": "Cap Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 9600,
+      "discount_amount_etb": 600,
+      "applied_coupon_code": "WELCOME10",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 9000,
+      "tracking_token": "6pxt2rt2ph5z2udvgqrdm7yv",
+      "created_at": "2026-10-15T14:35:32.002Z",
+      "updated_at": "2026-10-15T14:35:32.002Z",
+      "fulfillment": {
+        "id": "ful-1792074932001",
+        "order_id": "ord-1792074932001",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-W5254"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792074932001-0",
+          "order_id": "ord-1792074932001",
+          "product_id": "prod-1792074709672",
+          "variant_id": "var-test-1",
+          "product_name": "Artisanal Cashmere Scarf",
+          "sku": "CSH-SCF-NAT-OS",
+          "size": "OS",
+          "color": "Natural Cream",
+          "unit_price_etb": 3200,
+          "quantity": 3,
+          "line_total_etb": 9600,
+          "product_image_url": "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792074931994",
+      "order_number": "ORD-2026-734691",
+      "customer_id": "cust-1",
+      "customer_name": "Coupon Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 3200,
+      "discount_amount_etb": 300,
+      "applied_coupon_code": "FASHION300",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 2900,
+      "tracking_token": "anumamqfk9hnbdfxjbrgznnj",
+      "created_at": "2026-10-15T14:35:31.994Z",
+      "updated_at": "2026-10-15T14:35:31.994Z",
+      "fulfillment": {
+        "id": "ful-1792074931994",
+        "order_id": "ord-1792074931994",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-G9508"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792074931994-0",
+          "order_id": "ord-1792074931994",
+          "product_id": "prod-1792074709672",
+          "variant_id": "var-test-1",
+          "product_name": "Artisanal Cashmere Scarf",
+          "sku": "CSH-SCF-NAT-OS",
+          "size": "OS",
+          "color": "Natural Cream",
+          "unit_price_etb": 3200,
+          "quantity": 1,
+          "line_total_etb": 3200,
+          "product_image_url": "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792074709591",
+      "order_number": "ORD-2026-110937",
+      "customer_id": "cust-1",
+      "customer_name": "Test Buyer",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 5700,
+      "discount_amount_etb": 0,
+      "delivery_fee_etb": 50,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 5750,
+      "tracking_token": "jk365hftprtmnudc8y8kff4k",
+      "created_at": "2026-10-15T14:31:49.591Z",
+      "updated_at": "2026-10-15T14:31:49.622Z",
+      "fulfillment": {
+        "id": "ful-1792074709590",
+        "order_id": "ord-1792074709591",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-J3823"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792074709591-0",
+          "order_id": "ord-1792074709591",
+          "product_id": "prod-linen-shirt",
+          "variant_id": "var-1-s",
+          "product_name": "Relaxed Pure Linen Camp Shirt",
+          "sku": "LNN-SHT-WHT-S",
+          "size": "S",
+          "color": "Off-White",
+          "unit_price_etb": 2850,
+          "quantity": 2,
+          "line_total_etb": 5700,
+          "product_image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792074709552",
+      "order_number": "ORD-2026-610053",
+      "customer_id": "cust-1",
+      "customer_name": "Cap Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 8550,
+      "discount_amount_etb": 600,
+      "applied_coupon_code": "WELCOME10",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 7950,
+      "tracking_token": "2wqfpv29twj67gujnberdphd",
+      "created_at": "2026-10-15T14:31:49.553Z",
+      "updated_at": "2026-10-15T14:31:49.553Z",
+      "fulfillment": {
+        "id": "ful-1792074709552",
+        "order_id": "ord-1792074709552",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-A8379"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792074709552-0",
+          "order_id": "ord-1792074709552",
+          "product_id": "prod-linen-shirt",
+          "variant_id": "var-1-s",
+          "product_name": "Relaxed Pure Linen Camp Shirt",
+          "sku": "LNN-SHT-WHT-S",
+          "size": "S",
+          "color": "Off-White",
+          "unit_price_etb": 2850,
+          "quantity": 3,
+          "line_total_etb": 8550,
+          "product_image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792074709544",
+      "order_number": "ORD-2026-562702",
+      "customer_id": "cust-1",
+      "customer_name": "Coupon Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 2850,
+      "discount_amount_etb": 300,
+      "applied_coupon_code": "FASHION300",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 2550,
+      "tracking_token": "kfj34j8hqf9dccwrbf6tcwma",
+      "created_at": "2026-10-15T14:31:49.544Z",
+      "updated_at": "2026-10-15T14:31:49.544Z",
+      "fulfillment": {
+        "id": "ful-1792074709544",
+        "order_id": "ord-1792074709544",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-K3499"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792074709544-0",
+          "order_id": "ord-1792074709544",
+          "product_id": "prod-linen-shirt",
+          "variant_id": "var-1-s",
+          "product_name": "Relaxed Pure Linen Camp Shirt",
+          "sku": "LNN-SHT-WHT-S",
+          "size": "S",
+          "color": "Off-White",
+          "unit_price_etb": 2850,
+          "quantity": 1,
+          "line_total_etb": 2850,
+          "product_image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792074151325",
+      "order_number": "ORD-2026-588202",
+      "customer_id": "cust-1",
+      "customer_name": "Test Buyer",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 3600,
+      "discount_amount_etb": 0,
+      "delivery_fee_etb": 50,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 3650,
+      "tracking_token": "g6yzr4skcwm3p6wvhmr524nc",
+      "created_at": "2026-10-15T14:22:31.325Z",
+      "updated_at": "2026-10-15T14:22:31.336Z",
+      "fulfillment": {
+        "id": "ful-1792074151325",
+        "order_id": "ord-1792074151325",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-G3796"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792074151325-0",
+          "order_id": "ord-1792074151325",
+          "product_id": "prod-1792074151318",
+          "variant_id": "test-v-m",
+          "product_name": "Test Tailored Linen Vest",
+          "sku": "TST-VEST-M",
+          "size": "M",
+          "color": "Sand",
+          "unit_price_etb": 1800,
+          "quantity": 2,
+          "line_total_etb": 3600
+        }
+      ]
+    },
+    {
+      "id": "ord-1792074151324",
+      "order_number": "ORD-2026-755701",
+      "customer_id": "cust-1",
+      "customer_name": "Cap Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 8550,
+      "discount_amount_etb": 600,
+      "applied_coupon_code": "WELCOME10",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 7950,
+      "tracking_token": "m42n6sk9cunj3w6ztsjbheqe",
+      "created_at": "2026-10-15T14:22:31.324Z",
+      "updated_at": "2026-10-15T14:22:31.324Z",
+      "fulfillment": {
+        "id": "ful-1792074151324",
+        "order_id": "ord-1792074151324",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-U1630"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792074151324-0",
+          "order_id": "ord-1792074151324",
+          "product_id": "prod-linen-shirt",
+          "variant_id": "var-1-s",
+          "product_name": "Relaxed Pure Linen Camp Shirt",
+          "sku": "LNN-SHT-WHT-S",
+          "size": "S",
+          "color": "Off-White",
+          "unit_price_etb": 2850,
+          "quantity": 3,
+          "line_total_etb": 8550,
+          "product_image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792074151313",
+      "order_number": "ORD-2026-855521",
+      "customer_id": "cust-1",
+      "customer_name": "Coupon Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 2850,
+      "discount_amount_etb": 300,
+      "applied_coupon_code": "FASHION300",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 2550,
+      "tracking_token": "jpqdad4pkjf3225hmvdr4jtn",
+      "created_at": "2026-10-15T14:22:31.314Z",
+      "updated_at": "2026-10-15T14:22:31.314Z",
+      "fulfillment": {
+        "id": "ful-1792074151313",
+        "order_id": "ord-1792074151313",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-T9758"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792074151313-0",
+          "order_id": "ord-1792074151313",
+          "product_id": "prod-linen-shirt",
+          "variant_id": "var-1-s",
+          "product_name": "Relaxed Pure Linen Camp Shirt",
+          "sku": "LNN-SHT-WHT-S",
+          "size": "S",
+          "color": "Off-White",
+          "unit_price_etb": 2850,
+          "quantity": 1,
+          "line_total_etb": 2850,
+          "product_image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
     {
       "id": "ord-1791996964035",
       "order_number": "ORD-2026-640294",
@@ -327,8 +2529,8 @@
       "tax_amount_etb": 0,
       "total_amount_etb": 2850,
       "tracking_token": "trk-demo-token-12345678",
-      "created_at": "2026-10-12T16:46:50.979Z",
-      "updated_at": "2026-10-14T16:46:50.979Z",
+      "created_at": "2026-10-13T14:31:49.505Z",
+      "updated_at": "2026-10-15T14:31:49.505Z",
       "items": [
         {
           "id": "item-1",
@@ -363,11 +2565,11 @@
       "phone_normalized": "+251911223344",
       "email": "abebe@example.com",
       "marketing_consent": true,
-      "total_orders": 7,
-      "total_spent_etb": 32100,
+      "total_orders": 37,
+      "total_spent_etb": 789750,
       "competition_count": 1,
       "first_seen_at": "2026-10-07T16:46:50.979Z",
-      "last_activity_at": "2026-10-14T16:56:04.035Z"
+      "last_activity_at": "2026-10-15T15:34:12.774Z"
     }
   ],
   "storeSettings": {

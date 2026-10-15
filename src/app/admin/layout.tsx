@@ -33,6 +33,7 @@ import {
   Megaphone,
   Search,
   Lock,
+  Globe,
 } from 'lucide-react';
 
 export default async function AdminLayout({
@@ -94,6 +95,7 @@ export default async function AdminLayout({
       title: 'Settings & Security',
       items: [
         { label: 'SEO Management', href: '/admin/seo', icon: Search },
+        { label: 'GoDaddy Domain & SSL', href: '/admin/settings/domain', icon: Globe },
         { label: 'Store & Branding', href: '/admin/settings/store', icon: Sliders },
         { label: 'Payment Gateway', href: '/admin/settings/payments', icon: CreditCard },
         { label: 'Delivery Zones', href: '/admin/settings/delivery', icon: Truck },

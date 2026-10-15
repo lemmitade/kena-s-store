@@ -1,16 +1,32 @@
 // ============================================================================
-// NEXT.JS PROXY (AUTH GUARD): PROTECT ADMIN PORTAL
-// Redirects unauthenticated access to /admin/login
+// NEXT.JS PROXY (AUTH GUARD & DOMAIN CANONICALIZATION)
+// 1. Enforces consistent WWW <-> Apex domain routing
+// 2. Redirects unauthenticated access to /admin/login
 // ============================================================================
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
+  const host = request.headers.get('host') || '';
+
+  // 1. WWW to Apex Canonical Domain Redirection (production only, skip localhost)
+  const isLocalhost =
+    host.includes('localhost') ||
+    host.includes('127.0.0.1') ||
+    host.includes('0.0.0.0');
+
+  if (!isLocalhost && host.startsWith('www.')) {
+    const apexHost = host.replace(/^www\./, '');
+    const protocol = request.headers.get('x-forwarded-proto') || 'https';
+    const redirectUrl = `${protocol}://${apexHost}${pathname}${search}`;
+    return NextResponse.redirect(new URL(redirectUrl), { status: 308 });
+  }
+
   const token = request.cookies.get('kena_admin_token')?.value;
 
-  // 1. Handling the login route
+  // 2. Handling the login route
   if (pathname === '/admin/login') {
     if (token) {
       // Already authenticated -> send to dashboard
@@ -27,7 +43,7 @@ export function proxy(request: NextRequest) {
     });
   }
 
-  // 2. Handling all other /admin routes
+  // 3. Handling all other /admin routes
   if (pathname.startsWith('/admin')) {
     if (!token) {
       const loginUrl = new URL('/admin/login', request.url);
@@ -40,5 +56,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
 };

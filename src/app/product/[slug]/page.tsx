@@ -28,16 +28,25 @@ interface ProductPageProps {
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = await getProductBySlug(slug);
+  const product = await getProductBySlug(slug, { allowDrafts: true });
   const settings = await getStoreSettings();
 
   if (!product) {
     return { title: 'Product Not Found' };
   }
 
+  const rawBaseUrl =
+    process.env.NEXT_PUBLIC_APP_URL ||
+    settings.seo_settings?.canonical_url ||
+    'https://kenastore.et';
+  const cleanBase = rawBaseUrl.replace(/\/+$/, '');
+
   return {
     title: product.seo_title || `${product.name} | ${settings.store_name}`,
     description: product.seo_description || product.description.slice(0, 160),
+    alternates: {
+      canonical: `${cleanBase}/product/${product.slug}`,
+    },
     openGraph: {
       title: product.name,
       description: product.description.slice(0, 160),
@@ -50,7 +59,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
   const settings = await getStoreSettings();
   const sections = await getSections();
-  const product = await getProductBySlug(slug);
+  const product = await getProductBySlug(slug, { allowDrafts: true });
 
   if (!product) {
     notFound();
