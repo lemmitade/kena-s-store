@@ -2951,6 +2951,7 @@
       "rules_overview": "The winning bid is the lowest amount that is submitted by only ONE participant. All bids are verified deterministically."
     },
     "chapa_public_key": "CHAPA_TEST_PUB_ayOWglxK6DKbnbyvMYCnRP8Osa2H16fHcq4oAIAL",
-    "chapa_secret_key": "CHAPA_TEST_PRIV_jjIB_c4WZWenlQtaijj6FuUezHs2fzRmoSGQtZVK"
+    "chapa_secret_key": "CHAPA_TEST_PRIV_jjIB_c4WZWenlQtaijj6FuUezHs2fzRmoSGQtZVK",
+    "chapa_webhook_secret": "kena_secret_hash_2026"
   }
 }
