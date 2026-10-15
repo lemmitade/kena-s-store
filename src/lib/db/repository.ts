@@ -23,6 +23,7 @@ import {
 } from '@/types';
 import { generateOrderNumber, generatePickupCode, generateTrackingToken } from '@/lib/utils/format';
 import { normalizeEthiopianPhone } from '@/lib/utils/phone';
+import { syncProductToSupabase, deleteProductFromSupabase, loadProductsFromSupabase } from './supabase-sync';
 import fs from 'fs';
 import path from 'path';
 
@@ -1280,6 +1281,24 @@ export async function getProducts(options?: {
   includeDrafts?: boolean;
 }): Promise<Product[]> {
   loadStoreState(db);
+
+  // Sync from Supabase cloud if configured
+  try {
+    const cloudProducts = await loadProductsFromSupabase();
+    if (cloudProducts && cloudProducts.length > 0) {
+      const map = new Map<string, Product>();
+      for (const p of cloudProducts) {
+        if (p && p.slug) map.set(p.slug, p);
+      }
+      for (const p of db.products) {
+        if (p && p.slug && !map.has(p.slug)) {
+          map.set(p.slug, p);
+        }
+      }
+      db.products = Array.from(map.values());
+    }
+  } catch {}
+
   let list = db.products.filter((p) => (options?.includeDrafts ? !p.is_archived : p.is_published && !p.is_archived));
 
   if (options?.sectionSlug) {
@@ -1450,6 +1469,7 @@ export async function createProduct(data: Omit<Product, 'id' | 'created_at' | 'u
 
   db.products.unshift(newProduct);
   saveStoreState(db);
+  syncProductToSupabase(newProduct).catch(() => {});
   return newProduct;
 }
 
@@ -1515,6 +1535,7 @@ export async function updateProduct(idOrSlug: string, data: Partial<Product>): P
   }
 
   saveStoreState(db);
+  syncProductToSupabase(db.products[index]).catch(() => {});
   return db.products[index];
 }
 
@@ -1526,8 +1547,11 @@ export async function deleteProduct(idOrSlug: string): Promise<boolean> {
     (p) => p.id === target || p.slug === target || p.id.toLowerCase() === lowerTarget || p.slug.toLowerCase() === lowerTarget
   );
   if (index === -1) return false;
-  db.products.splice(index, 1);
+  const removed = db.products.splice(index, 1)[0];
   saveStoreState(db);
+  if (removed) {
+    deleteProductFromSupabase(removed.slug || target).catch(() => {});
+  }
   return true;
 }
 
