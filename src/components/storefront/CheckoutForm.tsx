@@ -140,6 +140,10 @@ export function CheckoutForm({ pickupLocations, deliveryZones, settings }: Check
 
       // Order created successfully
       clearCart();
+      if (result.checkoutUrl) {
+        window.location.href = result.checkoutUrl;
+        return;
+      }
       router.push(`/order-confirmation/${result.orderNumber}?token=${result.trackingToken}`);
     } catch (err) {
       setErrorMessage(`Unexpected error: ${(err as Error).message}`);

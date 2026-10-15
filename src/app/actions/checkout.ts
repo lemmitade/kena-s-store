@@ -7,6 +7,7 @@
 
 import { createOrder, CreateOrderInput, getStoreSettings } from '@/lib/db/repository';
 import { sendTelegramMessage, buildNewOrderAlert } from '@/lib/telegram/bot';
+import { initializeChapaPayment } from '@/lib/payments/chapa';
 import { revalidatePath } from 'next/cache';
 
 export interface CheckoutResult {
@@ -15,6 +16,7 @@ export interface CheckoutResult {
   trackingToken?: string;
   totalETB?: number;
   paymentMethod?: string;
+  checkoutUrl?: string;
   error?: string;
 }
 
@@ -61,12 +63,44 @@ export async function processCheckoutAction(input: CreateOrderInput): Promise<Ch
       // ignore in tests
     }
 
+    let checkoutUrl: string | undefined;
+    if (order.payment_method === 'chapa') {
+      try {
+        const nameParts = (order.customer_name || 'Customer').trim().split(/\s+/);
+        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://kenasstore.com';
+        const chapaRes = await initializeChapaPayment({
+          amount: order.total_amount_etb,
+          currency: 'ETB',
+          email: order.customer_email || `${order.order_number.toLowerCase()}@kenasstore.com`,
+          first_name: nameParts[0] || 'Customer',
+          last_name: nameParts.slice(1).join(' ') || 'Shopper',
+          phone_number: order.customer_phone,
+          tx_ref: order.order_number,
+          callback_url: `${baseUrl}/api/webhooks/chapa`,
+          return_url: `${baseUrl}/order-confirmation/${order.order_number}?token=${order.tracking_token}`,
+          customization: {
+            title: 'Kena Store Order',
+            description: `Payment for Order #${order.order_number}`,
+          },
+        });
+
+        if (chapaRes.status === 'success' && chapaRes.data?.checkout_url) {
+          checkoutUrl = chapaRes.data.checkout_url;
+        } else if (chapaRes.message) {
+          console.warn('[Chapa initialize warning]:', chapaRes.message);
+        }
+      } catch (chapaErr) {
+        console.error('[Chapa initialize error]:', chapaErr);
+      }
+    }
+
     return {
       success: true,
       orderNumber: order.order_number,
       trackingToken: order.tracking_token,
       totalETB: order.total_amount_etb,
       paymentMethod: order.payment_method,
+      checkoutUrl,
     };
   } catch (err) {
     return {

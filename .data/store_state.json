@@ -15,8 +15,8 @@
       "low_stock_threshold": 5,
       "seo_title": "baggy jeans | YOUR BRAND",
       "seo_description": "Wide-leg relaxed denim trousers.",
-      "created_at": "2026-10-15T16:16:47.781Z",
-      "updated_at": "2026-10-15T16:16:47.781Z",
+      "created_at": "2026-10-15T16:37:14.496Z",
+      "updated_at": "2026-10-15T16:37:14.496Z",
       "images": [
         {
           "id": "img-baggy-1",
@@ -37,7 +37,7 @@
           "color_hex": "#2E5090",
           "stock_quantity": 10,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         },
         {
           "id": "var-baggy-m",
@@ -48,7 +48,7 @@
           "color_hex": "#2E5090",
           "stock_quantity": 13,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         },
         {
           "id": "var-baggy-l",
@@ -59,7 +59,7 @@
           "color_hex": "#2E5090",
           "stock_quantity": 10,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         }
       ]
     },
@@ -78,8 +78,8 @@
       "low_stock_threshold": 3,
       "seo_title": "Relaxed Pure Linen Camp Shirt | YOUR BRAND",
       "seo_description": "100% organic linen camp shirt tailored in Ethiopia.",
-      "created_at": "2026-10-15T16:16:47.781Z",
-      "updated_at": "2026-10-15T16:16:47.781Z",
+      "created_at": "2026-10-15T16:37:14.496Z",
+      "updated_at": "2026-10-15T16:37:14.496Z",
       "images": [
         {
           "id": "img-1-1",
@@ -108,7 +108,7 @@
           "color_hex": "#FAF9F6",
           "stock_quantity": 8,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         },
         {
           "id": "var-1-m",
@@ -119,7 +119,7 @@
           "color_hex": "#FAF9F6",
           "stock_quantity": 14,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         },
         {
           "id": "var-1-l",
@@ -130,7 +130,7 @@
           "color_hex": "#FAF9F6",
           "stock_quantity": 10,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         },
         {
           "id": "var-1-olv-m",
@@ -141,7 +141,7 @@
           "color_hex": "#556B2F",
           "stock_quantity": 6,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         }
       ]
     },
@@ -159,8 +159,8 @@
       "is_published": true,
       "is_archived": false,
       "low_stock_threshold": 4,
-      "created_at": "2026-10-15T16:16:47.781Z",
-      "updated_at": "2026-10-15T16:16:47.781Z",
+      "created_at": "2026-10-15T16:37:14.496Z",
+      "updated_at": "2026-10-15T16:37:14.496Z",
       "images": [
         {
           "id": "img-2-1",
@@ -181,7 +181,7 @@
           "color_hex": "#2B2B2B",
           "stock_quantity": 3,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         },
         {
           "id": "var-2-32",
@@ -192,7 +192,7 @@
           "color_hex": "#2B2B2B",
           "stock_quantity": 9,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         },
         {
           "id": "var-2-34",
@@ -203,7 +203,7 @@
           "color_hex": "#2B2B2B",
           "stock_quantity": 7,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         }
       ]
     },
@@ -220,8 +220,8 @@
       "is_published": true,
       "is_archived": false,
       "low_stock_threshold": 2,
-      "created_at": "2026-10-15T16:16:47.781Z",
-      "updated_at": "2026-10-15T16:16:47.781Z",
+      "created_at": "2026-10-15T16:37:14.496Z",
+      "updated_at": "2026-10-15T16:37:14.496Z",
       "images": [
         {
           "id": "img-3-1",
@@ -242,7 +242,7 @@
           "color_hex": "#121212",
           "stock_quantity": 4,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         },
         {
           "id": "var-3-s",
@@ -253,7 +253,7 @@
           "color_hex": "#121212",
           "stock_quantity": 8,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         },
         {
           "id": "var-3-m",
@@ -264,7 +264,7 @@
           "color_hex": "#121212",
           "stock_quantity": 6,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         }
       ]
     },
@@ -281,8 +281,8 @@
       "is_published": true,
       "is_archived": false,
       "low_stock_threshold": 2,
-      "created_at": "2026-10-15T16:16:47.781Z",
-      "updated_at": "2026-10-15T16:16:47.781Z",
+      "created_at": "2026-10-15T16:37:14.496Z",
+      "updated_at": "2026-10-15T16:37:14.496Z",
       "images": [
         {
           "id": "img-4-1",
@@ -303,7 +303,7 @@
           "color_hex": "#3D2817",
           "stock_quantity": 4,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         },
         {
           "id": "var-4-42",
@@ -314,7 +314,7 @@
           "color_hex": "#3D2817",
           "stock_quantity": 5,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         },
         {
           "id": "var-4-43",
@@ -325,7 +325,7 @@
           "color_hex": "#3D2817",
           "stock_quantity": 3,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         }
       ]
     },
@@ -343,8 +343,8 @@
       "is_published": true,
       "is_archived": false,
       "low_stock_threshold": 3,
-      "created_at": "2026-10-15T16:16:47.781Z",
-      "updated_at": "2026-10-15T16:16:47.781Z",
+      "created_at": "2026-10-15T16:37:14.496Z",
+      "updated_at": "2026-10-15T16:37:14.496Z",
       "images": [
         {
           "id": "img-5-1",
@@ -365,7 +365,7 @@
           "color_hex": "#F5F5DC",
           "stock_quantity": 3,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         },
         {
           "id": "var-5-m",
@@ -376,7 +376,7 @@
           "color_hex": "#F5F5DC",
           "stock_quantity": 4,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         },
         {
           "id": "var-5-l",
@@ -387,7 +387,7 @@
           "color_hex": "#F5F5DC",
           "stock_quantity": 2,
           "is_available": true,
-          "created_at": "2026-10-15T16:16:47.781Z"
+          "created_at": "2026-10-15T16:37:14.496Z"
         }
       ]
     }
@@ -705,7 +705,7 @@
       "min_order_amount_etb": 1000,
       "usage_limit_total": 500,
       "usage_limit_per_customer": 1,
-      "current_redemptions_count": 25,
+      "current_redemptions_count": 27,
       "is_new_customer_only": true,
       "status": "active"
     },
@@ -717,7 +717,7 @@
       "min_order_amount_etb": 2500,
       "usage_limit_total": 200,
       "usage_limit_per_customer": 1,
-      "current_redemptions_count": 40,
+      "current_redemptions_count": 42,
       "is_new_customer_only": false,
       "status": "active"
     },
@@ -735,6 +735,274 @@
     }
   ],
   "orders": [
+    {
+      "id": "ord-1792082234545",
+      "order_number": "ORD-2026-114055",
+      "customer_id": "cust-1",
+      "customer_name": "Test Buyer",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 6900,
+      "discount_amount_etb": 0,
+      "delivery_fee_etb": 50,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 6950,
+      "tracking_token": "aepskywgzd8aue3fn3yubm9h",
+      "created_at": "2026-10-15T16:37:14.545Z",
+      "updated_at": "2026-10-15T16:37:14.550Z",
+      "fulfillment": {
+        "id": "ful-1792082234544",
+        "order_id": "ord-1792082234545",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-V8177"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792082234545-0",
+          "order_id": "ord-1792082234545",
+          "product_id": "prod-wool-trousers",
+          "variant_id": "var-2-30",
+          "product_name": "Pleated High-Waist Wool Trousers",
+          "sku": "TRS-WOOL-CHR-30",
+          "size": "30",
+          "color": "Charcoal",
+          "unit_price_etb": 3450,
+          "quantity": 2,
+          "line_total_etb": 6900,
+          "product_image_url": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792082232342",
+      "order_number": "ORD-2026-253648",
+      "customer_id": "cust-1",
+      "customer_name": "Cap Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 8550,
+      "discount_amount_etb": 600,
+      "applied_coupon_code": "WELCOME10",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 7950,
+      "tracking_token": "m6bras7d9dqqq68gsbqk2hav",
+      "created_at": "2026-10-15T16:37:12.342Z",
+      "updated_at": "2026-10-15T16:37:12.342Z",
+      "fulfillment": {
+        "id": "ful-1792082232342",
+        "order_id": "ord-1792082232342",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-A3875"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792082232342-0",
+          "order_id": "ord-1792082232342",
+          "product_id": "prod-linen-shirt",
+          "variant_id": "var-1-s",
+          "product_name": "Relaxed Pure Linen Camp Shirt",
+          "sku": "LNN-SHT-WHT-S",
+          "size": "S",
+          "color": "Off-White",
+          "unit_price_etb": 2850,
+          "quantity": 3,
+          "line_total_etb": 8550,
+          "product_image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792082232331",
+      "order_number": "ORD-2026-931434",
+      "customer_id": "cust-1",
+      "customer_name": "Coupon Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 2850,
+      "discount_amount_etb": 300,
+      "applied_coupon_code": "FASHION300",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 2550,
+      "tracking_token": "q3fbmaub6yjydhsahj7j6gzt",
+      "created_at": "2026-10-15T16:37:12.331Z",
+      "updated_at": "2026-10-15T16:37:12.331Z",
+      "fulfillment": {
+        "id": "ful-1792082232331",
+        "order_id": "ord-1792082232331",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-A3219"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792082232331-0",
+          "order_id": "ord-1792082232331",
+          "product_id": "prod-linen-shirt",
+          "variant_id": "var-1-s",
+          "product_name": "Relaxed Pure Linen Camp Shirt",
+          "sku": "LNN-SHT-WHT-S",
+          "size": "S",
+          "color": "Off-White",
+          "unit_price_etb": 2850,
+          "quantity": 1,
+          "line_total_etb": 2850,
+          "product_image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792081793412",
+      "order_number": "ORD-2026-517187",
+      "customer_id": "cust-1",
+      "customer_name": "Test Buyer",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 6900,
+      "discount_amount_etb": 0,
+      "delivery_fee_etb": 50,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 6950,
+      "tracking_token": "666xzb4rgr7nq9qykadhyqge",
+      "created_at": "2026-10-15T16:29:53.412Z",
+      "updated_at": "2026-10-15T16:29:53.417Z",
+      "fulfillment": {
+        "id": "ful-1792081793412",
+        "order_id": "ord-1792081793412",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-K3723"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792081793412-0",
+          "order_id": "ord-1792081793412",
+          "product_id": "prod-wool-trousers",
+          "variant_id": "var-2-30",
+          "product_name": "Pleated High-Waist Wool Trousers",
+          "sku": "TRS-WOOL-CHR-30",
+          "size": "30",
+          "color": "Charcoal",
+          "unit_price_etb": 3450,
+          "quantity": 2,
+          "line_total_etb": 6900,
+          "product_image_url": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792081791370",
+      "order_number": "ORD-2026-721191",
+      "customer_id": "cust-1",
+      "customer_name": "Cap Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 8550,
+      "discount_amount_etb": 600,
+      "applied_coupon_code": "WELCOME10",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 7950,
+      "tracking_token": "k6uc8ny2jzvg7z3rqn3ctxdd",
+      "created_at": "2026-10-15T16:29:51.370Z",
+      "updated_at": "2026-10-15T16:29:51.370Z",
+      "fulfillment": {
+        "id": "ful-1792081791370",
+        "order_id": "ord-1792081791370",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-L5026"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792081791370-0",
+          "order_id": "ord-1792081791370",
+          "product_id": "prod-linen-shirt",
+          "variant_id": "var-1-s",
+          "product_name": "Relaxed Pure Linen Camp Shirt",
+          "sku": "LNN-SHT-WHT-S",
+          "size": "S",
+          "color": "Off-White",
+          "unit_price_etb": 2850,
+          "quantity": 3,
+          "line_total_etb": 8550,
+          "product_image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
+    {
+      "id": "ord-1792081791363",
+      "order_number": "ORD-2026-553231",
+      "customer_id": "cust-1",
+      "customer_name": "Coupon Tester",
+      "customer_phone": "0911223344",
+      "customer_phone_normalized": "+251911223344",
+      "fulfillment_type": "store_pickup",
+      "order_status": "confirmed",
+      "payment_status": "pending",
+      "payment_method": "cash_on_delivery",
+      "subtotal_etb": 2850,
+      "discount_amount_etb": 300,
+      "applied_coupon_code": "FASHION300",
+      "delivery_fee_etb": 0,
+      "tax_amount_etb": 0,
+      "total_amount_etb": 2550,
+      "tracking_token": "qynxhrrtnhx4g33kea8djakp",
+      "created_at": "2026-10-15T16:29:51.363Z",
+      "updated_at": "2026-10-15T16:29:51.363Z",
+      "fulfillment": {
+        "id": "ful-1792081791363",
+        "order_id": "ord-1792081791363",
+        "fulfillment_type": "store_pickup",
+        "pickup_location_id": "pk-bole",
+        "pickup_location_name": "Bole Flagship Boutique",
+        "pickup_reference_code": "PK-Q9252"
+      },
+      "items": [
+        {
+          "id": "item-ord-1792081791363-0",
+          "order_id": "ord-1792081791363",
+          "product_id": "prod-linen-shirt",
+          "variant_id": "var-1-s",
+          "product_name": "Relaxed Pure Linen Camp Shirt",
+          "sku": "LNN-SHT-WHT-S",
+          "size": "S",
+          "color": "Off-White",
+          "unit_price_etb": 2850,
+          "quantity": 1,
+          "line_total_etb": 2850,
+          "product_image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85"
+        }
+      ]
+    },
     {
       "id": "ord-1792081007835",
       "order_number": "ORD-2026-820136",
@@ -2833,11 +3101,11 @@
       "phone_normalized": "+251911223344",
       "email": "abebe@example.com",
       "marketing_consent": true,
-      "total_orders": 43,
-      "total_spent_etb": 824550,
+      "total_orders": 49,
+      "total_spent_etb": 859350,
       "competition_count": 1,
       "first_seen_at": "2026-10-07T16:46:50.979Z",
-      "last_activity_at": "2026-10-15T16:16:47.835Z"
+      "last_activity_at": "2026-10-15T16:37:14.545Z"
     }
   ],
   "storeSettings": {
@@ -2950,8 +3218,8 @@
       "winner_pays_bid_amount": true,
       "rules_overview": "The winning bid is the lowest amount that is submitted by only ONE participant. All bids are verified deterministically."
     },
-    "chapa_public_key": "CHAPA_TEST_PUB_ayOWglxK6DKbnbyvMYCnRP8Osa2H16fHcq4oAIAL",
-    "chapa_secret_key": "CHAPA_TEST_PRIV_jjIB_c4WZWenlQtaijj6FuUezHs2fzRmoSGQtZVK",
+    "chapa_public_key": "CHAPA_LIVE_PUB_nT1IwdRpug-J6Cjt8W42Tk5sqp22_5x9IpWPwigk",
+    "chapa_secret_key": "CHAPA_LIVE_PRIV_jAlirSv-ijpqk-aK_8y084mkaXMoG1buWezaZ4nh",
     "chapa_webhook_secret": "kena_secret_hash_2026"
   }
 }
