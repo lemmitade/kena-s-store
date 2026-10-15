@@ -9,20 +9,7 @@ import type { NextRequest } from 'next/server';
 
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
-  const host = request.headers.get('host') || '';
 
-  // 1. WWW to Apex Canonical Domain Redirection (production only, skip localhost)
-  const isLocalhost =
-    host.includes('localhost') ||
-    host.includes('127.0.0.1') ||
-    host.includes('0.0.0.0');
-
-  if (!isLocalhost && host.startsWith('www.')) {
-    const apexHost = host.replace(/^www\./, '');
-    const protocol = request.headers.get('x-forwarded-proto') || 'https';
-    const redirectUrl = `${protocol}://${apexHost}${pathname}${search}`;
-    return NextResponse.redirect(new URL(redirectUrl), { status: 308 });
-  }
 
   const token = request.cookies.get('kena_admin_token')?.value;
 
