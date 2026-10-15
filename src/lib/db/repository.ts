@@ -1300,8 +1300,19 @@ export async function getProducts(options?: {
         if (p && p.slug) map.set(p.slug, p);
       }
       for (const p of db.products) {
-        if (p && p.slug && !map.has(p.slug)) {
-          map.set(p.slug, p);
+        if (p && p.slug) {
+          if (map.has(p.slug)) {
+            // Preserve local section/category IDs if cloud version lacks them
+            const cloud = map.get(p.slug)!;
+            if (!cloud.primary_section_id && p.primary_section_id) {
+              cloud.primary_section_id = p.primary_section_id;
+            }
+            if (!cloud.primary_category_id && p.primary_category_id) {
+              cloud.primary_category_id = p.primary_category_id;
+            }
+          } else {
+            map.set(p.slug, p);
+          }
         }
       }
       db.products = Array.from(map.values());
