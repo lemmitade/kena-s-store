@@ -23,7 +23,14 @@ import {
 } from '@/types';
 import { generateOrderNumber, generatePickupCode, generateTrackingToken } from '@/lib/utils/format';
 import { normalizeEthiopianPhone } from '@/lib/utils/phone';
-import { syncProductToSupabase, deleteProductFromSupabase, loadProductsFromSupabase } from './supabase-sync';
+import {
+  syncProductToSupabase,
+  deleteProductFromSupabase,
+  loadProductsFromSupabase,
+  syncOrderToSupabase,
+  fetchOrderByNumberFromSupabase,
+  fetchAllOrdersFromSupabase,
+} from './supabase-sync';
 import fs from 'fs';
 import path from 'path';
 
@@ -1893,6 +1900,11 @@ export async function createOrder(input: CreateOrderInput): Promise<{
 
   db.orders.unshift(order);
   saveStoreState(db);
+  try {
+    await syncOrderToSupabase(order);
+  } catch (err) {
+    console.error('Failed to sync order to Supabase:', err);
+  }
 
   // 9. Queue Telegram Notification Job
   db.notificationJobs.push({
@@ -1913,7 +1925,17 @@ export async function createOrder(input: CreateOrderInput): Promise<{
 export async function getOrderByNumber(orderNumber: string): Promise<Order | null> {
   loadStoreState(db);
   const target = orderNumber.trim().toUpperCase();
-  return db.orders.find((o) => o.order_number.toUpperCase() === target) || null;
+  let found = db.orders.find((o) => o.order_number.toUpperCase() === target);
+  if (!found) {
+    try {
+      const cloudOrder = await fetchOrderByNumberFromSupabase(target);
+      if (cloudOrder) {
+        db.orders.unshift(cloudOrder);
+        found = cloudOrder;
+      }
+    } catch {}
+  }
+  return found || null;
 }
 
 export async function getOrderByTracking(orderNumber: string, phoneOrToken: string): Promise<Order | null> {
@@ -1921,7 +1943,16 @@ export async function getOrderByTracking(orderNumber: string, phoneOrToken: stri
   const norm = phoneOrToken.trim();
   const phoneVal = normalizeEthiopianPhone(norm);
   const target = orderNumber.trim().toUpperCase();
-  const order = db.orders.find((o) => o.order_number.toUpperCase() === target);
+  let order = db.orders.find((o) => o.order_number.toUpperCase() === target);
+  if (!order) {
+    try {
+      const cloudOrder = await fetchOrderByNumberFromSupabase(target);
+      if (cloudOrder) {
+        db.orders.unshift(cloudOrder);
+        order = cloudOrder;
+      }
+    } catch {}
+  }
   if (!order) return null;
 
   if (
@@ -1937,6 +1968,23 @@ export async function getOrderByTracking(orderNumber: string, phoneOrToken: stri
 
 export async function getAllOrders(): Promise<Order[]> {
   loadStoreState(db);
+  try {
+    const cloudOrders = await fetchAllOrdersFromSupabase();
+    if (cloudOrders && cloudOrders.length > 0) {
+      const map = new Map<string, Order>();
+      for (const o of cloudOrders) {
+        if (o && o.order_number) map.set(o.order_number, o);
+      }
+      for (const o of db.orders) {
+        if (o && o.order_number && !map.has(o.order_number)) {
+          map.set(o.order_number, o);
+        }
+      }
+      db.orders = Array.from(map.values()).sort(
+        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+    }
+  } catch {}
   return [...db.orders];
 }
 
@@ -1952,6 +2000,9 @@ export async function updateOrderStatus(
   if (paymentStatus) o.payment_status = paymentStatus;
   o.updated_at = new Date().toISOString();
   saveStoreState(db);
+  try {
+    await syncOrderToSupabase(o);
+  } catch {}
   return o;
 }
 

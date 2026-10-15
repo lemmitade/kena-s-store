@@ -1,5 +1,5 @@
 import { getSupabaseServerClient } from '@/lib/supabase/server';
-import { Product } from '@/types';
+import { Product, Order } from '@/types';
 
 export async function syncProductToSupabase(prod: Product): Promise<void> {
   const supabase = getSupabaseServerClient();
@@ -191,3 +191,167 @@ export async function loadProductsFromSupabase(): Promise<Product[] | null> {
     return null;
   }
 }
+
+export async function syncOrderToSupabase(order: Order): Promise<void> {
+  const supabase = getSupabaseServerClient();
+  if (!supabase) return;
+
+  try {
+    let payloadNotes = order.notes || '';
+    try {
+      payloadNotes = JSON.stringify({
+        notes: order.notes,
+        items: order.items,
+        fulfillment: order.fulfillment,
+      });
+    } catch {}
+
+    const { error } = await supabase.from('orders').upsert(
+      {
+        order_number: order.order_number,
+        customer_name: order.customer_name,
+        customer_phone: order.customer_phone,
+        customer_phone_normalized: order.customer_phone_normalized || order.customer_phone,
+        customer_email: order.customer_email || null,
+        fulfillment_type: order.fulfillment_type,
+        order_status: order.order_status || 'confirmed',
+        payment_status: order.payment_status || 'pending',
+        payment_method: order.payment_method || 'cash_on_delivery',
+        subtotal_etb: order.subtotal_etb,
+        discount_amount_etb: order.discount_amount_etb || 0,
+        applied_coupon_code: order.applied_coupon_code || null,
+        delivery_fee_etb: order.delivery_fee_etb || 0,
+        tax_amount_etb: order.tax_amount_etb || 0,
+        total_amount_etb: order.total_amount_etb,
+        tracking_token: order.tracking_token,
+        notes: payloadNotes,
+        created_at: order.created_at,
+        updated_at: order.updated_at || order.created_at,
+      },
+      { onConflict: 'order_number' }
+    );
+
+    if (error) {
+      console.error('[syncOrderToSupabase error]:', error);
+    }
+  } catch (err) {
+    console.error('[syncOrderToSupabase error]:', err);
+  }
+}
+
+export async function fetchOrderByNumberFromSupabase(orderNumber: string): Promise<Order | null> {
+  const supabase = getSupabaseServerClient();
+  if (!supabase) return null;
+
+  try {
+    const target = orderNumber.trim();
+    const { data: ord, error } = await supabase
+      .from('orders')
+      .select('*')
+      .ilike('order_number', target)
+      .maybeSingle();
+
+    if (error || !ord) return null;
+
+    let items = undefined;
+    let fulfillment = undefined;
+    let originalNotes = ord.notes;
+
+    if (ord.notes && typeof ord.notes === 'string' && ord.notes.startsWith('{')) {
+      try {
+        const parsed = JSON.parse(ord.notes);
+        if (parsed.items) items = parsed.items;
+        if (parsed.fulfillment) fulfillment = parsed.fulfillment;
+        if (parsed.notes !== undefined) originalNotes = parsed.notes;
+      } catch {}
+    }
+
+    return {
+      id: ord.id,
+      order_number: ord.order_number,
+      customer_id: ord.customer_id,
+      customer_name: ord.customer_name,
+      customer_phone: ord.customer_phone,
+      customer_phone_normalized: ord.customer_phone_normalized,
+      customer_email: ord.customer_email || undefined,
+      fulfillment_type: ord.fulfillment_type,
+      order_status: ord.order_status,
+      payment_status: ord.payment_status,
+      payment_method: ord.payment_method,
+      subtotal_etb: ord.subtotal_etb,
+      discount_amount_etb: ord.discount_amount_etb || 0,
+      applied_coupon_code: ord.applied_coupon_code || undefined,
+      delivery_fee_etb: ord.delivery_fee_etb || 0,
+      tax_amount_etb: ord.tax_amount_etb || 0,
+      total_amount_etb: ord.total_amount_etb,
+      tracking_token: ord.tracking_token,
+      notes: originalNotes,
+      created_at: ord.created_at,
+      updated_at: ord.updated_at,
+      items,
+      fulfillment,
+    };
+  } catch (err) {
+    console.error('[fetchOrderByNumberFromSupabase error]:', err);
+    return null;
+  }
+}
+
+export async function fetchAllOrdersFromSupabase(): Promise<Order[] | null> {
+  const supabase = getSupabaseServerClient();
+  if (!supabase) return null;
+
+  try {
+    const { data: rows, error } = await supabase
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error || !rows) return null;
+
+    return rows.map((ord: any) => {
+      let items = undefined;
+      let fulfillment = undefined;
+      let originalNotes = ord.notes;
+
+      if (ord.notes && typeof ord.notes === 'string' && ord.notes.startsWith('{')) {
+        try {
+          const parsed = JSON.parse(ord.notes);
+          if (parsed.items) items = parsed.items;
+          if (parsed.fulfillment) fulfillment = parsed.fulfillment;
+          if (parsed.notes !== undefined) originalNotes = parsed.notes;
+        } catch {}
+      }
+
+      return {
+        id: ord.id,
+        order_number: ord.order_number,
+        customer_id: ord.customer_id,
+        customer_name: ord.customer_name,
+        customer_phone: ord.customer_phone,
+        customer_phone_normalized: ord.customer_phone_normalized,
+        customer_email: ord.customer_email || undefined,
+        fulfillment_type: ord.fulfillment_type,
+        order_status: ord.order_status,
+        payment_status: ord.payment_status,
+        payment_method: ord.payment_method,
+        subtotal_etb: ord.subtotal_etb,
+        discount_amount_etb: ord.discount_amount_etb || 0,
+        applied_coupon_code: ord.applied_coupon_code || undefined,
+        delivery_fee_etb: ord.delivery_fee_etb || 0,
+        tax_amount_etb: ord.tax_amount_etb || 0,
+        total_amount_etb: ord.total_amount_etb,
+        tracking_token: ord.tracking_token,
+        notes: originalNotes,
+        created_at: ord.created_at,
+        updated_at: ord.updated_at,
+        items,
+        fulfillment,
+      };
+    });
+  } catch (err) {
+    console.error('[fetchAllOrdersFromSupabase error]:', err);
+    return null;
+  }
+}
+
