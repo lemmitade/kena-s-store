@@ -6,7 +6,7 @@
 // and dynamic variant matrix (SKUs, sizes, colors, live stock quantities).
 // ============================================================================
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -256,10 +256,32 @@ export function ProductEditorForm({
     }
   };
 
-  // Filter categories by section if matched
+  // Filter categories by selected section
   const filteredCategories = categories.filter(
     (c) => !primarySectionId || c.section_id === primarySectionId
   );
+
+  // When section changes, reset category if it no longer belongs to the new section
+  const handleSectionChange = useCallback((newSectionId: string) => {
+    setPrimarySectionId(newSectionId);
+    // Check if current category belongs to the new section
+    if (primaryCategoryId) {
+      const currentCat = categories.find((c) => c.id === primaryCategoryId);
+      if (!currentCat || currentCat.section_id !== newSectionId) {
+        setPrimaryCategoryId('');
+      }
+    }
+  }, [primaryCategoryId, categories]);
+
+  // On mount, validate that the existing category belongs to the selected section
+  useEffect(() => {
+    if (primaryCategoryId && primarySectionId) {
+      const cat = categories.find((c) => c.id === primaryCategoryId);
+      if (cat && cat.section_id !== primarySectionId) {
+        setPrimaryCategoryId('');
+      }
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8 font-mono text-xs">
@@ -362,7 +384,7 @@ export function ProductEditorForm({
             <label className="uppercase text-stone-500 block">Assigned Section *</label>
             <select
               value={primarySectionId}
-              onChange={(e) => setPrimarySectionId(e.target.value)}
+              onChange={(e) => handleSectionChange(e.target.value)}
               className="w-full bg-[#FAF9F6] border border-stone-300 px-4 py-3 text-sm focus:outline-none focus:border-stone-900"
             >
               {sections.map((sec) => (

@@ -1234,6 +1234,7 @@ export async function updateStoreSettings(settings: Partial<StoreSettings>): Pro
 }
 
 export async function getSections(includeArchived = false): Promise<StoreSection[]> {
+  loadStoreState(db);
   return db.sections
     .filter((s) => (includeArchived ? true : !s.is_archived && s.is_active))
     .sort((a, b) => a.display_order - b.display_order);
@@ -1266,6 +1267,7 @@ export async function updateSection(id: string, data: Partial<StoreSection>): Pr
 }
 
 export async function getCategories(sectionId?: string, includeArchived = false): Promise<Category[]> {
+  loadStoreState(db);
   return db.categories
     .filter((c) => {
       if (!includeArchived && (c.is_archived || !c.is_active)) return false;
