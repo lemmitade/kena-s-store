@@ -6,7 +6,7 @@ const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT
 let serverClient: SupabaseClient | null = null;
 
 export function getSupabaseServerClient(): SupabaseClient | null {
-  if (!supabaseUrl || !serviceRoleKey) {
+  if (!supabaseUrl || !serviceRoleKey || supabaseUrl.includes('your-project.supabase.co')) {
     return null;
   }
   if (!serverClient) {
@@ -21,5 +21,9 @@ export function getSupabaseServerClient(): SupabaseClient | null {
 }
 
 export function isSupabaseConfigured(): boolean {
-  return Boolean(supabaseUrl && (serviceRoleKey || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY));
+  return Boolean(
+    supabaseUrl &&
+    !supabaseUrl.includes('your-project.supabase.co') &&
+    (serviceRoleKey || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+  );
 }

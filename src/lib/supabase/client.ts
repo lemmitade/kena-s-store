@@ -6,7 +6,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 let browserClient: SupabaseClient | null = null;
 
 export function getSupabaseBrowserClient(): SupabaseClient | null {
-  if (!supabaseUrl || !supabaseAnonKey) {
+  if (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes('your-project.supabase.co')) {
     return null;
   }
   if (!browserClient) {
