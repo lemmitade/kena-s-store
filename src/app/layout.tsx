@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
     seo?.meta_description ||
     settings.tagline ||
     'Curated Ethiopian fashion, artisanal highland leather, and minimalist essentials.';
-  const canonicalUrl = seo?.canonical_url || 'https://kenastore.et';
+  const canonicalUrl = process.env.NEXT_PUBLIC_APP_URL || seo?.canonical_url || 'https://kenasstore.com';
   const ogImage = seo?.og_image_url || settings.logo_url || '/logo.png';
 
   return {

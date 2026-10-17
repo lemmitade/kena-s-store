@@ -3,7 +3,7 @@ import { getStoreSettings, getProducts, getSections, getCategories, getCompetiti
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const settings = await getStoreSettings();
-  const rawBaseUrl = process.env.NEXT_PUBLIC_APP_URL || settings.seo_settings?.canonical_url || 'https://kenastore.et';
+  const rawBaseUrl = process.env.NEXT_PUBLIC_APP_URL || settings.seo_settings?.canonical_url || 'https://kenasstore.com';
   const baseUrl = rawBaseUrl.replace(/\/+$/, '');
 
   const now = new Date();

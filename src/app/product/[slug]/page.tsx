@@ -38,11 +38,15 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const rawBaseUrl =
     process.env.NEXT_PUBLIC_APP_URL ||
     settings.seo_settings?.canonical_url ||
-    'https://kenastore.et';
+    'https://kenasstore.com';
   const cleanBase = rawBaseUrl.replace(/\/+$/, '');
 
+  const pageTitle = product.seo_title
+    ? product.seo_title.replace(new RegExp(`\\s*\\|\\s*${settings.store_name}.*?$`, 'i'), '')
+    : product.name;
+
   return {
-    title: product.seo_title || `${product.name} | ${settings.store_name}`,
+    title: pageTitle,
     description: product.seo_description || product.description.slice(0, 160),
     alternates: {
       canonical: `${cleanBase}/product/${product.slug}`,
