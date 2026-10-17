@@ -6,32 +6,52 @@ export async function syncProductToSupabase(prod: Product): Promise<void> {
   if (!supabase) return;
 
   try {
-    // 1. Check if product exists by slug
-    const { data: existing } = await supabase
-      .from('products')
-      .select('id')
-      .eq('slug', prod.slug)
-      .maybeSingle();
+    // 1. Check if product exists by UUID ID, cloud_id, or slug
+    const idUuid = Boolean(prod.id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(prod.id));
+    const cloudUuid = Boolean(prod.cloud_id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(prod.cloud_id));
+    let productId: string | undefined = undefined;
 
-    let productId = existing?.id;
+    const targetUuid = (idUuid ? prod.id : undefined) || (cloudUuid ? prod.cloud_id : undefined);
+    if (targetUuid) {
+      const { data: byId } = await supabase
+        .from('products')
+        .select('id')
+        .eq('id', targetUuid)
+        .maybeSingle();
+      if (byId) productId = byId.id;
+    }
 
     if (!productId) {
+      const { data: bySlug } = await supabase
+        .from('products')
+        .select('id')
+        .eq('slug', prod.slug)
+        .maybeSingle();
+      if (bySlug) productId = bySlug.id;
+    }
+
+    if (!productId) {
+      const insertData: Record<string, unknown> = {
+        name: prod.name,
+        slug: prod.slug,
+        description: prod.description || '',
+        primary_section_id: prod.primary_section_id || null,
+        primary_category_id: prod.primary_category_id || null,
+        regular_price_etb: prod.regular_price_etb,
+        sale_price_etb: prod.sale_price_etb || null,
+        is_published: prod.is_published ?? true,
+        is_featured: prod.is_featured ?? false,
+        is_new_arrival: prod.is_new_arrival ?? false,
+        is_archived: prod.is_archived ?? false,
+        low_stock_threshold: prod.low_stock_threshold || 5,
+      };
+      if (idUuid && prod.id) {
+        insertData.id = prod.id;
+      }
+
       const { data: inserted, error: insertErr } = await supabase
         .from('products')
-        .insert({
-          name: prod.name,
-          slug: prod.slug,
-          description: prod.description || '',
-          primary_section_id: prod.primary_section_id || null,
-          primary_category_id: prod.primary_category_id || null,
-          regular_price_etb: prod.regular_price_etb,
-          sale_price_etb: prod.sale_price_etb || null,
-          is_published: prod.is_published ?? true,
-          is_featured: prod.is_featured ?? false,
-          is_new_arrival: prod.is_new_arrival ?? false,
-          is_archived: prod.is_archived ?? false,
-          low_stock_threshold: prod.low_stock_threshold || 5,
-        })
+        .insert(insertData)
         .select('id')
         .single();
 
@@ -40,23 +60,26 @@ export async function syncProductToSupabase(prod: Product): Promise<void> {
         return;
       }
       productId = inserted.id;
+      prod.cloud_id = productId;
     } else {
+      const updateData: Record<string, unknown> = {
+        name: prod.name,
+        slug: prod.slug,
+        description: prod.description || '',
+        primary_section_id: prod.primary_section_id || null,
+        primary_category_id: prod.primary_category_id || null,
+        regular_price_etb: prod.regular_price_etb,
+        sale_price_etb: prod.sale_price_etb || null,
+        is_published: prod.is_published ?? true,
+        is_featured: prod.is_featured ?? false,
+        is_new_arrival: prod.is_new_arrival ?? false,
+        is_archived: prod.is_archived ?? false,
+        low_stock_threshold: prod.low_stock_threshold || 5,
+        updated_at: new Date().toISOString(),
+      };
       await supabase
         .from('products')
-        .update({
-          name: prod.name,
-          description: prod.description || '',
-          primary_section_id: prod.primary_section_id || null,
-          primary_category_id: prod.primary_category_id || null,
-          regular_price_etb: prod.regular_price_etb,
-          sale_price_etb: prod.sale_price_etb || null,
-          is_published: prod.is_published ?? true,
-          is_featured: prod.is_featured ?? false,
-          is_new_arrival: prod.is_new_arrival ?? false,
-          is_archived: prod.is_archived ?? false,
-          low_stock_threshold: prod.low_stock_threshold || 5,
-          updated_at: new Date().toISOString(),
-        })
+        .update(updateData)
         .eq('id', productId);
     }
 
@@ -103,7 +126,12 @@ export async function deleteProductFromSupabase(slugOrId: string): Promise<void>
   if (!supabase) return;
 
   try {
-    await supabase.from('products').delete().or(`slug.eq.${slugOrId},name.eq.${slugOrId}`);
+    const isUuid = Boolean(slugOrId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slugOrId));
+    if (isUuid) {
+      await supabase.from('products').delete().eq('id', slugOrId);
+    } else {
+      await supabase.from('products').delete().or(`slug.eq.${slugOrId},name.eq.${slugOrId}`);
+    }
   } catch (err) {
     console.error('[Supabase delete error]:', err);
   }
@@ -157,6 +185,7 @@ export async function loadProductsFromSupabase(): Promise<Product[] | null> {
 
     return prods.map((p: any) => ({
       id: p.id,
+      cloud_id: p.id,
       name: p.name,
       slug: p.slug,
       description: p.description || '',

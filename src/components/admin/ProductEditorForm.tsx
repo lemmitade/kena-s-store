@@ -35,8 +35,12 @@ export function ProductEditorForm({
   const [name, setName] = useState(initialProduct?.name || '');
   const [slug, setSlug] = useState(initialProduct?.slug || '');
   const [description, setDescription] = useState(initialProduct?.description || '');
+  const initialCategory = initialProduct?.primary_category_id
+    ? categories.find((c) => c.id === initialProduct.primary_category_id)
+    : null;
+
   const [primarySectionId, setPrimarySectionId] = useState(
-    initialProduct?.primary_section_id || sections[0]?.id || ''
+    initialProduct?.primary_section_id || initialCategory?.section_id || sections[0]?.id || ''
   );
   const [primaryCategoryId, setPrimaryCategoryId] = useState(
     initialProduct?.primary_category_id || ''
@@ -273,15 +277,25 @@ export function ProductEditorForm({
     }
   }, [primaryCategoryId, categories]);
 
-  // On mount, validate that the existing category belongs to the selected section
-  useEffect(() => {
-    if (primaryCategoryId && primarySectionId) {
-      const cat = categories.find((c) => c.id === primaryCategoryId);
-      if (cat && cat.section_id !== primarySectionId) {
-        setPrimaryCategoryId('');
+  const handleCategoryChange = useCallback((newCategoryId: string) => {
+    setPrimaryCategoryId(newCategoryId);
+    if (newCategoryId) {
+      const cat = categories.find((c) => c.id === newCategoryId);
+      if (cat && cat.section_id && cat.section_id !== primarySectionId) {
+        setPrimarySectionId(cat.section_id);
       }
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [primarySectionId, categories]);
+
+  // If a category is selected, ensure the section matches that category
+  useEffect(() => {
+    if (primaryCategoryId) {
+      const cat = categories.find((c) => c.id === primaryCategoryId);
+      if (cat && cat.section_id && cat.section_id !== primarySectionId) {
+        setPrimarySectionId(cat.section_id);
+      }
+    }
+  }, [primaryCategoryId, primarySectionId, categories]);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8 font-mono text-xs">
@@ -399,7 +413,7 @@ export function ProductEditorForm({
             <label className="uppercase text-stone-500 block">Category (Optional)</label>
             <select
               value={primaryCategoryId}
-              onChange={(e) => setPrimaryCategoryId(e.target.value)}
+              onChange={(e) => handleCategoryChange(e.target.value)}
               className="w-full bg-[#FAF9F6] border border-stone-300 px-4 py-3 text-sm focus:outline-none focus:border-stone-900"
             >
               <option value="">-- No Specific Category --</option>

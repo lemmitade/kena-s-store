@@ -1283,6 +1283,65 @@ export async function getCategoryBySlug(sectionSlug: string, categorySlug: strin
   return db.categories.find((c) => c.section_id === section.id && c.slug === categorySlug && !c.is_archived) || null;
 }
 
+function productMatchesTarget(prod: Product, target: string): boolean {
+  if (!prod || !target) return false;
+  const raw = target.trim();
+  const lowerRaw = raw.toLowerCase();
+  let decoded = lowerRaw;
+  try {
+    decoded = decodeURIComponent(raw).trim().toLowerCase();
+  } catch {}
+
+  const prodId = (prod.id || '').trim();
+  const prodCloudId = (prod.cloud_id || '').trim();
+  const prodSlug = (prod.slug || '').trim();
+
+  return (
+    prodId === raw ||
+    prodId.toLowerCase() === lowerRaw ||
+    prodId.toLowerCase() === decoded ||
+    (prodCloudId !== '' && (
+      prodCloudId === raw ||
+      prodCloudId.toLowerCase() === lowerRaw ||
+      prodCloudId.toLowerCase() === decoded
+    )) ||
+    prodSlug === raw ||
+    prodSlug.toLowerCase() === lowerRaw ||
+    prodSlug.toLowerCase() === decoded
+  );
+}
+
+function mergeCloudProducts(cloudProducts: Product[]): void {
+  if (!cloudProducts || cloudProducts.length === 0) return;
+  for (const cp of cloudProducts) {
+    if (!cp) continue;
+    const idx = db.products.findIndex(
+      (x) =>
+        (x.id && cp.id && x.id === cp.id) ||
+        (x.cloud_id && cp.id && x.cloud_id === cp.id) ||
+        (x.slug && cp.slug && x.slug.toLowerCase() === cp.slug.toLowerCase())
+    );
+    if (idx !== -1) {
+      const existing = db.products[idx];
+      db.products[idx] = {
+        ...existing,
+        ...cp,
+        // Preserve local ID if existing had one, store cloud_id
+        id: existing.id || cp.id,
+        cloud_id: cp.id || existing.cloud_id,
+        // Preserve section / category if cloud is missing them
+        primary_section_id: cp.primary_section_id || existing.primary_section_id,
+        primary_category_id: cp.primary_category_id || existing.primary_category_id,
+      };
+    } else {
+      db.products.push({
+        ...cp,
+        cloud_id: cp.id,
+      });
+    }
+  }
+}
+
 export async function getProducts(options?: {
   sectionSlug?: string;
   categorySlug?: string;
@@ -1297,27 +1356,7 @@ export async function getProducts(options?: {
   try {
     const cloudProducts = await loadProductsFromSupabase();
     if (cloudProducts && cloudProducts.length > 0) {
-      const map = new Map<string, Product>();
-      for (const p of cloudProducts) {
-        if (p && p.slug) map.set(p.slug, p);
-      }
-      for (const p of db.products) {
-        if (p && p.slug) {
-          if (map.has(p.slug)) {
-            // Preserve local section/category IDs if cloud version lacks them
-            const cloud = map.get(p.slug)!;
-            if (!cloud.primary_section_id && p.primary_section_id) {
-              cloud.primary_section_id = p.primary_section_id;
-            }
-            if (!cloud.primary_category_id && p.primary_category_id) {
-              cloud.primary_category_id = p.primary_category_id;
-            }
-          } else {
-            map.set(p.slug, p);
-          }
-        }
-      }
-      db.products = Array.from(map.values());
+      mergeCloudProducts(cloudProducts);
     }
   } catch {}
 
@@ -1369,33 +1408,32 @@ export async function getProducts(options?: {
 export async function getProductBySlug(slugOrId: string, options?: { allowDrafts?: boolean }): Promise<Product | null> {
   if (!slugOrId) return null;
   loadStoreState(db);
-  const raw = String(slugOrId).trim();
-  let decoded = raw;
-  try {
-    decoded = decodeURIComponent(raw).trim().toLowerCase();
-  } catch {
-    decoded = raw.toLowerCase();
-  }
-  const lowerRaw = raw.toLowerCase();
+  const target = String(slugOrId).trim();
 
-  const p = db.products.find((prod) => {
+  let p = db.products.find((prod) => {
     if (prod.is_archived) return false;
-    // Allow drafts if specifically requested or if queried by exact ID/slug
     if (!options?.allowDrafts && !prod.is_published) {
-      // Still match if admin is previewing via ID or direct slug
-      return prod.id === raw || prod.slug === raw || prod.id.toLowerCase() === lowerRaw || prod.slug.toLowerCase() === lowerRaw;
+      return productMatchesTarget(prod, target);
     }
-    const prodSlug = (prod.slug || '').toLowerCase();
-    const prodId = (prod.id || '').toLowerCase();
-    return (
-      prod.slug === raw ||
-      prod.id === raw ||
-      prodSlug === decoded ||
-      prodId === decoded ||
-      prodSlug === lowerRaw ||
-      prodId === lowerRaw
-    );
+    return productMatchesTarget(prod, target);
   });
+
+  if (!p) {
+    try {
+      const cloudProducts = await loadProductsFromSupabase();
+      if (cloudProducts && cloudProducts.length > 0) {
+        mergeCloudProducts(cloudProducts);
+        saveStoreState(db);
+        p = db.products.find((prod) => {
+          if (prod.is_archived) return false;
+          if (!options?.allowDrafts && !prod.is_published) {
+            return productMatchesTarget(prod, target);
+          }
+          return productMatchesTarget(prod, target);
+        });
+      }
+    } catch {}
+  }
 
   if (!p) return null;
   return {
@@ -1408,27 +1446,20 @@ export async function getProductBySlug(slugOrId: string, options?: { allowDrafts
 export async function getProductById(idOrSlug: string): Promise<Product | null> {
   if (!idOrSlug) return null;
   loadStoreState(db);
-  const raw = String(idOrSlug).trim();
-  let decoded = raw;
-  try {
-    decoded = decodeURIComponent(raw).trim().toLowerCase();
-  } catch {
-    decoded = raw.toLowerCase();
-  }
-  const lowerRaw = raw.toLowerCase();
+  const target = String(idOrSlug).trim();
 
-  const p = db.products.find((prod) => {
-    const prodId = (prod.id || '').toLowerCase();
-    const prodSlug = (prod.slug || '').toLowerCase();
-    return (
-      prod.id === raw ||
-      prod.slug === raw ||
-      prodId === decoded ||
-      prodSlug === decoded ||
-      prodId === lowerRaw ||
-      prodSlug === lowerRaw
-    );
-  });
+  let p = db.products.find((prod) => productMatchesTarget(prod, target));
+
+  if (!p) {
+    try {
+      const cloudProducts = await loadProductsFromSupabase();
+      if (cloudProducts && cloudProducts.length > 0) {
+        mergeCloudProducts(cloudProducts);
+        saveStoreState(db);
+        p = db.products.find((prod) => productMatchesTarget(prod, target));
+      }
+    } catch {}
+  }
 
   if (!p) return null;
   return {
@@ -1498,10 +1529,19 @@ export async function createProduct(data: Omit<Product, 'id' | 'created_at' | 'u
 export async function updateProduct(idOrSlug: string, data: Partial<Product>): Promise<Product | null> {
   loadStoreState(db);
   const target = String(idOrSlug).trim();
-  const lowerTarget = target.toLowerCase();
-  const index = db.products.findIndex(
-    (p) => p.id === target || p.slug === target || p.id.toLowerCase() === lowerTarget || p.slug.toLowerCase() === lowerTarget
-  );
+  let index = db.products.findIndex((p) => productMatchesTarget(p, target));
+
+  if (index === -1) {
+    try {
+      const cloudProducts = await loadProductsFromSupabase();
+      if (cloudProducts && cloudProducts.length > 0) {
+        mergeCloudProducts(cloudProducts);
+        saveStoreState(db);
+        index = db.products.findIndex((p) => productMatchesTarget(p, target));
+      }
+    } catch {}
+  }
+
   if (index === -1) return null;
 
   const existing = db.products[index];
@@ -1526,10 +1566,12 @@ export async function updateProduct(idOrSlug: string, data: Partial<Product>): P
     }
   }
 
+  const isTargetUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(target);
   const now = new Date().toISOString();
   db.products[index] = {
     ...existing,
     ...data,
+    cloud_id: existing.cloud_id || (isTargetUuid ? target : undefined),
     slug: updatedSlug,
     updated_at: now,
   };
@@ -1557,22 +1599,29 @@ export async function updateProduct(idOrSlug: string, data: Partial<Product>): P
   }
 
   saveStoreState(db);
-  syncProductToSupabase(db.products[index]).catch(() => {});
+  try {
+    await syncProductToSupabase(db.products[index]);
+  } catch {}
   return db.products[index];
 }
 
 export async function deleteProduct(idOrSlug: string): Promise<boolean> {
   loadStoreState(db);
   const target = String(idOrSlug).trim();
-  const lowerTarget = target.toLowerCase();
-  const index = db.products.findIndex(
-    (p) => p.id === target || p.slug === target || p.id.toLowerCase() === lowerTarget || p.slug.toLowerCase() === lowerTarget
-  );
-  if (index === -1) return false;
+  let index = db.products.findIndex((p) => productMatchesTarget(p, target));
+
+  if (index === -1) {
+    try {
+      await deleteProductFromSupabase(target);
+      return true;
+    } catch {
+      return false;
+    }
+  }
   const removed = db.products.splice(index, 1)[0];
   saveStoreState(db);
   if (removed) {
-    deleteProductFromSupabase(removed.slug || target).catch(() => {});
+    deleteProductFromSupabase(removed.cloud_id || removed.slug || target).catch(() => {});
   }
   return true;
 }

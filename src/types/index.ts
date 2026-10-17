@@ -188,6 +188,7 @@ export interface ProductVariant {
 
 export interface Product {
   id: string;
+  cloud_id?: string;
   name: string;
   slug: string;
   description: string;
