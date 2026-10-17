@@ -20,12 +20,12 @@ export async function GET(request: NextRequest) {
       const canonical =
         settings.seo_settings?.canonical_url ||
         process.env.NEXT_PUBLIC_APP_URL ||
-        'https://kenastore.et';
+        'https://kenasstore.com';
       try {
         const u = new URL(canonical.startsWith('http') ? canonical : `https://${canonical}`);
         targetDomain = u.hostname;
       } catch {
-        targetDomain = 'kenastore.et';
+        targetDomain = 'kenasstore.com';
       }
     }
 

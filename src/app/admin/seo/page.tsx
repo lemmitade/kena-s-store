@@ -19,8 +19,8 @@ export default async function AdminSeoPage() {
     keywords:
       'Kena Store, Ethiopian fashion, Habesha clothing, Shemma dress, Addis Ababa shopping, Highland leather, Tibeb',
     og_image_url: settings.logo_url || '/logo.png',
-    canonical_url: 'https://kenastore.et',
-    twitter_handle: '@kenastore',
+    canonical_url: 'https://kenasstore.com',
+    twitter_handle: '@kenasstore',
     allow_indexing: true,
     google_site_verification: '',
   };

@@ -45,7 +45,9 @@ export async function verifyAdminCredentials(
   const configuredEmail = settings.admin_credentials?.email || ADMIN_DEFAULT_EMAIL;
   const configuredPassword = settings.admin_credentials?.password || ADMIN_DEFAULT_PASSWORD;
 
-  const emailMatch = email.trim().toLowerCase() === configuredEmail.trim().toLowerCase();
+  const emailMatch =
+    email.trim().toLowerCase() === configuredEmail.trim().toLowerCase() ||
+    (!settings.admin_credentials?.email && email.trim().toLowerCase() === 'admin@kenasstore.com');
   const passwordMatch = password === configuredPassword;
 
   return emailMatch && passwordMatch;

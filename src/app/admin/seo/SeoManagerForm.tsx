@@ -20,7 +20,7 @@ export function SeoManagerForm({ initialSeo, storeName }: SeoManagerFormProps) {
   const [metaDescription, setMetaDescription] = useState(initialSeo.meta_description || '');
   const [keywords, setKeywords] = useState(initialSeo.keywords || '');
   const [ogImageUrl, setOgImageUrl] = useState(initialSeo.og_image_url || '/logo.png');
-  const [canonicalUrl, setCanonicalUrl] = useState(initialSeo.canonical_url || 'https://kenastore.et');
+  const [canonicalUrl, setCanonicalUrl] = useState(initialSeo.canonical_url || 'https://kenasstore.com');
   const [twitterHandle, setTwitterHandle] = useState(initialSeo.twitter_handle || '@kenastore');
   const [allowIndexing, setAllowIndexing] = useState(initialSeo.allow_indexing ?? true);
   const [googleVerification, setGoogleVerification] = useState(

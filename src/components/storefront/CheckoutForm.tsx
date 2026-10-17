@@ -7,6 +7,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/lib/cart/cart-context';
 import { DeliveryZone, PickupLocation, StoreSettings } from '@/types';
@@ -158,12 +159,12 @@ export function CheckoutForm({ pickupLocations, deliveryZones, settings }: Check
         <p className="text-xs font-mono text-stone-500 mt-2 mb-6">
           Add items to your bag before checking out.
         </p>
-        <a
+        <Link
           href="/shop"
           className="inline-block bg-[#121212] text-white px-8 py-3.5 text-xs font-mono uppercase tracking-widest"
         >
           Browse Shop
-        </a>
+        </Link>
       </div>
     );
   }

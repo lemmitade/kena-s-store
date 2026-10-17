@@ -12,13 +12,13 @@ export const dynamic = 'force-dynamic';
 
 export default async function AdminDomainSettingsPage() {
   const settings = await getStoreSettings();
-  const canonicalUrl = settings.seo_settings?.canonical_url || 'https://kenastore.et';
-  let defaultDomain = 'kenastore.et';
+  const canonicalUrl = process.env.NEXT_PUBLIC_APP_URL || settings.seo_settings?.canonical_url || 'https://kenasstore.com';
+  let defaultDomain = 'kenasstore.com';
   try {
     const u = new URL(canonicalUrl.startsWith('http') ? canonicalUrl : `https://${canonicalUrl}`);
     defaultDomain = u.hostname.replace(/^www\./, '');
   } catch {
-    defaultDomain = 'kenastore.et';
+    defaultDomain = 'kenasstore.com';
   }
 
   return (
