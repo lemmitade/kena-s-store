@@ -1020,7 +1020,7 @@ function getStoreDataFilePath(): string {
 
 let lastLoadedMtime = 0;
 
-function saveStoreState(store: MemoryStore) {
+export function saveStoreState(store: MemoryStore) {
   try {
     const filePath = getStoreDataFilePath();
     let diskOrders: Order[] = [];

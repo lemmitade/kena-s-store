@@ -5,8 +5,21 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyChapaWebhookSignature } from '@/lib/payments/chapa';
-import { db, updateOrderStatus, getStoreSettings } from '@/lib/db/repository';
+import { db, getOrderByNumber, saveStoreState, getStoreSettings } from '@/lib/db/repository';
+import { syncOrderToSupabase } from '@/lib/db/supabase-sync';
 import { sendTelegramMessage, buildPaymentVerifiedAlert } from '@/lib/telegram/bot';
+
+export async function GET() {
+  return NextResponse.json(
+    {
+      status: 'active',
+      gateway: 'chapa',
+      endpoint: 'https://kenasstore.com/api/webhooks/chapa',
+      timestamp: new Date().toISOString(),
+    },
+    { status: 200 }
+  );
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,8 +41,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing transaction reference.' }, { status: 400 });
     }
 
-    // 2. Locate Matching Order
-    const order = db.orders.find((o) => o.order_number === txRef);
+    // 2. Locate Matching Order (supports local memory + Supabase cloud lookup)
+    const order = await getOrderByNumber(txRef);
     if (!order) {
       // Idempotent ack so Chapa doesn't spam retries if order was processed or outside system
       return NextResponse.json({ received: true, note: 'Order not found in store.' }, { status: 200 });
@@ -45,6 +58,10 @@ export async function POST(request: NextRequest) {
       order.payment_status = 'paid';
       order.order_status = 'preparing';
       order.updated_at = new Date().toISOString();
+
+      // Persist to local JSON state & sync to Supabase PostgreSQL
+      saveStoreState(db);
+      await syncOrderToSupabase(order);
 
       // Log in audit trail
       db.auditLogs.unshift({
@@ -74,6 +91,8 @@ export async function POST(request: NextRequest) {
     } else if (status === 'failed') {
       order.payment_status = 'failed';
       order.updated_at = new Date().toISOString();
+      saveStoreState(db);
+      await syncOrderToSupabase(order);
     }
 
     return NextResponse.json({ received: true, status: order.payment_status }, { status: 200 });
