@@ -74,22 +74,29 @@ export async function submitBidAction(formData: {
       const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://kenasstore.com';
       const nameParts = formData.participant_name.trim().split(/\s+/);
       const cleanPhone = formData.participant_phone.replace(/\D/g, '');
+      const chapaSecret =
+        settings.chapa_secret_key ||
+        process.env.CHAPA_SECRET_KEY ||
+        'CHAPA_LIVE_PRIV_cMgwDMrOciEtxjjs5WU22jbQnqWu8LbXpCYWhzro';
 
-      const chapaRes = await initializeChapaPayment({
-        amount: requiredFee,
-        currency: 'ETB',
-        email: `${cleanPhone}@bids.kenasstore.com`,
-        first_name: nameParts[0] || 'Bidder',
-        last_name: nameParts.slice(1).join(' ') || 'Participant',
-        phone_number: formData.participant_phone.trim(),
-        tx_ref: txRef,
-        callback_url: `${baseUrl}/api/webhooks/chapa`,
-        return_url: `${baseUrl}/bids/${comp.slug}?paid=true&ref=${txRef}`,
-        customization: {
-          title: 'Bid Entry Fee',
-          description: `Entry fee (${requiredFee} ETB) for ${comp.title}`,
+      const chapaRes = await initializeChapaPayment(
+        {
+          amount: requiredFee,
+          currency: 'ETB',
+          email: `${cleanPhone}@bids.kenasstore.com`,
+          first_name: nameParts[0] || 'Bidder',
+          last_name: nameParts.slice(1).join(' ') || 'Participant',
+          phone_number: formData.participant_phone.trim(),
+          tx_ref: txRef,
+          callback_url: `${baseUrl}/api/webhooks/chapa`,
+          return_url: `${baseUrl}/bids/${comp.slug}?paid=true&ref=${txRef}`,
+          customization: {
+            title: 'Bid Entry Fee',
+            description: `Entry fee (${requiredFee} ETB) for ${comp.title}`,
+          },
         },
-      });
+        chapaSecret
+      );
 
       if (chapaRes.status === 'success' && chapaRes.data?.checkout_url) {
         return {
@@ -142,8 +149,14 @@ export async function verifyBidPaymentAction(txRef: string) {
       return { verified: true, entry };
     }
 
+    const settings = await getStoreSettings();
+    const chapaSecret =
+      settings.chapa_secret_key ||
+      process.env.CHAPA_SECRET_KEY ||
+      'CHAPA_LIVE_PRIV_cMgwDMrOciEtxjjs5WU22jbQnqWu8LbXpCYWhzro';
+
     // Verify with Chapa API
-    const chapaVerify = await verifyChapaTransaction(txRef);
+    const chapaVerify = await verifyChapaTransaction(txRef, chapaSecret);
     if (chapaVerify.status === 'success' && chapaVerify.data?.status === 'success') {
       const markRes = await markCompetitionEntryPaid(txRef);
       return { verified: true, entry: markRes.entry };
