@@ -66,6 +66,8 @@ export async function processCheckoutAction(input: CreateOrderInput): Promise<Ch
     let checkoutUrl: string | undefined;
     if (order.payment_method === 'chapa') {
       try {
+        const settings = await getStoreSettings();
+        const chapaSecret = settings.chapa_secret_key || process.env.CHAPA_SECRET_KEY;
         const nameParts = (order.customer_name || 'Customer').trim().split(/\s+/);
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://kenasstore.com';
         const chapaRes = await initializeChapaPayment({
@@ -82,15 +84,24 @@ export async function processCheckoutAction(input: CreateOrderInput): Promise<Ch
             title: 'Kena Store Order',
             description: `Payment for Order #${order.order_number}`,
           },
-        });
+        }, chapaSecret);
 
         if (chapaRes.status === 'success' && chapaRes.data?.checkout_url) {
           checkoutUrl = chapaRes.data.checkout_url;
-        } else if (chapaRes.message) {
-          console.warn('[Chapa initialize warning]:', chapaRes.message);
+        } else {
+          const msg = chapaRes.message || 'Payment gateway initialization failed.';
+          console.warn('[Chapa initialize warning]:', msg);
+          return {
+            success: false,
+            error: `Chapa Payment Error: ${msg}`,
+          };
         }
       } catch (chapaErr) {
         console.error('[Chapa initialize error]:', chapaErr);
+        return {
+          success: false,
+          error: `Payment gateway error: ${(chapaErr as Error).message}`,
+        };
       }
     }
 

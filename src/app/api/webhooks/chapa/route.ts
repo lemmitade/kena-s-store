@@ -24,18 +24,25 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const rawBody = await request.text();
-    const signature = request.headers.get('x-chapa-signature');
+    const signature =
+      request.headers.get('x-chapa-signature') ||
+      request.headers.get('chapa-signature') ||
+      request.headers.get('x-chapa-signature-256');
 
     // 1. Signature Verification
+    const hasSecret = Boolean(process.env.CHAPA_WEBHOOK_SECRET || process.env.CHAPA_SECRET_KEY);
     const isValidSignature = verifyChapaWebhookSignature(rawBody, signature);
-    // If webhook secret is configured and signature does not match, reject
-    if (process.env.CHAPA_WEBHOOK_SECRET && !isValidSignature) {
+
+    // If webhook secret or secret key is configured and signature does not match, reject
+    if (hasSecret && !isValidSignature) {
+      console.warn('[Chapa Webhook Error]: Invalid HMAC signature header:', signature);
       return NextResponse.json({ error: 'Invalid HMAC signature.' }, { status: 401 });
     }
 
     const payload = JSON.parse(rawBody);
-    const txRef = payload.tx_ref || payload.reference;
-    const status = payload.status; // 'success', 'failed', 'pending'
+    const txRef = payload.tx_ref || payload.reference || payload.trx_ref;
+    const isSuccess = payload.status === 'success' || payload.event === 'charge.success';
+    const isFailed = payload.status === 'failed' || payload.event === 'charge.failed';
 
     if (!txRef) {
       return NextResponse.json({ error: 'Missing transaction reference.' }, { status: 400 });
@@ -49,12 +56,12 @@ export async function POST(request: NextRequest) {
     }
 
     // 3. Idempotency Check (prevent duplicate execution if already paid)
-    if (order.payment_status === 'paid' && status === 'success') {
+    if (order.payment_status === 'paid' && isSuccess) {
       return NextResponse.json({ received: true, note: 'Order already marked as paid.' }, { status: 200 });
     }
 
     // 4. Update Payment & Order Status
-    if (status === 'success') {
+    if (isSuccess) {
       order.payment_status = 'paid';
       order.order_status = 'preparing';
       order.updated_at = new Date().toISOString();
@@ -88,7 +95,7 @@ export async function POST(request: NextRequest) {
       } catch {
         // notification errors must not fail webhook response
       }
-    } else if (status === 'failed') {
+    } else if (isFailed) {
       order.payment_status = 'failed';
       order.updated_at = new Date().toISOString();
       saveStoreState(db);

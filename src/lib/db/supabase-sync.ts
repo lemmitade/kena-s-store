@@ -85,19 +85,87 @@ export async function syncProductToSupabase(prod: Product): Promise<void> {
 
     // 2. Sync variants
     if (productId && Array.isArray(prod.variants) && prod.variants.length > 0) {
-      for (const v of prod.variants) {
-        const sku = v.sku || `${prod.slug}-${v.size || 'os'}-${Date.now()}`;
-        await supabase.from('product_variants').upsert(
-          {
-            product_id: productId,
-            sku,
-            size: v.size || null,
-            color: v.color || null,
-            stock_quantity: v.stock_quantity ?? 0,
-            is_available: v.is_available ?? true,
-          },
-          { onConflict: 'sku' }
+      // Fetch existing variants for this product in Supabase
+      const { data: existingVariants, error: fetchErr } = await supabase
+        .from('product_variants')
+        .select('id, sku')
+        .eq('product_id', productId);
+
+      if (!fetchErr && existingVariants) {
+        const submittedIds = new Set(
+          prod.variants
+            .map((v) => v.id)
+            .filter((id): id is string => Boolean(id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)))
         );
+
+        // Delete variants that were removed in the editor
+        const toDelete = existingVariants.filter((ev) => !submittedIds.has(ev.id));
+        for (const ev of toDelete) {
+          await supabase.from('product_variants').delete().eq('id', ev.id);
+        }
+      }
+
+      // Upsert / insert each variant
+      for (let idx = 0; idx < prod.variants.length; idx++) {
+        const v = prod.variants[idx];
+        const isUuid = Boolean(v.id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v.id));
+
+        let sku = (v.sku && v.sku.trim())
+          ? v.sku.trim().toUpperCase()
+          : `${(prod.slug || 'PRD').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6)}-${v.size || 'STD'}-${idx + 1}`;
+
+        // Check if SKU exists in the database
+        const { data: existingSkuRecord } = await supabase
+          .from('product_variants')
+          .select('id, product_id')
+          .eq('sku', sku)
+          .maybeSingle();
+
+        if (existingSkuRecord && existingSkuRecord.product_id !== productId) {
+          // SKU is already registered to another product! Make it unique so we never steal or conflict
+          const baseCode = (prod.slug || 'PRD').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 4);
+          sku = `${baseCode}-${v.size || 'STD'}-${Date.now().toString().slice(-4)}${idx}`;
+          v.sku = sku;
+        }
+
+        const stock = Math.max(0, Number(v.stock_quantity) || 0);
+        const variantPayload: Record<string, unknown> = {
+          product_id: productId,
+          sku,
+          size: v.size?.trim() || null,
+          color: v.color?.trim() || null,
+          stock_quantity: stock,
+          is_available: stock > 0,
+          updated_at: new Date().toISOString(),
+        };
+
+        if (isUuid) {
+          variantPayload.id = v.id;
+          const { error: upsertErr } = await supabase
+            .from('product_variants')
+            .upsert(variantPayload, { onConflict: 'id' });
+          if (upsertErr) {
+            console.error('[Supabase sync variant upsert error]:', upsertErr);
+          }
+        } else if (existingSkuRecord && existingSkuRecord.product_id === productId) {
+          v.id = existingSkuRecord.id;
+          await supabase
+            .from('product_variants')
+            .update(variantPayload)
+            .eq('id', existingSkuRecord.id);
+        } else {
+          const { data: insData, error: insErr } = await supabase
+            .from('product_variants')
+            .insert(variantPayload)
+            .select('id')
+            .single();
+
+          if (insData) {
+            v.id = insData.id;
+          } else if (insErr) {
+            console.error('[Supabase sync variant insert error]:', insErr);
+          }
+        }
       }
     }
 

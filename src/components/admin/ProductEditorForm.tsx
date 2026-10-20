@@ -77,21 +77,41 @@ export function ProductEditorForm({
       color: string;
       stock_quantity: number;
     }>
-  >(
-    initialProduct?.variants && initialProduct.variants.length > 0
-      ? initialProduct.variants.map((v) => ({
+  >(() => {
+    if (initialProduct?.variants && initialProduct.variants.length > 0) {
+      return initialProduct.variants.map((v) => ({
+        id: v.id,
+        sku: v.sku,
+        size: v.size || '',
+        color: v.color || '',
+        stock_quantity: Number(v.stock_quantity) || 0,
+      }));
+    }
+    const cleanPrefix = (initialProduct?.slug || 'PRD')
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, '')
+      .slice(0, 5) || 'SKU';
+    return [
+      { sku: `${cleanPrefix}-S`, size: 'S', color: 'White', stock_quantity: 1 },
+      { sku: `${cleanPrefix}-M`, size: 'M', color: 'White', stock_quantity: 1 },
+      { sku: `${cleanPrefix}-L`, size: 'L', color: 'White', stock_quantity: 1 },
+    ];
+  });
+
+  // Sync state if initialProduct loads/updates
+  useEffect(() => {
+    if (initialProduct?.variants && initialProduct.variants.length > 0) {
+      setVariants(
+        initialProduct.variants.map((v) => ({
           id: v.id,
           sku: v.sku,
           size: v.size || '',
           color: v.color || '',
-          stock_quantity: v.stock_quantity,
+          stock_quantity: Number(v.stock_quantity) || 0,
         }))
-      : [
-          { sku: 'NEW-S-WHT', size: 'S', color: 'White', stock_quantity: 10 },
-          { sku: 'NEW-M-WHT', size: 'M', color: 'White', stock_quantity: 15 },
-          { sku: 'NEW-L-WHT', size: 'L', color: 'White', stock_quantity: 8 },
-        ]
-  );
+      );
+    }
+  }, [initialProduct]);
 
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -112,7 +132,12 @@ export function ProductEditorForm({
   };
 
   const handleAddVariant = () => {
-    const skuCode = `SKU-${Date.now().toString().slice(-4)}`;
+    const cleanPrefix = (slug || name || 'SKU')
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, '')
+      .slice(0, 5) || 'SKU';
+    const randSuffix = Math.random().toString(36).substring(2, 6).toUpperCase();
+    const skuCode = `${cleanPrefix}-${randSuffix}`;
     setVariants((prev) => [
       ...prev,
       {
@@ -201,6 +226,17 @@ export function ProductEditorForm({
             setIsPublished(updated.is_published);
             setIsFeatured(updated.is_featured);
             setIsNewArrival(updated.is_new_arrival);
+            if (updated.variants && updated.variants.length > 0) {
+              setVariants(
+                updated.variants.map((v) => ({
+                  id: v.id,
+                  sku: v.sku,
+                  size: v.size || '',
+                  color: v.color || '',
+                  stock_quantity: Number(v.stock_quantity) || 0,
+                }))
+              );
+            }
             router.replace(`/admin/products/${updated.id}`);
           }
           router.refresh();

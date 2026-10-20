@@ -15,8 +15,8 @@
       "low_stock_threshold": 5,
       "seo_title": "baggy jeans | YOUR BRAND",
       "seo_description": "Wide-leg relaxed denim trousers.",
-      "created_at": "2026-10-15T16:37:14.496Z",
-      "updated_at": "2026-10-15T16:37:14.496Z",
+      "created_at": "2026-10-20T08:53:39.656Z",
+      "updated_at": "2026-10-20T08:53:39.656Z",
       "images": [
         {
           "id": "img-baggy-1",
@@ -37,7 +37,7 @@
           "color_hex": "#2E5090",
           "stock_quantity": 10,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.656Z"
         },
         {
           "id": "var-baggy-m",
@@ -48,7 +48,7 @@
           "color_hex": "#2E5090",
           "stock_quantity": 13,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.656Z"
         },
         {
           "id": "var-baggy-l",
@@ -59,7 +59,7 @@
           "color_hex": "#2E5090",
           "stock_quantity": 10,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.656Z"
         }
       ]
     },
@@ -78,8 +78,8 @@
       "low_stock_threshold": 3,
       "seo_title": "Relaxed Pure Linen Camp Shirt | YOUR BRAND",
       "seo_description": "100% organic linen camp shirt tailored in Ethiopia.",
-      "created_at": "2026-10-15T16:37:14.496Z",
-      "updated_at": "2026-10-15T16:37:14.496Z",
+      "created_at": "2026-10-20T08:53:39.656Z",
+      "updated_at": "2026-10-20T08:53:39.656Z",
       "images": [
         {
           "id": "img-1-1",
@@ -108,7 +108,7 @@
           "color_hex": "#FAF9F6",
           "stock_quantity": 8,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.656Z"
         },
         {
           "id": "var-1-m",
@@ -119,7 +119,7 @@
           "color_hex": "#FAF9F6",
           "stock_quantity": 14,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.656Z"
         },
         {
           "id": "var-1-l",
@@ -130,7 +130,7 @@
           "color_hex": "#FAF9F6",
           "stock_quantity": 10,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.656Z"
         },
         {
           "id": "var-1-olv-m",
@@ -141,7 +141,7 @@
           "color_hex": "#556B2F",
           "stock_quantity": 6,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.656Z"
         }
       ]
     },
@@ -159,8 +159,8 @@
       "is_published": true,
       "is_archived": false,
       "low_stock_threshold": 4,
-      "created_at": "2026-10-15T16:37:14.496Z",
-      "updated_at": "2026-10-15T16:37:14.496Z",
+      "created_at": "2026-10-20T08:53:39.656Z",
+      "updated_at": "2026-10-20T08:53:39.656Z",
       "images": [
         {
           "id": "img-2-1",
@@ -179,9 +179,9 @@
           "size": "30",
           "color": "Charcoal",
           "color_hex": "#2B2B2B",
-          "stock_quantity": 3,
+          "stock_quantity": 5,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.656Z"
         },
         {
           "id": "var-2-32",
@@ -192,7 +192,7 @@
           "color_hex": "#2B2B2B",
           "stock_quantity": 9,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.656Z"
         },
         {
           "id": "var-2-34",
@@ -203,7 +203,7 @@
           "color_hex": "#2B2B2B",
           "stock_quantity": 7,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.656Z"
         }
       ]
     },
@@ -220,8 +220,8 @@
       "is_published": true,
       "is_archived": false,
       "low_stock_threshold": 2,
-      "created_at": "2026-10-15T16:37:14.496Z",
-      "updated_at": "2026-10-15T16:37:14.496Z",
+      "created_at": "2026-10-20T08:53:39.656Z",
+      "updated_at": "2026-10-20T08:53:39.656Z",
       "images": [
         {
           "id": "img-3-1",
@@ -242,7 +242,7 @@
           "color_hex": "#121212",
           "stock_quantity": 4,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.656Z"
         },
         {
           "id": "var-3-s",
@@ -253,7 +253,7 @@
           "color_hex": "#121212",
           "stock_quantity": 8,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.656Z"
         },
         {
           "id": "var-3-m",
@@ -264,7 +264,7 @@
           "color_hex": "#121212",
           "stock_quantity": 6,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.656Z"
         }
       ]
     },
@@ -281,8 +281,8 @@
       "is_published": true,
       "is_archived": false,
       "low_stock_threshold": 2,
-      "created_at": "2026-10-15T16:37:14.496Z",
-      "updated_at": "2026-10-15T16:37:14.496Z",
+      "created_at": "2026-10-20T08:53:39.656Z",
+      "updated_at": "2026-10-20T08:53:39.656Z",
       "images": [
         {
           "id": "img-4-1",
@@ -303,7 +303,7 @@
           "color_hex": "#3D2817",
           "stock_quantity": 4,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.656Z"
         },
         {
           "id": "var-4-42",
@@ -314,7 +314,7 @@
           "color_hex": "#3D2817",
           "stock_quantity": 5,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.656Z"
         },
         {
           "id": "var-4-43",
@@ -325,7 +325,7 @@
           "color_hex": "#3D2817",
           "stock_quantity": 3,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.656Z"
         }
       ]
     },
@@ -343,8 +343,8 @@
       "is_published": true,
       "is_archived": false,
       "low_stock_threshold": 3,
-      "created_at": "2026-10-15T16:37:14.496Z",
-      "updated_at": "2026-10-15T16:37:14.496Z",
+      "created_at": "2026-10-20T08:53:39.657Z",
+      "updated_at": "2026-10-20T08:53:39.657Z",
       "images": [
         {
           "id": "img-5-1",
@@ -365,7 +365,7 @@
           "color_hex": "#F5F5DC",
           "stock_quantity": 3,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.657Z"
         },
         {
           "id": "var-5-m",
@@ -376,7 +376,7 @@
           "color_hex": "#F5F5DC",
           "stock_quantity": 4,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.657Z"
         },
         {
           "id": "var-5-l",
@@ -387,7 +387,257 @@
           "color_hex": "#F5F5DC",
           "stock_quantity": 2,
           "is_available": true,
-          "created_at": "2026-10-15T16:37:14.496Z"
+          "created_at": "2026-10-20T08:53:39.657Z"
+        }
+      ]
+    },
+    {
+      "id": "c397e6a3-1ad5-4c93-a034-1ef2ca5f56cb",
+      "cloud_id": "c397e6a3-1ad5-4c93-a034-1ef2ca5f56cb",
+      "name": "Skirt",
+      "slug": "skirt",
+      "description": "Skirt Unic",
+      "primary_section_id": "sec-women",
+      "regular_price_etb": 3000,
+      "is_published": true,
+      "is_featured": false,
+      "is_new_arrival": true,
+      "is_archived": false,
+      "low_stock_threshold": 3,
+      "created_at": "2026-10-20T08:35:58.28316+00:00",
+      "updated_at": "2026-10-20T08:35:58.28316+00:00",
+      "variants": [],
+      "images": [
+        {
+          "id": "3cb2a1c9-20a8-497a-8b6f-05525819d2c7",
+          "product_id": "c397e6a3-1ad5-4c93-a034-1ef2ca5f56cb",
+          "image_url": "https://img.sanishtech.com/u/62c2540ad921d04a316e187ad6126900.jpeg",
+          "alt_text": "Skirt",
+          "display_order": 1,
+          "is_primary": true
+        }
+      ]
+    },
+    {
+      "id": "2297c3e0-f8e6-48c5-aeb6-a38fc2bea9c2",
+      "cloud_id": "2297c3e0-f8e6-48c5-aeb6-a38fc2bea9c2",
+      "name": "Dress",
+      "slug": "dress-1",
+      "description": "Long dress stylish and attractive",
+      "primary_section_id": "sec-women",
+      "regular_price_etb": 5000,
+      "is_published": true,
+      "is_featured": false,
+      "is_new_arrival": true,
+      "is_archived": false,
+      "low_stock_threshold": 3,
+      "created_at": "2026-10-20T08:34:08.313079+00:00",
+      "updated_at": "2026-10-20T08:34:08.313079+00:00",
+      "variants": [],
+      "images": [
+        {
+          "id": "7c4e127b-01e5-451e-80f9-341875ff5f96",
+          "product_id": "2297c3e0-f8e6-48c5-aeb6-a38fc2bea9c2",
+          "image_url": "https://img.sanishtech.com/u/ed1829b773d34d28f2be57eab2d32657.jpeg",
+          "alt_text": "Dress",
+          "display_order": 1,
+          "is_primary": true
+        }
+      ]
+    },
+    {
+      "id": "69b60307-770c-42b5-9f0b-94b95d3ccb7a",
+      "cloud_id": "69b60307-770c-42b5-9f0b-94b95d3ccb7a",
+      "name": "Tote Bags",
+      "slug": "tote-bags",
+      "description": "Tote bags \nBy different Colours",
+      "primary_section_id": "sec-women",
+      "regular_price_etb": 3500,
+      "is_published": true,
+      "is_featured": false,
+      "is_new_arrival": true,
+      "is_archived": false,
+      "low_stock_threshold": 3,
+      "created_at": "2026-10-20T08:31:52.824388+00:00",
+      "updated_at": "2026-10-20T08:31:52.824388+00:00",
+      "variants": [],
+      "images": []
+    },
+    {
+      "id": "4e7456df-d282-41f2-b142-79fecf6aeed7",
+      "cloud_id": "4e7456df-d282-41f2-b142-79fecf6aeed7",
+      "name": "Trouser baggy",
+      "slug": "trouser-baggy",
+      "description": "A baggy confortable Unic trouser",
+      "primary_section_id": "sec-women",
+      "regular_price_etb": 3800,
+      "is_published": true,
+      "is_featured": false,
+      "is_new_arrival": true,
+      "is_archived": false,
+      "low_stock_threshold": 3,
+      "created_at": "2026-10-20T08:24:38.367676+00:00",
+      "updated_at": "2026-10-20T08:26:15.424+00:00",
+      "variants": [],
+      "images": [
+        {
+          "id": "9b65abd6-9bc2-4aab-b2ff-f3076a52ce33",
+          "product_id": "4e7456df-d282-41f2-b142-79fecf6aeed7",
+          "image_url": "https://img.sanishtech.com/u/e6ebcbe0fd6643d32ca69ed8227b1862.jpeg",
+          "alt_text": "Trouser baggy",
+          "display_order": 1,
+          "is_primary": true
+        }
+      ]
+    },
+    {
+      "id": "8f72fb7e-e4ec-448f-8dc2-776eb7075107",
+      "cloud_id": "8f72fb7e-e4ec-448f-8dc2-776eb7075107",
+      "name": "Long skirt",
+      "slug": "long-skirt",
+      "description": "Long skirt",
+      "primary_section_id": "sec-women",
+      "regular_price_etb": 3000,
+      "is_published": true,
+      "is_featured": false,
+      "is_new_arrival": true,
+      "is_archived": false,
+      "low_stock_threshold": 3,
+      "created_at": "2026-10-19T06:54:51.938593+00:00",
+      "updated_at": "2026-10-20T08:53:39.946Z",
+      "variants": [
+        {
+          "id": "85e803ec-859a-495f-8d55-d6c3cfcc3bd6",
+          "product_id": "8f72fb7e-e4ec-448f-8dc2-776eb7075107",
+          "sku": "LSK-S-WHT",
+          "size": "S",
+          "color": "White",
+          "stock_quantity": 10,
+          "is_available": true,
+          "created_at": "2026-10-20T08:53:39.945Z"
+        },
+        {
+          "id": "84a6ff85-76d4-41be-bcc2-66ec6f476d41",
+          "product_id": "8f72fb7e-e4ec-448f-8dc2-776eb7075107",
+          "sku": "LSK-M-WHT",
+          "size": "M",
+          "color": "White",
+          "stock_quantity": 15,
+          "is_available": true,
+          "created_at": "2026-10-20T08:53:39.945Z"
+        },
+        {
+          "id": "94a895b5-bd22-4b01-ab42-aaafbe6511dc",
+          "product_id": "8f72fb7e-e4ec-448f-8dc2-776eb7075107",
+          "sku": "LSK-L-WHT",
+          "size": "L",
+          "color": "White",
+          "stock_quantity": 8,
+          "is_available": true,
+          "created_at": "2026-10-20T08:53:39.945Z"
+        }
+      ],
+      "images": [
+        {
+          "id": "e6dbaa35-ce9a-4e64-b73a-ecb96f4a503e",
+          "product_id": "8f72fb7e-e4ec-448f-8dc2-776eb7075107",
+          "image_url": "https://img.sanishtech.com/u/ea353e2b70597053aecb941bdbbc7541.jpeg",
+          "alt_text": "Long skirt",
+          "display_order": 1,
+          "is_primary": true
+        }
+      ]
+    },
+    {
+      "id": "7004cd62-b02f-4ae2-91ca-5d0ff91d1fbe",
+      "cloud_id": "7004cd62-b02f-4ae2-91ca-5d0ff91d1fbe",
+      "name": "Top",
+      "slug": "top",
+      "description": "Stylish top Made of cotton",
+      "primary_section_id": "sec-women",
+      "regular_price_etb": 1900,
+      "is_published": true,
+      "is_featured": false,
+      "is_new_arrival": true,
+      "is_archived": false,
+      "low_stock_threshold": 3,
+      "created_at": "2026-10-19T06:51:32.267865+00:00",
+      "updated_at": "2026-10-20T08:20:19.85+00:00",
+      "variants": [],
+      "images": [
+        {
+          "id": "e168fc14-7cc7-458f-9c32-9d5dfa7cfddc",
+          "product_id": "7004cd62-b02f-4ae2-91ca-5d0ff91d1fbe",
+          "image_url": "https://img.sanishtech.com/u/9fc50d4d2613b6e19b9ed5a2da45f005.jpeg",
+          "alt_text": "Top",
+          "display_order": 1,
+          "is_primary": true
+        }
+      ]
+    },
+    {
+      "id": "993d380e-c8c0-47e7-ae22-26fba4eeb658",
+      "cloud_id": "993d380e-c8c0-47e7-ae22-26fba4eeb658",
+      "name": "Long sleeve Tshirt",
+      "slug": "long-sleeve-tshirt",
+      "description": "Elegant look long sleeve Tshirt",
+      "primary_section_id": "sec-women",
+      "regular_price_etb": 2500,
+      "is_published": true,
+      "is_featured": false,
+      "is_new_arrival": true,
+      "is_archived": false,
+      "low_stock_threshold": 3,
+      "created_at": "2026-10-19T06:45:54.769347+00:00",
+      "updated_at": "2026-10-19T08:24:51.087+00:00",
+      "variants": [
+        {
+          "id": "e17bd7da-452c-4a38-97d3-eba92777b724",
+          "product_id": "993d380e-c8c0-47e7-ae22-26fba4eeb658",
+          "sku": "SKU-8026",
+          "size": "M",
+          "color": "Neutral",
+          "stock_quantity": 2,
+          "is_available": true,
+          "created_at": "2026-10-19T06:45:55.222657+00:00"
+        }
+      ],
+      "images": [
+        {
+          "id": "d63fb7f3-c3a9-4ca4-8632-1ebfad7235e8",
+          "product_id": "993d380e-c8c0-47e7-ae22-26fba4eeb658",
+          "image_url": "https://img.sanishtech.com/u/21768adfff84c741ae7ca9a99753981a.png",
+          "alt_text": "Long sleeve Tshirt",
+          "display_order": 1,
+          "is_primary": true
+        }
+      ]
+    },
+    {
+      "id": "0cc73405-d964-4be1-bbf4-603cf3416ba4",
+      "cloud_id": "0cc73405-d964-4be1-bbf4-603cf3416ba4",
+      "name": "Dress",
+      "slug": "dress",
+      "description": "Long back less dresss",
+      "primary_section_id": "sec-women",
+      "primary_category_id": "cat-dresses",
+      "regular_price_etb": 5000,
+      "is_published": true,
+      "is_featured": false,
+      "is_new_arrival": true,
+      "is_archived": false,
+      "low_stock_threshold": 3,
+      "created_at": "2026-10-15T17:02:00.690751+00:00",
+      "updated_at": "2026-10-20T08:37:15.093+00:00",
+      "variants": [],
+      "images": [
+        {
+          "id": "c5557668-6d83-4132-9885-09a9408cb1a4",
+          "product_id": "0cc73405-d964-4be1-bbf4-603cf3416ba4",
+          "image_url": "https://img.sanishtech.com/u/504a90c21fdb9e6e154641126d9e5c36.jpeg",
+          "alt_text": "Dress",
+          "display_order": 1,
+          "is_primary": true
         }
       ]
     }
@@ -3218,8 +3468,8 @@
       "winner_pays_bid_amount": true,
       "rules_overview": "The winning bid is the lowest amount that is submitted by only ONE participant. All bids are verified deterministically."
     },
-    "chapa_public_key": "CHAPA_LIVE_PUB_nT1IwdRpug-J6Cjt8W42Tk5sqp22_5x9IpWPwigk",
-    "chapa_secret_key": "CHAPA_LIVE_PRIV_jAlirSv-ijpqk-aK_8y084mkaXMoG1buWezaZ4nh",
-    "chapa_webhook_secret": "kena_secret_hash_2026"
+    "chapa_public_key": "CHAPA_LIVE_PUB_yWLVTYAkZuuMBoihkmRyOFXagwWzi67ZFHDXxUiD",
+    "chapa_secret_key": "CHAPA_LIVE_PRIV_cMgwDMrOciEtxjjs5WU22jbQnqWu8LbXpCYWhzro",
+    "chapa_webhook_secret": "CHAPA_LIVE_ENC_1sqWgRMnkTTHbmp9bEm-sWKxSUIZ6M0D-WelZuZu"
   }
 }

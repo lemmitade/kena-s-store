@@ -56,8 +56,9 @@ const INITIAL_STORE_SETTINGS: StoreSettings = {
   currency_symbol: 'ETB',
   cod_enabled: true,
   chapa_enabled: true,
-  chapa_public_key: process.env.NEXT_PUBLIC_CHAPA_PUBLIC_KEY || 'CHAPA_LIVE_PUB_nT1IwdRpug-J6Cjt8W42Tk5sqp22_5x9IpWPwigk',
-  chapa_secret_key: process.env.CHAPA_SECRET_KEY || 'CHAPA_LIVE_PRIV_jAlirSv-ijpqk-aK_8y084mkaXMoG1buWezaZ4nh',
+  chapa_public_key: process.env.NEXT_PUBLIC_CHAPA_PUBLIC_KEY || 'CHAPA_LIVE_PUB_yWLVTYAkZuuMBoihkmRyOFXagwWzi67ZFHDXxUiD',
+  chapa_secret_key: process.env.CHAPA_SECRET_KEY || 'CHAPA_LIVE_PRIV_cMgwDMrOciEtxjjs5WU22jbQnqWu8LbXpCYWhzro',
+  chapa_webhook_secret: process.env.CHAPA_WEBHOOK_SECRET || 'CHAPA_LIVE_ENC_1sqWgRMnkTTHbmp9bEm-sWKxSUIZ6M0D-WelZuZu',
   telegram_bot_token: process.env.TELEGRAM_BOT_TOKEN || '8900384234:AAGomXBQ1JQBmc_X4E5slxGbLJ1xk0IweoI',
   telegram_chat_id: process.env.TELEGRAM_CHAT_ID || '-1003962170647',
   telegram_notifications_enabled: true,
@@ -1326,9 +1327,13 @@ function mergeCloudProducts(cloudProducts: Product[]): void {
       db.products[idx] = {
         ...existing,
         ...cp,
-        // Preserve local ID if existing had one, store cloud_id
-        id: existing.id || cp.id,
+        // Prefer cloud UUID for consistent URLs, preserve local fallback
+        id: cp.id || existing.id,
         cloud_id: cp.id || existing.cloud_id,
+        // Preserve variants if cloud had none
+        variants: (cp.variants && cp.variants.length > 0) ? cp.variants : (existing.variants || []),
+        // Preserve images if cloud had none
+        images: (cp.images && cp.images.length > 0) ? cp.images : (existing.images || []),
         // Preserve section / category if cloud is missing them
         primary_section_id: cp.primary_section_id || existing.primary_section_id,
         primary_category_id: cp.primary_category_id || existing.primary_category_id,
@@ -1522,7 +1527,11 @@ export async function createProduct(data: Omit<Product, 'id' | 'created_at' | 'u
 
   db.products.unshift(newProduct);
   saveStoreState(db);
-  syncProductToSupabase(newProduct).catch(() => {});
+  try {
+    await syncProductToSupabase(newProduct);
+  } catch (err) {
+    console.error('[createProduct sync error]:', err);
+  }
   return newProduct;
 }
 
@@ -1567,10 +1576,12 @@ export async function updateProduct(idOrSlug: string, data: Partial<Product>): P
   }
 
   const isTargetUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(target);
+  const resolvedId = isTargetUuid ? target : (existing.cloud_id || existing.id);
   const now = new Date().toISOString();
   db.products[index] = {
     ...existing,
     ...data,
+    id: resolvedId,
     cloud_id: existing.cloud_id || (isTargetUuid ? target : undefined),
     slug: updatedSlug,
     updated_at: now,
@@ -1581,8 +1592,8 @@ export async function updateProduct(idOrSlug: string, data: Partial<Product>): P
     db.products[index].variants = data.variants.map((v, idx) => ({
       ...v,
       id: v.id || `var-${Date.now()}-${idx}`,
-      product_id: existing.id,
-      is_available: v.stock_quantity > 0,
+      product_id: resolvedId,
+      is_available: Number(v.stock_quantity) > 0,
       created_at: v.created_at || now,
     }));
   }
@@ -1592,7 +1603,7 @@ export async function updateProduct(idOrSlug: string, data: Partial<Product>): P
     db.products[index].images = data.images.map((img, idx) => ({
       ...img,
       id: img.id || `img-${Date.now()}-${idx}`,
-      product_id: existing.id,
+      product_id: resolvedId,
       display_order: img.display_order ?? idx + 1,
       is_primary: idx === 0,
     }));
@@ -1601,7 +1612,10 @@ export async function updateProduct(idOrSlug: string, data: Partial<Product>): P
   saveStoreState(db);
   try {
     await syncProductToSupabase(db.products[index]);
-  } catch {}
+  } catch (err) {
+    console.error('[updateProduct sync error]:', err);
+  }
+  saveStoreState(db);
   return db.products[index];
 }
 

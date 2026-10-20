@@ -141,19 +141,34 @@ export function verifyChapaWebhookSignature(
   signatureHeader: string | null,
   webhookSecret?: string
 ): boolean {
-  const secret = webhookSecret || process.env.CHAPA_WEBHOOK_SECRET;
-  if (!secret || !signatureHeader) {
+  if (!signatureHeader) {
     return false;
   }
 
-  try {
-    const hash = crypto
-      .createHmac('sha256', secret)
-      .update(rawBody)
-      .digest('hex');
+  const cleanHeader = signatureHeader.trim();
+  const secretsToTry = [
+    webhookSecret,
+    process.env.CHAPA_WEBHOOK_SECRET,
+    process.env.CHAPA_SECRET_KEY,
+  ].filter((s): s is string => Boolean(s && !s.includes('xxxxxxxx')));
 
-    return crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(signatureHeader));
-  } catch {
-    return false;
+  for (const secret of secretsToTry) {
+    try {
+      const hash = crypto
+        .createHmac('sha256', secret)
+        .update(rawBody)
+        .digest('hex');
+
+      const hashBuf = Buffer.from(hash, 'utf8');
+      const sigBuf = Buffer.from(cleanHeader, 'utf8');
+
+      if (hashBuf.length === sigBuf.length && crypto.timingSafeEqual(hashBuf, sigBuf)) {
+        return true;
+      }
+    } catch {
+      // try next secret candidate
+    }
   }
+
+  return false;
 }

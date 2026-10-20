@@ -76,7 +76,7 @@ export async function createProductAction(formData: {
       variants: formData.variants.map((v, idx) => ({
         id: `var-${Date.now()}-${idx}`,
         product_id: '',
-        sku: (v.sku || `SKU-${Date.now()}-${idx}`).trim().toUpperCase(),
+        sku: (v.sku || `${cleanSlug.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6)}-${(v.size || 'STD').toUpperCase()}-${idx + 1}`).trim().toUpperCase(),
         size: v.size?.trim(),
         color: v.color?.trim(),
         color_hex: v.color_hex?.trim(),
@@ -174,7 +174,7 @@ export async function updateProductAction(
       variants: formData.variants.map((v, idx) => ({
         id: v.id || `var-${Date.now()}-${idx}`,
         product_id: productId,
-        sku: (v.sku || `SKU-${Date.now()}-${idx}`).trim().toUpperCase(),
+        sku: (v.sku || `${cleanSlug.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6)}-${(v.size || 'STD').toUpperCase()}-${idx + 1}`).trim().toUpperCase(),
         size: v.size?.trim(),
         color: v.color?.trim(),
         color_hex: v.color_hex?.trim(),
