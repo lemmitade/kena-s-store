@@ -40,9 +40,21 @@ export async function POST(request: NextRequest) {
     }
 
     const payload = JSON.parse(rawBody);
-    const txRef = payload.tx_ref || payload.reference || payload.trx_ref;
-    const isSuccess = payload.status === 'success' || payload.event === 'charge.success';
-    const isFailed = payload.status === 'failed' || payload.event === 'charge.failed';
+    const txRef =
+      payload.merchant_reference ||
+      payload.tx_ref ||
+      payload.reference ||
+      payload.trx_ref ||
+      payload.chapa_reference;
+    const normalizedStatus = String(payload.status || '').toLowerCase();
+    const isSuccess =
+      normalizedStatus === 'success' ||
+      payload.event === 'charge.success' ||
+      payload.event === 'payment.success';
+    const isFailed =
+      normalizedStatus === 'failed' ||
+      payload.event === 'charge.failed' ||
+      payload.event === 'payment.failed';
 
     if (!txRef) {
       return NextResponse.json({ error: 'Missing transaction reference.' }, { status: 400 });
