@@ -22,6 +22,9 @@ export interface CheckoutResult {
 
 export async function processCheckoutAction(input: CreateOrderInput): Promise<CheckoutResult> {
   try {
+    // Online payment via Chapa is mandatory (Cash on delivery removed)
+    input.payment_method = 'chapa';
+
     const result = await createOrder(input);
 
     if (!result.success || !result.order) {

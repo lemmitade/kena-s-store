@@ -1,8 +1,8 @@
 'use client';
 
 // ============================================================================
-// INTERACTIVE BID SUBMISSION FORM WITH MANDATORY ENTRY PAYMENT
-// Validates phone number, enforces minimum and maximum bounds, requires fee
+// INTERACTIVE BID SUBMISSION FORM WITH CHAPA ONLINE ENTRY PAYMENT
+// Validates phone number, enforces minimum/maximum bounds, online Chapa fee
 // ============================================================================
 
 import React, { useState } from 'react';
@@ -10,7 +10,7 @@ import { Competition } from '@/types';
 import { formatETB } from '@/lib/utils/format';
 import { normalizeEthiopianPhone } from '@/lib/utils/phone';
 import { submitBidAction } from '@/app/actions/bids';
-import { Check, AlertCircle, Lock, CreditCard, ShieldCheck, Smartphone, Landmark } from 'lucide-react';
+import { Check, AlertCircle, Lock, ShieldCheck } from 'lucide-react';
 
 interface BidSubmissionFormProps {
   competition: Competition;
@@ -24,8 +24,6 @@ export function BidSubmissionForm({ competition, entryFee = 100 }: BidSubmission
   const [participantName, setParticipantName] = useState('');
   const [participantPhone, setParticipantPhone] = useState('');
   const [bidAmount, setBidAmount] = useState<number>(competition.min_bid_etb);
-  const [paymentMethod, setPaymentMethod] = useState<'chapa' | 'telebirr' | 'cbe_birr'>('telebirr');
-  const [paymentReference, setPaymentReference] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
 
   const [loading, setLoading] = useState(false);
@@ -55,13 +53,6 @@ export function BidSubmissionForm({ competition, entryFee = 100 }: BidSubmission
       return;
     }
 
-    if (requirePayment && (!paymentReference.trim() || paymentReference.trim().length < 4)) {
-      setErrorMessage(
-        `Please provide your ${paymentMethod.toUpperCase()} transaction reference / payment receipt ID for the ${effectiveFee} ETB entry fee.`
-      );
-      return;
-    }
-
     if (!agreeTerms) {
       setErrorMessage('Please confirm your acknowledgement of the unique-lowest-bid rules.');
       return;
@@ -75,19 +66,24 @@ export function BidSubmissionForm({ competition, entryFee = 100 }: BidSubmission
         participant_name: participantName.trim(),
         participant_phone: participantPhone.trim(),
         bid_amount_etb: Math.round(bidAmount),
-        payment_method: paymentMethod,
-        payment_reference: paymentReference.trim(),
       });
 
-      setLoading(false);
-
       if (!res.success) {
+        setLoading(false);
         setErrorMessage(res.error || 'Bid submission failed.');
-      } else {
-        setSuccessMessage(res.message || 'Bid submitted successfully!');
-        setBidAmount(competition.min_bid_etb);
-        setPaymentReference('');
+        return;
       }
+
+      // If Chapa checkout URL is returned, redirect to payment gateway
+      if (res.checkoutUrl) {
+        setSuccessMessage('Redirecting to Chapa secure checkout...');
+        window.location.href = res.checkoutUrl;
+        return;
+      }
+
+      setLoading(false);
+      setSuccessMessage(res.message || 'Bid submitted successfully!');
+      setBidAmount(competition.min_bid_etb);
     } catch (err) {
       setLoading(false);
       setErrorMessage(`Unexpected error: ${(err as Error).message}`);
@@ -186,85 +182,34 @@ export function BidSubmissionForm({ competition, entryFee = 100 }: BidSubmission
           </div>
         </div>
 
-        {/* Step 3: Mandatory Payment Step */}
+        {/* Step 3: Online Chapa Payment Step */}
         {requirePayment && (
           <div className="space-y-4 pt-2 border-t border-stone-100">
             <div className="flex items-center justify-between">
               <span className="text-[10px] uppercase font-bold text-stone-400 tracking-wider block">
-                3. Mandatory Entry Fee Payment ({formatETB(effectiveFee)})
+                3. Entry Fee Payment ({formatETB(effectiveFee)})
               </span>
-              <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold">
-                Fee Required
+              <span className="text-[10px] text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded font-bold">
+                Chapa Online Payment
               </span>
             </div>
 
-            {/* Payment method tabs */}
-            <div className="grid grid-cols-3 gap-2">
-              <button
-                type="button"
-                onClick={() => setPaymentMethod('telebirr')}
-                className={`p-3 border text-center transition-all ${
-                  paymentMethod === 'telebirr'
-                    ? 'border-stone-900 bg-stone-900 text-white font-bold'
-                    : 'border-stone-300 bg-[#FAF9F6] text-stone-700 hover:border-stone-500'
-                }`}
-              >
-                <Smartphone className="w-4 h-4 mx-auto mb-1" />
-                <span className="text-[11px] block">Telebirr</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setPaymentMethod('cbe_birr')}
-                className={`p-3 border text-center transition-all ${
-                  paymentMethod === 'cbe_birr'
-                    ? 'border-stone-900 bg-stone-900 text-white font-bold'
-                    : 'border-stone-300 bg-[#FAF9F6] text-stone-700 hover:border-stone-500'
-                }`}
-              >
-                <Landmark className="w-4 h-4 mx-auto mb-1" />
-                <span className="text-[11px] block">CBE Birr</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setPaymentMethod('chapa')}
-                className={`p-3 border text-center transition-all ${
-                  paymentMethod === 'chapa'
-                    ? 'border-stone-900 bg-stone-900 text-white font-bold'
-                    : 'border-stone-300 bg-[#FAF9F6] text-stone-700 hover:border-stone-500'
-                }`}
-              >
-                <CreditCard className="w-4 h-4 mx-auto mb-1" />
-                <span className="text-[11px] block">Chapa Card</span>
-              </button>
-            </div>
-
-            {/* Payment instructions box */}
-            <div className="bg-stone-50 border border-stone-200 p-3.5 space-y-1.5 text-[11px] text-stone-600">
-              <div className="flex items-center gap-1.5 font-bold text-stone-900">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                <span>
-                  Payment Account: {paymentMethod === 'telebirr' ? 'Telebirr 0911234567 (Kena Store)' : paymentMethod === 'cbe_birr' ? 'CBE 1000123456789 (Kena Store)' : 'Chapa Instant Card Gateway'}
+            <div className="bg-stone-50 border-2 border-stone-900 p-4 space-y-2.5">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                <span className="text-xs font-semibold text-stone-900">
+                  Instant Payment via Chapa Gateway
                 </span>
               </div>
-              <p>
-                Transfer exactly <strong>{formatETB(effectiveFee)}</strong> and enter your transaction SMS receipt number below to validate eligibility.
+              <p className="text-[11px] text-stone-600 leading-relaxed font-sans">
+                Upon clicking the button below, you will be redirected to Chapa to securely complete your <strong>{formatETB(effectiveFee)}</strong> entry fee using <strong>Telebirr</strong>, <strong>CBE Birr</strong>, or <strong>Debit / Credit Cards</strong>.
               </p>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="uppercase text-stone-500 block">
-                Transaction Reference ID / Receipt Code *
-              </label>
-              <input
-                type="text"
-                required
-                value={paymentReference}
-                onChange={(e) => setPaymentReference(e.target.value.toUpperCase())}
-                placeholder="e.g. TXN-94827104 or Telebirr Receipt Code"
-                className="w-full bg-[#FAF9F6] border border-stone-300 p-3 text-xs uppercase font-mono font-bold tracking-wider focus:outline-none focus:border-stone-900"
-              />
+              <div className="flex flex-wrap items-center gap-2 pt-1 text-[10px] font-mono text-stone-600">
+                <span className="bg-white border border-stone-200 px-2 py-0.5 rounded shadow-sm">Telebirr</span>
+                <span className="bg-white border border-stone-200 px-2 py-0.5 rounded shadow-sm">CBE Birr</span>
+                <span className="bg-white border border-stone-200 px-2 py-0.5 rounded shadow-sm">Awash Birr</span>
+                <span className="bg-white border border-stone-200 px-2 py-0.5 rounded shadow-sm">Visa / Mastercard</span>
+              </div>
             </div>
           </div>
         )}
@@ -276,9 +221,9 @@ export function BidSubmissionForm({ competition, entryFee = 100 }: BidSubmission
               required
               checked={agreeTerms}
               onChange={(e) => setAgreeTerms(e.target.checked)}
-              className="mt-0.5 rounded border-stone-300"
+              className="mt-0.5 rounded border-stone-300 text-stone-900 focus:ring-0"
             />
-            <span className="text-[11px] text-stone-600 leading-relaxed">
+            <span className="text-[11px] text-stone-600 leading-relaxed font-sans">
               I acknowledge that this bid is binding under the Unique-Lowest-Bid terms. If I am the verified unique winner, I agree to claim the item within 48 hours.
             </span>
           </label>
@@ -292,9 +237,9 @@ export function BidSubmissionForm({ competition, entryFee = 100 }: BidSubmission
           <Lock className="w-4 h-4" />
           <span>
             {loading
-              ? 'Verifying & Submitting...'
+              ? 'Connecting to Chapa...'
               : requirePayment
-              ? `Pay ${formatETB(effectiveFee)} & Submit Bid`
+              ? `Pay ${formatETB(effectiveFee)} with Chapa & Submit Bid`
               : 'Submit Official Bid'}
           </span>
         </button>

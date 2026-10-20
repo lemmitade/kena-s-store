@@ -41,8 +41,8 @@ export function CheckoutForm({ pickupLocations, deliveryZones, settings }: Check
 
   const [selectedPickupId, setSelectedPickupId] = useState<string>(pickupLocations[0]?.id || '');
 
-  // Payment method state
-  const [paymentMethod, setPaymentMethod] = useState<'cash_on_delivery' | 'chapa'>('cash_on_delivery');
+  // Payment method state - Online payment via Chapa (Telebirr, CBE Birr, Cards)
+  const [paymentMethod, setPaymentMethod] = useState<'chapa'>('chapa');
 
   // Submission state
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -406,61 +406,28 @@ export function CheckoutForm({ pickupLocations, deliveryZones, settings }: Check
           </div>
 
           <div className="space-y-3">
-            <label
-              className={`block p-4 border cursor-pointer transition-all ${
-                paymentMethod === 'cash_on_delivery'
-                  ? 'border-stone-900 bg-white ring-1 ring-stone-900'
-                  : 'border-stone-200 bg-stone-50 hover:bg-white'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="cash_on_delivery"
-                  checked={paymentMethod === 'cash_on_delivery'}
-                  onChange={() => setPaymentMethod('cash_on_delivery')}
-                  className="text-stone-900 focus:ring-0"
-                />
-                <div>
-                  <span className="text-sm font-semibold text-stone-900 block">
-                    Cash on Delivery (COD) / Pay upon Collection
+            <div className="p-5 border-2 border-stone-900 bg-stone-50/60 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-sm font-semibold text-stone-900">
+                    Online Payment via Chapa
                   </span>
-                  <p className="text-xs font-mono text-stone-500">
-                    Pay our courier directly in cash or Telebirr upon physical receipt and inspection.
-                  </p>
                 </div>
+                <span className="text-[10px] font-mono uppercase bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded font-bold">
+                  Instant & Secure
+                </span>
               </div>
-            </label>
-
-            <label
-              className={`block p-4 border cursor-pointer transition-all ${
-                paymentMethod === 'chapa'
-                  ? 'border-stone-900 bg-white ring-1 ring-stone-900'
-                  : 'border-stone-200 bg-stone-50 hover:bg-white'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="chapa"
-                  checked={paymentMethod === 'chapa'}
-                  onChange={() => setPaymentMethod('chapa')}
-                  className="text-stone-900 focus:ring-0"
-                />
-                <div>
-                  <span className="text-sm font-semibold text-stone-900 block">
-                    Online Payment (Chapa: Telebirr, CBE Birr, Cards)
-                  </span>
-                  <p className="text-xs font-mono text-stone-500">
-                    {settings.chapa_enabled
-                      ? 'Secure digital payment verified via Chapa gateway.'
-                      : 'Live Chapa gateway integration ready (Configurable in Admin settings).'}
-                  </p>
-                </div>
+              <p className="text-xs font-mono text-stone-600 leading-relaxed">
+                Pay securely using <strong>Telebirr</strong>, <strong>CBE Birr</strong>, or <strong>Debit / Credit Cards</strong> via Chapa&apos;s verified payment gateway.
+              </p>
+              <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono text-stone-600">
+                <span className="bg-white border border-stone-200 px-2.5 py-1 rounded shadow-sm">Telebirr</span>
+                <span className="bg-white border border-stone-200 px-2.5 py-1 rounded shadow-sm">CBE Birr</span>
+                <span className="bg-white border border-stone-200 px-2.5 py-1 rounded shadow-sm">Awash Birr</span>
+                <span className="bg-white border border-stone-200 px-2.5 py-1 rounded shadow-sm">Visa / Mastercard</span>
               </div>
-            </label>
+            </div>
           </div>
         </section>
 
@@ -546,7 +513,7 @@ export function CheckoutForm({ pickupLocations, deliveryZones, settings }: Check
             className="w-full bg-[#121212] text-[#FAF9F6] h-14 uppercase tracking-widest text-xs font-semibold font-mono flex items-center justify-center gap-2 hover:bg-stone-800 transition-colors disabled:opacity-50"
           >
             <Lock className="w-4 h-4" />
-            <span>{isSubmitting ? 'Confirming Order...' : `Confirm Order (${formatETB(finalTotalETB)})`}</span>
+            <span>{isSubmitting ? 'Connecting to Chapa...' : `Pay with Chapa (${formatETB(finalTotalETB)})`}</span>
           </button>
 
           <div className="text-[11px] font-mono text-stone-400 space-y-1 text-center">

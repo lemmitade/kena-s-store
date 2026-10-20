@@ -5,9 +5,20 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyChapaWebhookSignature } from '@/lib/payments/chapa';
-import { db, getOrderByNumber, saveStoreState, getStoreSettings } from '@/lib/db/repository';
+import {
+  db,
+  getOrderByNumber,
+  saveStoreState,
+  getStoreSettings,
+  getCompetitionEntryByRef,
+  markCompetitionEntryPaid,
+} from '@/lib/db/repository';
 import { syncOrderToSupabase } from '@/lib/db/supabase-sync';
-import { sendTelegramMessage, buildPaymentVerifiedAlert } from '@/lib/telegram/bot';
+import {
+  sendTelegramMessage,
+  buildPaymentVerifiedAlert,
+  buildBidPaymentAlert,
+} from '@/lib/telegram/bot';
 
 export async function GET() {
   return NextResponse.json(
@@ -60,11 +71,48 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing transaction reference.' }, { status: 400 });
     }
 
-    // 2. Locate Matching Order (supports local memory + Supabase cloud lookup)
+    // 2. Locate Matching Order or Competition Bid Entry
     const order = await getOrderByNumber(txRef);
     if (!order) {
-      // Idempotent ack so Chapa doesn't spam retries if order was processed or outside system
-      return NextResponse.json({ received: true, note: 'Order not found in store.' }, { status: 200 });
+      // Check if it is a Competition Bid Entry
+      const entry = await getCompetitionEntryByRef(txRef);
+      if (entry) {
+        if (entry.payment_status === 'paid' && isSuccess) {
+          return NextResponse.json({ received: true, note: 'Bid entry already marked as paid.' }, { status: 200 });
+        }
+
+        if (isSuccess) {
+          const markRes = await markCompetitionEntryPaid(txRef);
+          // Send Telegram Alert for Competition Bid Entry
+          try {
+            const settings = await getStoreSettings();
+            const botToken = settings.telegram_bot_token || process.env.TELEGRAM_BOT_TOKEN;
+            const chatId = settings.telegram_chat_id || process.env.TELEGRAM_CHAT_ID;
+            const isEnabled =
+              settings.telegram_notifications_enabled ||
+              Boolean(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID);
+
+            if (isEnabled && botToken && chatId && markRes.entry) {
+              const msg = buildBidPaymentAlert(
+                markRes.competition?.title || 'Exclusive Competition',
+                markRes.entry.participant_name,
+                markRes.entry.entry_fee_etb,
+                txRef
+              );
+              await sendTelegramMessage(msg, botToken, chatId);
+            }
+          } catch {
+            // notification error must not fail webhook response
+          }
+        }
+        return NextResponse.json(
+          { received: true, type: 'competition_entry', status: isSuccess ? 'paid' : 'failed' },
+          { status: 200 }
+        );
+      }
+
+      // Idempotent ack so Chapa doesn't spam retries if reference was processed or outside system
+      return NextResponse.json({ received: true, note: 'Reference not found in store.' }, { status: 200 });
     }
 
     // 3. Idempotency Check (prevent duplicate execution if already paid)

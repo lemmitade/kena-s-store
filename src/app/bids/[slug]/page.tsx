@@ -12,7 +12,8 @@ import { Footer } from '@/components/storefront/Footer';
 import { BidSubmissionForm } from '@/components/storefront/BidSubmissionForm';
 import { getStoreSettings, getSections, getCompetitionBySlug } from '@/lib/db/repository';
 import { formatETB, formatDate } from '@/lib/utils/format';
-import { ShieldAlert, Clock, Sparkles, Scale, Info } from 'lucide-react';
+import { ShieldAlert, Clock, Sparkles, Scale, Info, CheckCircle2 } from 'lucide-react';
+import { verifyBidPaymentAction } from '@/app/actions/bids';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,16 +21,33 @@ interface CompetitionDetailPageProps {
   params: Promise<{
     slug: string;
   }>;
+  searchParams?: Promise<{
+    paid?: string;
+    ref?: string;
+  }>;
 }
 
-export default async function CompetitionDetailPage({ params }: CompetitionDetailPageProps) {
+export default async function CompetitionDetailPage({
+  params,
+  searchParams,
+}: CompetitionDetailPageProps) {
   const { slug } = await params;
+  const query = searchParams ? await searchParams : {};
   const settings = await getStoreSettings();
   const sections = await getSections();
   const competition = await getCompetitionBySlug(slug);
 
   if (!competition) {
     notFound();
+  }
+
+  // Verify bid payment if returned from Chapa
+  let isPaymentVerified = query.paid === 'true';
+  if (query.ref) {
+    const vResult = await verifyBidPaymentAction(query.ref);
+    if (vResult.verified) {
+      isPaymentVerified = true;
+    }
   }
 
   const isClosed = new Date().getTime() > new Date(competition.ends_at).getTime();
@@ -39,6 +57,23 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
       <Header sections={sections} settings={settings} />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+        {isPaymentVerified && (
+          <div className="p-6 bg-emerald-50 border-2 border-emerald-600 text-emerald-950 mb-8 space-y-1.5 rounded shadow-sm">
+            <div className="flex items-center gap-2 font-bold text-base text-emerald-800">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+              <span>Chapa Entry Fee Paid & Bid Successfully Registered!</span>
+            </div>
+            <p className="text-xs font-mono text-emerald-800">
+              Your payment has been verified. Your secret bid is officially entered into this competition. Good luck!
+            </p>
+            {query.ref && (
+              <p className="text-[11px] font-mono text-emerald-700">
+                Payment Reference: <strong>{query.ref}</strong>
+              </p>
+            )}
+          </div>
+        )}
+
         {/* Breadcrumb */}
         <nav className="text-xs font-mono text-stone-500 uppercase tracking-wider mb-8">
           <Link href="/" className="hover:text-black">

@@ -2122,6 +2122,10 @@ export async function getCompetitionBySlug(slug: string): Promise<Competition | 
   return db.competitions.find((c) => c.slug === slug) || null;
 }
 
+export async function getCompetitionById(id: string): Promise<Competition | null> {
+  return db.competitions.find((c) => c.id === id) || null;
+}
+
 export async function submitCompetitionBid(input: {
   competition_id: string;
   participant_name: string;
@@ -2129,7 +2133,8 @@ export async function submitCompetitionBid(input: {
   bid_amount_etb: number;
   payment_method?: string;
   payment_reference?: string;
-}): Promise<{ success: boolean; error?: string }> {
+  payment_status?: 'pending' | 'paid';
+}): Promise<{ success: boolean; error?: string; entry_id?: string; bid_id?: string; is_paid?: boolean }> {
   const comp = db.competitions.find((c) => c.id === input.competition_id);
   if (!comp) return { success: false, error: 'Competition not found.' };
 
@@ -2146,21 +2151,6 @@ export async function submitCompetitionBid(input: {
   const isPaidRequired = settings.bidding_preferences?.require_payment_to_bid || comp.entry_fee_etb > 0;
   const requiredFee = comp.entry_fee_etb > 0 ? comp.entry_fee_etb : (settings.bidding_preferences?.default_entry_fee_etb || 100);
 
-  if (isPaidRequired) {
-    if (!input.payment_method) {
-      return {
-        success: false,
-        error: `An entry fee of ${requiredFee} ETB is required to place a bid. Please select your payment method.`,
-      };
-    }
-    if (!input.payment_reference || input.payment_reference.trim().length < 4) {
-      return {
-        success: false,
-        error: 'Please enter a valid payment transaction reference / receipt code.',
-      };
-    }
-  }
-
   if (input.bid_amount_etb < comp.min_bid_etb || input.bid_amount_etb > comp.max_bid_etb) {
     return {
       success: false,
@@ -2172,6 +2162,8 @@ export async function submitCompetitionBid(input: {
   if (!phoneVal.isValid) {
     return { success: false, error: phoneVal.error };
   }
+
+  const isAlreadyPaid = !isPaidRequired || input.payment_status === 'paid';
 
   // Find or create entry
   let entry = db.competitionEntries.find(
@@ -2186,11 +2178,21 @@ export async function submitCompetitionBid(input: {
       participant_phone: phoneVal.localFormat,
       participant_phone_normalized: phoneVal.normalized,
       entry_fee_etb: isPaidRequired ? requiredFee : 0,
-      payment_status: 'paid',
-      is_eligible: true,
+      payment_status: isAlreadyPaid ? 'paid' : 'pending',
+      payment_reference: input.payment_reference,
+      is_eligible: isAlreadyPaid,
       entered_at: new Date().toISOString(),
     };
     db.competitionEntries.push(entry);
+  } else {
+    // Update reference and status if re-initiating
+    if (input.payment_reference) {
+      entry.payment_reference = input.payment_reference;
+    }
+    if (isAlreadyPaid) {
+      entry.payment_status = 'paid';
+      entry.is_eligible = true;
+    }
   }
 
   // Check bid count per entry
@@ -2203,19 +2205,55 @@ export async function submitCompetitionBid(input: {
   }
 
   const masked = `${phoneVal.localFormat.slice(0, 4)} **** ${phoneVal.localFormat.slice(-2)}`;
+  const bidId = `bid-${Date.now()}`;
 
   db.competitionBids.push({
-    id: `bid-${Date.now()}`,
+    id: bidId,
     competition_id: comp.id,
     entry_id: entry.id,
     bid_amount_etb: input.bid_amount_etb,
     submitted_at: new Date().toISOString(),
-    is_valid: true,
+    is_valid: entry.is_eligible,
     participant_name: input.participant_name,
     participant_phone_masked: masked,
   });
 
-  return { success: true };
+  saveStoreState(db);
+
+  return {
+    success: true,
+    entry_id: entry.id,
+    bid_id: bidId,
+    is_paid: entry.payment_status === 'paid',
+  };
+}
+
+export async function markCompetitionEntryPaid(paymentRef: string): Promise<{
+  success: boolean;
+  entry?: CompetitionEntry;
+  competition?: Competition;
+}> {
+  const entry = db.competitionEntries.find((e) => e.payment_reference === paymentRef);
+  if (!entry) return { success: false };
+
+  entry.payment_status = 'paid';
+  entry.is_eligible = true;
+
+  // Validate all bids for this entry
+  for (const bid of db.competitionBids) {
+    if (bid.entry_id === entry.id) {
+      bid.is_valid = true;
+    }
+  }
+
+  saveStoreState(db);
+
+  const competition = db.competitions.find((c) => c.id === entry.competition_id);
+  return { success: true, entry, competition };
+}
+
+export async function getCompetitionEntryByRef(paymentRef: string): Promise<CompetitionEntry | undefined> {
+  return db.competitionEntries.find((e) => e.payment_reference === paymentRef);
 }
 
 export async function getCompetitionBids(competitionId: string): Promise<CompetitionBid[]> {

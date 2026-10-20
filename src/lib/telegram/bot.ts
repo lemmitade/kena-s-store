@@ -141,3 +141,20 @@ export function buildWinnerAnnouncementAlert(
 <i>Result has been verified by store administration.</i>
 `;
 }
+
+export function buildBidPaymentAlert(
+  competitionTitle: string,
+  participantName: string,
+  entryFeeETB: number,
+  txRef: string
+): string {
+  return `
+🎯 <b>COMPETITION ENTRY FEE PAID (CHAPA)</b>
+<b>Competition:</b> ${escapeHtml(competitionTitle)}
+<b>Participant:</b> ${escapeHtml(participantName)}
+<b>Entry Fee:</b> ${formatETB(entryFeeETB)}
+<b>Tx Ref:</b> <code>${txRef}</code>
+<b>Status:</b> PAID & ELIGIBLE
+`;
+}
+
