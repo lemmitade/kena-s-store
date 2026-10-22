@@ -21,6 +21,15 @@ export function PaymentSettingsForm({ settings }: PaymentSettingsFormProps) {
   const [chapaSecretKey, setChapaSecretKey] = useState(settings.chapa_secret_key || '');
   const [chapaWebhookSecret, setChapaWebhookSecret] = useState(settings.chapa_webhook_secret || '');
 
+  // Bank transfer state
+  const [bankTransferEnabled, setBankTransferEnabled] = useState(settings.bank_transfer_enabled ?? true);
+  const [bankName, setBankName] = useState(settings.bank_name || 'Commercial Bank of Ethiopia (CBE)');
+  const [bankAccountNumber, setBankAccountNumber] = useState(settings.bank_account_number || '1000234567891');
+  const [bankAccountName, setBankAccountName] = useState(settings.bank_account_name || settings.store_name);
+  const [telebirrAccountNumber, setTelebirrAccountNumber] = useState(settings.telebirr_account_number || '0911234567');
+  const [telebirrAccountName, setTelebirrAccountName] = useState(settings.telebirr_account_name || settings.store_name);
+  const [bankInstructions, setBankInstructions] = useState(settings.bank_transfer_instructions || '');
+
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState('');
 
@@ -35,6 +44,13 @@ export function PaymentSettingsForm({ settings }: PaymentSettingsFormProps) {
       chapa_public_key: chapaPublicKey.trim() || undefined,
       chapa_secret_key: chapaSecretKey.trim() || undefined,
       chapa_webhook_secret: chapaWebhookSecret.trim() || undefined,
+      bank_transfer_enabled: bankTransferEnabled,
+      bank_name: bankName.trim() || undefined,
+      bank_account_number: bankAccountNumber.trim() || undefined,
+      bank_account_name: bankAccountName.trim() || undefined,
+      telebirr_account_number: telebirrAccountNumber.trim() || undefined,
+      telebirr_account_name: telebirrAccountName.trim() || undefined,
+      bank_transfer_instructions: bankInstructions.trim() || undefined,
     });
 
     setLoading(false);
@@ -142,6 +158,91 @@ export function PaymentSettingsForm({ settings }: PaymentSettingsFormProps) {
             <span className="text-[10px] text-stone-400 block pt-0.5">
               Webhook URL for your Chapa dashboard: <code>https://yourdomain.com/api/webhooks/chapa</code>
             </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Direct Bank Transfer & Telebirr Settings */}
+      <div className="bg-white border border-[#E7E5E4] p-6 space-y-6">
+        <div className="flex items-center justify-between border-b border-stone-200 pb-2">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-stone-900">
+            3. Direct Bank Transfer &amp; Telebirr Manual Payment
+          </h2>
+          <span className="px-2 py-0.5 bg-stone-100 text-stone-700 text-[10px] font-bold">
+            Manual Verification
+          </span>
+        </div>
+
+        <p className="text-stone-500">
+          Provides customers with your direct bank account (CBE) and Telebirr details at checkout so they can transfer funds directly and submit their transaction reference code.
+        </p>
+
+        <label className="flex items-center gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={bankTransferEnabled}
+            onChange={(e) => setBankTransferEnabled(e.target.checked)}
+            className="rounded border-stone-300 text-stone-900 focus:ring-0"
+          />
+          <span className="font-semibold text-stone-900">
+            Enable Direct Bank Transfer / Telebirr at Checkout
+          </span>
+        </label>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <div className="space-y-1">
+            <label className="uppercase text-stone-500 block">Bank Name</label>
+            <input
+              type="text"
+              value={bankName}
+              onChange={(e) => setBankName(e.target.value)}
+              placeholder="e.g. Commercial Bank of Ethiopia (CBE)"
+              className="w-full border border-stone-300 p-2.5 bg-[#FAF9F6]"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="uppercase text-stone-500 block">Bank Account Number</label>
+            <input
+              type="text"
+              value={bankAccountNumber}
+              onChange={(e) => setBankAccountNumber(e.target.value)}
+              placeholder="e.g. 1000123456789"
+              className="w-full border border-stone-300 p-2.5 bg-[#FAF9F6]"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="uppercase text-stone-500 block">Bank Account Holder Name</label>
+            <input
+              type="text"
+              value={bankAccountName}
+              onChange={(e) => setBankAccountName(e.target.value)}
+              placeholder="e.g. Kena Store"
+              className="w-full border border-stone-300 p-2.5 bg-[#FAF9F6]"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="uppercase text-stone-500 block">Telebirr Account / Phone Number</label>
+            <input
+              type="text"
+              value={telebirrAccountNumber}
+              onChange={(e) => setTelebirrAccountNumber(e.target.value)}
+              placeholder="e.g. 0911234567"
+              className="w-full border border-stone-300 p-2.5 bg-[#FAF9F6]"
+            />
+          </div>
+
+          <div className="space-y-1 sm:col-span-2">
+            <label className="uppercase text-stone-500 block">Telebirr Account Holder Name</label>
+            <input
+              type="text"
+              value={telebirrAccountName}
+              onChange={(e) => setTelebirrAccountName(e.target.value)}
+              placeholder="e.g. Kena Store"
+              className="w-full border border-stone-300 p-2.5 bg-[#FAF9F6]"
+            />
           </div>
         </div>
       </div>

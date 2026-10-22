@@ -59,6 +59,13 @@ const INITIAL_STORE_SETTINGS: StoreSettings = {
   chapa_public_key: process.env.NEXT_PUBLIC_CHAPA_PUBLIC_KEY || 'CHAPA_LIVE_PUB_yWLVTYAkZuuMBoihkmRyOFXagwWzi67ZFHDXxUiD',
   chapa_secret_key: process.env.CHAPA_SECRET_KEY || 'CHAPA_LIVE_PRIV_cMgwDMrOciEtxjjs5WU22jbQnqWu8LbXpCYWhzro',
   chapa_webhook_secret: process.env.CHAPA_WEBHOOK_SECRET || 'CHAPA_LIVE_ENC_1sqWgRMnkTTHbmp9bEm-sWKxSUIZ6M0D-WelZuZu',
+  bank_transfer_enabled: true,
+  bank_name: 'Commercial Bank of Ethiopia (CBE)',
+  bank_account_number: '1000234567891',
+  bank_account_name: 'Kena Store',
+  telebirr_account_number: '0911234567',
+  telebirr_account_name: 'Kena Store',
+  bank_transfer_instructions: 'Please transfer the exact order total to either our CBE account or Telebirr account. Use your Order Number as the transfer reason/reference, and enter your transaction reference code below.',
   telegram_bot_token: process.env.TELEGRAM_BOT_TOKEN || '8900384234:AAGomXBQ1JQBmc_X4E5slxGbLJ1xk0IweoI',
   telegram_chat_id: process.env.TELEGRAM_CHAT_ID || '-1003962170647',
   telegram_notifications_enabled: true,
@@ -303,412 +310,7 @@ const INITIAL_CATEGORIES: Category[] = [
   },
 ];
 
-const INITIAL_PRODUCTS: Product[] = [
-  {
-    id: 'prod-baggy-jeans',
-    name: 'baggy jeans',
-    slug: 'baggy-jeans',
-    description:
-      'Contemporary wide-leg relaxed denim trousers crafted with durable washed cotton. Tailored for comfort with modern street-luxury drape.',
-    primary_section_id: 'sec-women',
-    primary_category_id: 'cat-dresses',
-    regular_price_etb: 38000,
-    is_featured: true,
-    is_new_arrival: true,
-    is_published: true,
-    is_archived: false,
-    low_stock_threshold: 5,
-    seo_title: 'baggy jeans | YOUR BRAND',
-    seo_description: 'Wide-leg relaxed denim trousers.',
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    images: [
-      {
-        id: 'img-baggy-1',
-        product_id: 'prod-baggy-jeans',
-        image_url:
-          'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85',
-        alt_text: 'baggy jeans',
-        display_order: 1,
-        is_primary: true,
-      },
-    ],
-    variants: [
-      {
-        id: 'var-baggy-s',
-        product_id: 'prod-baggy-jeans',
-        sku: 'BGY-JNS-BLU-S',
-        size: 'S',
-        color: 'Classic Blue',
-        color_hex: '#2E5090',
-        stock_quantity: 10,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: 'var-baggy-m',
-        product_id: 'prod-baggy-jeans',
-        sku: 'BGY-JNS-BLU-M',
-        size: 'M',
-        color: 'Classic Blue',
-        color_hex: '#2E5090',
-        stock_quantity: 13,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: 'var-baggy-l',
-        product_id: 'prod-baggy-jeans',
-        sku: 'BGY-JNS-BLU-L',
-        size: 'L',
-        color: 'Classic Blue',
-        color_hex: '#2E5090',
-        stock_quantity: 10,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-    ],
-  },
-  {
-    id: 'prod-linen-shirt',
-    name: 'Relaxed Pure Linen Camp Shirt',
-    slug: 'relaxed-pure-linen-camp-shirt',
-    description:
-      'Spun from 100% organic lightweight flax linen. Featuring an open camp collar, mother-of-pearl buttons, and side-vent drapes tailored for effortless warmth in Addis Ababa.',
-    primary_section_id: 'sec-men',
-    primary_category_id: 'cat-linen-shirts',
-    regular_price_etb: 2850,
-    is_featured: true,
-    is_new_arrival: true,
-    is_published: true,
-    is_archived: false,
-    low_stock_threshold: 3,
-    seo_title: 'Relaxed Pure Linen Camp Shirt | YOUR BRAND',
-    seo_description: '100% organic linen camp shirt tailored in Ethiopia.',
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    images: [
-      {
-        id: 'img-1-1',
-        product_id: 'prod-linen-shirt',
-        image_url:
-          'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85',
-        alt_text: 'Relaxed Pure Linen Camp Shirt in Off-White',
-        display_order: 1,
-        is_primary: true,
-      },
-      {
-        id: 'img-1-2',
-        product_id: 'prod-linen-shirt',
-        image_url:
-          'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=1200&q=85',
-        alt_text: 'Linen shirt texture detail',
-        display_order: 2,
-        is_primary: false,
-      },
-    ],
-    variants: [
-      {
-        id: 'var-1-s',
-        product_id: 'prod-linen-shirt',
-        sku: 'LNN-SHT-WHT-S',
-        size: 'S',
-        color: 'Off-White',
-        color_hex: '#FAF9F6',
-        stock_quantity: 8,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: 'var-1-m',
-        product_id: 'prod-linen-shirt',
-        sku: 'LNN-SHT-WHT-M',
-        size: 'M',
-        color: 'Off-White',
-        color_hex: '#FAF9F6',
-        stock_quantity: 14,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: 'var-1-l',
-        product_id: 'prod-linen-shirt',
-        sku: 'LNN-SHT-WHT-L',
-        size: 'L',
-        color: 'Off-White',
-        color_hex: '#FAF9F6',
-        stock_quantity: 10,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: 'var-1-olv-m',
-        product_id: 'prod-linen-shirt',
-        sku: 'LNN-SHT-OLV-M',
-        size: 'M',
-        color: 'Olive Umber',
-        color_hex: '#556B2F',
-        stock_quantity: 6,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-    ],
-  },
-  {
-    id: 'prod-wool-trousers',
-    name: 'Pleated High-Waist Wool Trousers',
-    slug: 'pleated-high-waist-wool-trousers',
-    description:
-      'Double front pleats with a relaxed tapered leg. Woven from breathable tropical wool blend with concealed hook closure and internal waistband adjusters.',
-    primary_section_id: 'sec-men',
-    primary_category_id: 'cat-trousers',
-    regular_price_etb: 3950,
-    sale_price_etb: 3450,
-    is_featured: true,
-    is_new_arrival: false,
-    is_published: true,
-    is_archived: false,
-    low_stock_threshold: 4,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    images: [
-      {
-        id: 'img-2-1',
-        product_id: 'prod-wool-trousers',
-        image_url:
-          'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=1200&q=85',
-        alt_text: 'Pleated High-Waist Wool Trousers in Charcoal',
-        display_order: 1,
-        is_primary: true,
-      },
-    ],
-    variants: [
-      {
-        id: 'var-2-30',
-        product_id: 'prod-wool-trousers',
-        sku: 'TRS-WOOL-CHR-30',
-        size: '30',
-        color: 'Charcoal',
-        color_hex: '#2B2B2B',
-        stock_quantity: 5,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: 'var-2-32',
-        product_id: 'prod-wool-trousers',
-        sku: 'TRS-WOOL-CHR-32',
-        size: '32',
-        color: 'Charcoal',
-        color_hex: '#2B2B2B',
-        stock_quantity: 9,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: 'var-2-34',
-        product_id: 'prod-wool-trousers',
-        sku: 'TRS-WOOL-CHR-34',
-        size: '34',
-        color: 'Charcoal',
-        color_hex: '#2B2B2B',
-        stock_quantity: 7,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-    ],
-  },
-  {
-    id: 'prod-column-dress',
-    name: 'Architectural Column Midi Dress',
-    slug: 'architectural-column-midi-dress',
-    description:
-      'A striking minimalist silhouette crafted from substantial stretch viscose crepe. Features clean seam detailing, a discreet side slit, and an invisible back zipper.',
-    primary_section_id: 'sec-women',
-    primary_category_id: 'cat-dresses',
-    regular_price_etb: 4600,
-    is_featured: true,
-    is_new_arrival: true,
-    is_published: true,
-    is_archived: false,
-    low_stock_threshold: 2,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    images: [
-      {
-        id: 'img-3-1',
-        product_id: 'prod-column-dress',
-        image_url:
-          'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=85',
-        alt_text: 'Architectural Column Midi Dress in Onyx Black',
-        display_order: 1,
-        is_primary: true,
-      },
-    ],
-    variants: [
-      {
-        id: 'var-3-xs',
-        product_id: 'prod-column-dress',
-        sku: 'DRS-COL-BLK-XS',
-        size: 'XS',
-        color: 'Onyx Black',
-        color_hex: '#121212',
-        stock_quantity: 4,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: 'var-3-s',
-        product_id: 'prod-column-dress',
-        sku: 'DRS-COL-BLK-S',
-        size: 'S',
-        color: 'Onyx Black',
-        color_hex: '#121212',
-        stock_quantity: 8,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: 'var-3-m',
-        product_id: 'prod-column-dress',
-        sku: 'DRS-COL-BLK-M',
-        size: 'M',
-        color: 'Onyx Black',
-        color_hex: '#121212',
-        stock_quantity: 6,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-    ],
-  },
-  {
-    id: 'prod-loafers',
-    name: 'Handcrafted Highland Leather Loafers',
-    slug: 'handcrafted-highland-leather-loafers',
-    description:
-      'Meticulously crafted from supple vegetable-tanned Ethiopian highland calfskin. Goodyear welted leather soles and hand-burnished finish.',
-    primary_section_id: 'sec-footwear',
-    primary_category_id: 'cat-loafers',
-    regular_price_etb: 6200,
-    is_featured: true,
-    is_new_arrival: false,
-    is_published: true,
-    is_archived: false,
-    low_stock_threshold: 2,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    images: [
-      {
-        id: 'img-4-1',
-        product_id: 'prod-loafers',
-        image_url:
-          'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&w=1200&q=85',
-        alt_text: 'Handcrafted Highland Leather Loafers',
-        display_order: 1,
-        is_primary: true,
-      },
-    ],
-    variants: [
-      {
-        id: 'var-4-41',
-        product_id: 'prod-loafers',
-        sku: 'LFR-ETH-BRN-41',
-        size: '41',
-        color: 'Espresso Brown',
-        color_hex: '#3D2817',
-        stock_quantity: 4,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: 'var-4-42',
-        product_id: 'prod-loafers',
-        sku: 'LFR-ETH-BRN-42',
-        size: '42',
-        color: 'Espresso Brown',
-        color_hex: '#3D2817',
-        stock_quantity: 5,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: 'var-4-43',
-        product_id: 'prod-loafers',
-        sku: 'LFR-ETH-BRN-43',
-        size: '43',
-        color: 'Espresso Brown',
-        color_hex: '#3D2817',
-        stock_quantity: 3,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-    ],
-  },
-  {
-    id: 'prod-tibeb-set',
-    name: 'Modern Handwoven Tibeb Tunic Set',
-    slug: 'modern-handwoven-tibeb-tunic-set',
-    description:
-      'Handspun Shemma cotton tailored into a clean, modern tunic and trouser pairing. Subtle monochrome Tibeb geometric borders woven by master weavers in Gulele.',
-    primary_section_id: 'sec-heritage',
-    primary_category_id: 'cat-tibeb-sets',
-    regular_price_etb: 7500,
-    sale_price_etb: 6800,
-    is_featured: true,
-    is_new_arrival: true,
-    is_published: true,
-    is_archived: false,
-    low_stock_threshold: 3,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    images: [
-      {
-        id: 'img-5-1',
-        product_id: 'prod-tibeb-set',
-        image_url:
-          'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=85',
-        alt_text: 'Modern Handwoven Tibeb Tunic Set',
-        display_order: 1,
-        is_primary: true,
-      },
-    ],
-    variants: [
-      {
-        id: 'var-5-s',
-        product_id: 'prod-tibeb-set',
-        sku: 'TIB-SET-NAT-S',
-        size: 'S',
-        color: 'Natural Cream',
-        color_hex: '#F5F5DC',
-        stock_quantity: 3,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: 'var-5-m',
-        product_id: 'prod-tibeb-set',
-        sku: 'TIB-SET-NAT-M',
-        size: 'M',
-        color: 'Natural Cream',
-        color_hex: '#F5F5DC',
-        stock_quantity: 4,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: 'var-5-l',
-        product_id: 'prod-tibeb-set',
-        sku: 'TIB-SET-NAT-L',
-        size: 'L',
-        color: 'Natural Cream',
-        color_hex: '#F5F5DC',
-        stock_quantity: 2,
-        is_available: true,
-        created_at: new Date().toISOString(),
-      },
-    ],
-  },
-];
+const INITIAL_PRODUCTS: Product[] = [];
 
 const INITIAL_PICKUP_LOCATIONS: PickupLocation[] = [
   {
@@ -885,6 +487,7 @@ class MemoryStore {
   sections: StoreSection[] = [...INITIAL_SECTIONS];
   categories: Category[] = [...INITIAL_CATEGORIES];
   products: Product[] = JSON.parse(JSON.stringify(INITIAL_PRODUCTS));
+  deletedProductIds: string[] = [];
   pickupLocations: PickupLocation[] = [...INITIAL_PICKUP_LOCATIONS];
   deliveryZones: DeliveryZone[] = JSON.parse(JSON.stringify(INITIAL_DELIVERY_ZONES));
   coupons: Coupon[] = [...INITIAL_COUPONS];
@@ -1080,6 +683,7 @@ export function saveStoreState(store: MemoryStore) {
 
     const data = {
       products: store.products,
+      deletedProductIds: Array.from(new Set(store.deletedProductIds || [])),
       sections: store.sections,
       categories: store.categories,
       pickupLocations: store.pickupLocations,
@@ -1126,24 +730,30 @@ function loadStoreState(store: MemoryStore, force = false) {
     }
     lastLoadedMtime = stat.mtimeMs;
 
+    // 0. Deleted product IDs
+    if (Array.isArray(data.deletedProductIds)) {
+      store.deletedProductIds = Array.from(
+        new Set([...(store.deletedProductIds || []), ...data.deletedProductIds])
+      );
+    }
+
     // 1. Products persistence & merge
-    if (Array.isArray(data.products) && data.products.length > 0) {
+    if (Array.isArray(data.products)) {
+      const deletedSet = new Set(
+        (store.deletedProductIds || []).map((s: string) => String(s).toLowerCase().trim())
+      );
+      const isDeleted = (p: Product) => {
+        if (!p) return true;
+        if (p.id && deletedSet.has(p.id.toLowerCase().trim())) return true;
+        if (p.slug && deletedSet.has(p.slug.toLowerCase().trim())) return true;
+        if (p.cloud_id && deletedSet.has(p.cloud_id.toLowerCase().trim())) return true;
+        return false;
+      };
+
       const prodMap = new Map<string, Product>();
       for (const p of data.products) {
-        if (p && p.id) prodMap.set(p.id, p);
-      }
-      for (const p of store.products) {
-        if (p && p.id) {
-          if (!prodMap.has(p.id)) {
-            prodMap.set(p.id, p);
-          } else {
-            const diskP = prodMap.get(p.id)!;
-            const memTime = new Date(p.updated_at || p.created_at || 0).getTime();
-            const diskTime = new Date(diskP.updated_at || diskP.created_at || 0).getTime();
-            if (memTime > diskTime) {
-              prodMap.set(p.id, p);
-            }
-          }
+        if (p && p.id && !isDeleted(p)) {
+          prodMap.set(p.id, p);
         }
       }
       store.products = Array.from(prodMap.values());
@@ -1361,7 +971,15 @@ export async function getProducts(options?: {
   try {
     const cloudProducts = await loadProductsFromSupabase();
     if (cloudProducts && cloudProducts.length > 0) {
-      mergeCloudProducts(cloudProducts);
+      const deletedSet = new Set(
+        (db.deletedProductIds || []).map((s: string) => String(s).toLowerCase().trim())
+      );
+      const validCloudProducts = cloudProducts.filter(
+        (cp) =>
+          !deletedSet.has(cp.id.toLowerCase().trim()) &&
+          !deletedSet.has(cp.slug.toLowerCase().trim())
+      );
+      mergeCloudProducts(validCloudProducts);
     }
   } catch {}
 
@@ -1622,21 +1240,43 @@ export async function updateProduct(idOrSlug: string, data: Partial<Product>): P
 export async function deleteProduct(idOrSlug: string): Promise<boolean> {
   loadStoreState(db);
   const target = String(idOrSlug).trim();
-  let index = db.products.findIndex((p) => productMatchesTarget(p, target));
+  const index = db.products.findIndex((p) => productMatchesTarget(p, target));
 
-  if (index === -1) {
-    try {
-      await deleteProductFromSupabase(target);
-      return true;
-    } catch {
-      return false;
+  let removed: Product | undefined;
+  if (index !== -1) {
+    removed = db.products.splice(index, 1)[0];
+  }
+
+  if (!db.deletedProductIds) {
+    db.deletedProductIds = [];
+  }
+  if (!db.deletedProductIds.includes(target)) {
+    db.deletedProductIds.push(target);
+  }
+  if (removed) {
+    if (removed.id && !db.deletedProductIds.includes(removed.id)) {
+      db.deletedProductIds.push(removed.id);
+    }
+    if (removed.slug && !db.deletedProductIds.includes(removed.slug)) {
+      db.deletedProductIds.push(removed.slug);
+    }
+    if (removed.cloud_id && !db.deletedProductIds.includes(removed.cloud_id)) {
+      db.deletedProductIds.push(removed.cloud_id);
     }
   }
-  const removed = db.products.splice(index, 1)[0];
+
   saveStoreState(db);
-  if (removed) {
-    deleteProductFromSupabase(removed.cloud_id || removed.slug || target).catch(() => {});
+
+  try {
+    await deleteProductFromSupabase(target, {
+      slug: removed?.slug,
+      name: removed?.name,
+      cloud_id: removed?.cloud_id,
+    });
+  } catch (err) {
+    console.error('[deleteProduct Supabase sync error]:', err);
   }
+
   return true;
 }
 
@@ -1732,6 +1372,8 @@ export interface CreateOrderInput {
   fulfillment_type: 'home_delivery' | 'store_pickup';
   payment_method: 'cash_on_delivery' | 'chapa' | 'bank_transfer';
   coupon_code?: string;
+  notes?: string;
+  payment_reference?: string;
   // Delivery details
   delivery_zone_id?: string;
   delivery_address?: string;
@@ -1955,6 +1597,9 @@ export async function createOrder(input: CreateOrderInput): Promise<{
     tax_amount_etb: 0,
     total_amount_etb,
     tracking_token: trackingToken,
+    notes: input.payment_reference
+      ? `Payment Ref: ${input.payment_reference}${input.notes ? ` | ${input.notes}` : ''}`
+      : input.notes,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     fulfillment: fulfillmentDetails,

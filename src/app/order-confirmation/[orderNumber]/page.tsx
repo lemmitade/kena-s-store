@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getOrderByNumber, getStoreSettings } from '@/lib/db/repository';
 import { formatETB, formatDate } from '@/lib/utils/format';
-import { CheckCircle2, MapPin, Store, Truck, ArrowRight, ShieldCheck } from 'lucide-react';
+import { CheckCircle2, MapPin, Store, Truck, ArrowRight, ShieldCheck, Building2 } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -94,6 +94,53 @@ export default async function OrderConfirmationPage({
               <p className="text-xs font-mono text-stone-600">
                 Present this code to store staff at <strong>{order.fulfillment.pickup_location_name}</strong> upon collection.
               </p>
+            </div>
+          )}
+
+          {/* Bank Transfer Instructions Card */}
+          {order.payment_method === 'bank_transfer' && (
+            <div className="bg-[#FAF9F6] border-2 border-stone-900 p-6 space-y-3 font-mono text-xs">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-stone-900 font-bold uppercase tracking-wider text-sm">
+                  <Building2 className="w-4 h-4" />
+                  <span>Direct Bank Transfer / Telebirr Details</span>
+                </div>
+                <span className="px-2 py-0.5 bg-amber-100 text-amber-900 text-[10px] font-bold rounded uppercase">
+                  Awaiting Transfer Verification
+                </span>
+              </div>
+              <p className="text-stone-600 leading-relaxed">
+                Please transfer the total order amount of <strong className="text-stone-900 font-bold">{formatETB(order.total_amount_etb)}</strong> to either account below using your Order Number (<strong>{order.order_number}</strong>) as the transaction reason/reference:
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div className="bg-white border border-stone-200 p-3.5 rounded space-y-1">
+                  <span className="text-[10px] uppercase text-stone-400 block font-semibold">
+                    {settings.bank_name || 'Commercial Bank of Ethiopia (CBE)'}
+                  </span>
+                  <p className="font-bold text-stone-900 text-sm tracking-wider">
+                    {settings.bank_account_number || '1000234567891'}
+                  </p>
+                  <p className="text-[11px] text-stone-500">
+                    Account Name: <strong>{settings.bank_account_name || settings.store_name}</strong>
+                  </p>
+                </div>
+                <div className="bg-white border border-stone-200 p-3.5 rounded space-y-1">
+                  <span className="text-[10px] uppercase text-stone-400 block font-semibold">
+                    Telebirr Direct
+                  </span>
+                  <p className="font-bold text-stone-900 text-sm tracking-wider">
+                    {settings.telebirr_account_number || settings.contact_phone || '0911234567'}
+                  </p>
+                  <p className="text-[11px] text-stone-500">
+                    Account Name: <strong>{settings.telebirr_account_name || settings.store_name}</strong>
+                  </p>
+                </div>
+              </div>
+              {order.notes && (
+                <div className="text-[11px] text-stone-500 pt-1 border-t border-stone-200">
+                  Recorded reference: <strong className="text-stone-900">{order.notes}</strong>
+                </div>
+              )}
             </div>
           )}
 

@@ -121,6 +121,13 @@ export interface StoreSettings {
   chapa_public_key?: string;
   chapa_secret_key?: string;
   chapa_webhook_secret?: string;
+  bank_transfer_enabled?: boolean;
+  bank_name?: string;
+  bank_account_number?: string;
+  bank_account_name?: string;
+  telebirr_account_number?: string;
+  telebirr_account_name?: string;
+  bank_transfer_instructions?: string;
   telegram_bot_token?: string;
   telegram_chat_id?: string;
   telegram_notifications_enabled: boolean;

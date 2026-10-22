@@ -18,41 +18,70 @@ import {
 } from '../src/lib/db/repository';
 
 describe('Product Routing & 404 Prevention', () => {
+  const testSlug = 'routing-test-linen-shirt';
+  let routingProduct: any;
+
   test('Resolves product by exact slug, case-insensitive slug, and URL-encoded slug', async () => {
-    const slug = 'relaxed-pure-linen-camp-shirt';
-    const byExact = await getProductBySlug(slug);
+    routingProduct = await createProduct({
+      name: 'Routing Test Linen Shirt',
+      slug: testSlug,
+      description: 'Test routing description',
+      regular_price_etb: 2850,
+      is_published: true,
+      is_featured: false,
+      is_new_arrival: false,
+      is_archived: false,
+      low_stock_threshold: 2,
+      variants: [
+        {
+          id: `var-rt-${Date.now()}`,
+          product_id: '',
+          sku: `RT-SHR-${Date.now()}`,
+          size: 'M',
+          color: 'White',
+          stock_quantity: 10,
+          is_available: true,
+          created_at: new Date().toISOString(),
+        },
+      ],
+    });
+
+    const byExact = await getProductBySlug(testSlug);
     assert.ok(byExact, 'Should find product by exact slug');
-    assert.equal(byExact.id, 'prod-linen-shirt');
+    assert.equal(byExact.id, routingProduct.id);
 
     // Case-insensitive slug
-    const byUpper = await getProductBySlug('RELAXED-PURE-LINEN-CAMP-SHIRT');
+    const byUpper = await getProductBySlug(testSlug.toUpperCase());
     assert.ok(byUpper, 'Should find product by uppercase slug');
-    assert.equal(byUpper.id, 'prod-linen-shirt');
+    assert.equal(byUpper.id, routingProduct.id);
 
     // URL-encoded slug
-    const byEncoded = await getProductBySlug(encodeURIComponent('relaxed-pure-linen-camp-shirt'));
+    const byEncoded = await getProductBySlug(encodeURIComponent(testSlug));
     assert.ok(byEncoded, 'Should find product by URL-encoded slug');
-    assert.equal(byEncoded.id, 'prod-linen-shirt');
+    assert.equal(byEncoded.id, routingProduct.id);
   });
 
   test('Resolves product by product ID on the slug route (preventing 404 when ID is used in URL)', async () => {
-    const byId = await getProductBySlug('prod-linen-shirt');
+    const byId = await getProductBySlug(routingProduct.id);
     assert.ok(byId, 'Should resolve product when product ID is passed to getProductBySlug');
-    assert.equal(byId.slug, 'relaxed-pure-linen-camp-shirt');
+    assert.equal(byId.slug, testSlug);
 
     // Case-insensitive ID lookup
-    const byIdUpper = await getProductBySlug('PROD-LINEN-SHIRT');
+    const byIdUpper = await getProductBySlug(routingProduct.id.toUpperCase());
     assert.ok(byIdUpper, 'Should resolve product with case-insensitive ID');
   });
 
   test('getProductById resolves by both ID and slug', async () => {
-    const byId = await getProductById('prod-wool-trousers');
+    const byId = await getProductById(routingProduct.id);
     assert.ok(byId);
-    assert.equal(byId.id, 'prod-wool-trousers');
+    assert.equal(byId.id, routingProduct.id);
 
-    const bySlug = await getProductById('pleated-high-waist-wool-trousers');
+    const bySlug = await getProductById(testSlug);
     assert.ok(bySlug);
-    assert.equal(bySlug.id, 'prod-wool-trousers');
+    assert.equal(bySlug.id, routingProduct.id);
+
+    // Clean up
+    await deleteProduct(routingProduct.id);
   });
 });
 

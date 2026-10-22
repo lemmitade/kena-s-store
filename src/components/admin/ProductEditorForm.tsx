@@ -287,6 +287,7 @@ export function ProductEditorForm({
       setDeleting(false);
       if (res.success) {
         router.push('/admin/products');
+        router.refresh();
       } else {
         setErrorMsg(res.error || 'Failed to delete product.');
       }

@@ -189,16 +189,35 @@ export async function syncProductToSupabase(prod: Product): Promise<void> {
   }
 }
 
-export async function deleteProductFromSupabase(slugOrId: string): Promise<void> {
+export async function deleteProductFromSupabase(
+  slugOrId: string,
+  extra?: { slug?: string; name?: string; cloud_id?: string }
+): Promise<void> {
   const supabase = getSupabaseServerClient();
   if (!supabase) return;
 
   try {
-    const isUuid = Boolean(slugOrId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slugOrId));
-    if (isUuid) {
-      await supabase.from('products').delete().eq('id', slugOrId);
-    } else {
-      await supabase.from('products').delete().or(`slug.eq.${slugOrId},name.eq.${slugOrId}`);
+    const isUuid = (val?: string) =>
+      Boolean(val && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val));
+
+    // 1. Delete by UUID if target or cloud_id is UUID
+    const uuidToDelete = [slugOrId, extra?.cloud_id].find(isUuid);
+    if (uuidToDelete) {
+      const { error } = await supabase.from('products').delete().eq('id', uuidToDelete);
+      if (error) console.error('[Supabase delete by id error]:', error);
+    }
+
+    // 2. Delete by slug if available
+    const slugToDelete = extra?.slug || (!isUuid(slugOrId) ? slugOrId : undefined);
+    if (slugToDelete) {
+      const { error } = await supabase.from('products').delete().eq('slug', slugToDelete);
+      if (error) console.error('[Supabase delete by slug error]:', error);
+    }
+
+    // 3. Delete by name if available
+    if (extra?.name) {
+      const { error } = await supabase.from('products').delete().eq('name', extra.name);
+      if (error) console.error('[Supabase delete by name error]:', error);
     }
   } catch (err) {
     console.error('[Supabase delete error]:', err);

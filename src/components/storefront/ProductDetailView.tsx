@@ -6,17 +6,19 @@
 // ============================================================================
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Product, ProductVariant } from '@/types';
 import { formatETB } from '@/lib/utils/format';
 import { useCart } from '@/lib/cart/cart-context';
-import { Check, ShoppingBag, ShieldCheck, Truck, Store } from 'lucide-react';
+import { Check, ShoppingBag, ShieldCheck, Truck, Store, Zap } from 'lucide-react';
 
 interface ProductDetailViewProps {
   product: Product;
 }
 
 export function ProductDetailView({ product }: ProductDetailViewProps) {
+  const router = useRouter();
   const { addItem } = useCart();
   const variants = product.variants || [];
 
@@ -68,6 +70,26 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
 
     setAddedToast(true);
     setTimeout(() => setAddedToast(false), 3000);
+  };
+
+  const handleBuyNow = () => {
+    if (!currentVariant || !isAvailable) return;
+
+    addItem({
+      variant_id: currentVariant.id,
+      product_id: product.id,
+      product_name: product.name,
+      product_slug: product.slug,
+      sku: currentVariant.sku,
+      size: currentVariant.size,
+      color: currentVariant.color,
+      unit_price_etb: currentPrice,
+      quantity,
+      image_url: images[0]?.image_url,
+      max_stock: currentStock,
+    });
+
+    router.push('/checkout');
   };
 
   return (
@@ -276,15 +298,26 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                 type="button"
                 onClick={handleAddToCart}
                 disabled={!isAvailable}
-                className={`flex-1 h-14 uppercase tracking-widest text-xs font-semibold font-mono flex items-center justify-center gap-2 transition-all ${
+                className={`flex-1 h-14 uppercase tracking-widest text-xs font-semibold font-mono flex items-center justify-center gap-2 border transition-all ${
                   isAvailable
-                    ? 'bg-[#121212] text-[#FAF9F6] hover:bg-stone-800'
-                    : 'bg-stone-200 text-stone-400 cursor-not-allowed'
+                    ? 'border-stone-900 text-stone-900 bg-white hover:bg-stone-50'
+                    : 'border-stone-200 bg-stone-100 text-stone-400 cursor-not-allowed'
                 }`}
               >
                 <ShoppingBag className="w-4 h-4" />
                 <span>{isAvailable ? 'Add To Bag' : 'Sold Out'}</span>
               </button>
+
+              {isAvailable && (
+                <button
+                  type="button"
+                  onClick={handleBuyNow}
+                  className="flex-1 h-14 uppercase tracking-widest text-xs font-semibold font-mono flex items-center justify-center gap-2 bg-[#121212] text-[#FAF9F6] hover:bg-stone-800 transition-all shadow-sm"
+                >
+                  <Zap className="w-4 h-4 text-amber-400 fill-amber-400" />
+                  <span>Buy Now</span>
+                </button>
+              )}
             </div>
 
             {addedToast && (

@@ -20,6 +20,7 @@ interface CartContextType {
   couponDiscountETB: number;
   applyCouponCode: (code: string) => Promise<{ success: boolean; message: string }>;
   removeCouponCode: () => void;
+  isLoaded: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -154,6 +155,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         couponDiscountETB,
         applyCouponCode,
         removeCouponCode,
+        isLoaded,
       }}
     >
       {children}

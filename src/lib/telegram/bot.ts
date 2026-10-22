@@ -101,7 +101,7 @@ ${itemsList}
 Subtotal: ${formatETB(order.subtotal_etb)}
 ${order.discount_amount_etb > 0 ? `Discount (${escapeHtml(order.applied_coupon_code || '')}): -${formatETB(order.discount_amount_etb)}\n` : ''}Fulfillment Fee: ${formatETB(order.delivery_fee_etb)}
 <b>Total:</b> <b>${formatETB(order.total_amount_etb)}</b>
-<b>Payment:</b> ${paymentMethod} (${paymentStatus})
+<b>Payment:</b> ${paymentMethod} (${paymentStatus})${order.notes ? `\n<b>Notes:</b> <code>${escapeHtml(order.notes)}</code>` : ''}
 `.trim();
 }
 

@@ -2,10 +2,11 @@
 // STORE & INVENTORY AUTOMATED TESTS
 // ============================================================================
 
-import { test, describe } from 'node:test';
+import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   createProduct,
+  deleteProduct,
   getProducts,
   createOrder,
   db,
@@ -13,10 +14,12 @@ import {
 } from '../src/lib/db/repository';
 
 describe('Storefront & Inventory Lifecycle', () => {
-  test('Creates product with variants and checks initial stock', async () => {
-    const prod = await createProduct({
+  let prod: any;
+
+  before(async () => {
+    prod = await createProduct({
       name: 'Test Tailored Linen Vest',
-      slug: 'test-tailored-linen-vest',
+      slug: `test-tailored-linen-vest-${Date.now()}`,
       description: 'Linen vest test description.',
       regular_price_etb: 1800,
       is_featured: false,
@@ -26,31 +29,35 @@ describe('Storefront & Inventory Lifecycle', () => {
       low_stock_threshold: 2,
       variants: [
         {
-          id: 'test-v-m',
+          id: `test-v-m-${Date.now()}`,
           product_id: '',
-          sku: 'TST-VEST-M',
+          sku: `TST-VEST-M-${Date.now()}`,
           size: 'M',
           color: 'Sand',
-          stock_quantity: 5,
+          stock_quantity: 10,
           is_available: true,
           created_at: new Date().toISOString(),
         },
       ],
     });
+  });
 
+  after(async () => {
+    if (prod?.id) {
+      await deleteProduct(prod.id);
+    }
+  });
+
+  test('Creates product with variants and checks initial stock', async () => {
     assert.equal(prod.name, 'Test Tailored Linen Vest');
-    assert.equal(prod.variants?.[0].stock_quantity, 5);
+    assert.equal(prod.variants?.[0].stock_quantity, 10);
 
     const fetched = await getProducts({ searchQuery: 'Test Tailored Linen' });
     assert.equal(fetched.length >= 1, true);
-
-    // Clean up
-    await (await import('../src/lib/db/repository')).deleteProduct(prod.id);
   });
 
   test('Performs guest checkout, atomically deducts variant inventory', async () => {
-    const testProd = db.products.find((p) => p.id === 'prod-wool-trousers') || db.products[0];
-    const initialVariant = testProd.variants![0];
+    const initialVariant = prod.variants![0];
     const initialStock = initialVariant.stock_quantity;
     const qtyToBuy = 2;
 
@@ -79,8 +86,7 @@ describe('Storefront & Inventory Lifecycle', () => {
   });
 
   test('Prevents overselling when requested quantity exceeds available stock', async () => {
-    const testProd = db.products.find((p) => p.id === 'prod-wool-trousers') || db.products[0];
-    const variant = testProd.variants![0];
+    const variant = prod.variants![0];
     const excessiveQty = variant.stock_quantity + 999;
 
     const res = await createOrder({

@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { getProducts, getSections } from '@/lib/db/repository';
 import { formatETB } from '@/lib/utils/format';
 import { Plus, Search, Eye, Edit, AlertTriangle } from 'lucide-react';
+import { DeleteProductButton } from '@/components/admin/DeleteProductButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -150,6 +151,7 @@ export default async function AdminProductsPage() {
                       >
                         <Eye className="w-3.5 h-3.5" />
                       </Link>
+                      <DeleteProductButton productId={p.id} productName={p.name} />
                     </td>
                   </tr>
                 );
