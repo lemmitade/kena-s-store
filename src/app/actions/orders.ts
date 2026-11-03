@@ -4,8 +4,9 @@
 // SERVER ACTIONS: ORDER MANAGEMENT & AUDITED FEE OVERRIDES
 // ============================================================================
 
-import { updateOrderStatus, overrideOrderDeliveryFee, getAllOrders } from '@/lib/db/repository';
+import { updateOrderStatus, overrideOrderDeliveryFee, getAllOrders, getStoreSettings } from '@/lib/db/repository';
 import { OrderStatus, PaymentStatus } from '@/types';
+import { sendTelegramMessage, buildPaymentVerifiedAlert } from '@/lib/telegram/bot';
 import { revalidatePath } from 'next/cache';
 
 export async function fetchOrdersAction() {
@@ -24,6 +25,22 @@ export async function updateOrderStatusAction(
 ) {
   try {
     const updated = await updateOrderStatus(orderId, newStatus, newPaymentStatus);
+
+    if (updated && newPaymentStatus === 'paid') {
+      try {
+        const settings = await getStoreSettings();
+        const botToken = settings.telegram_bot_token || process.env.TELEGRAM_BOT_TOKEN;
+        const chatId = settings.telegram_chat_id || process.env.TELEGRAM_CHAT_ID;
+        const isEnabled = settings.telegram_notifications_enabled ?? true;
+        if (isEnabled && botToken && chatId) {
+          const msg = buildPaymentVerifiedAlert(updated, updated.total_amount_etb, updated.order_number);
+          void sendTelegramMessage(msg, botToken, chatId);
+        }
+      } catch (err) {
+        console.warn('[Admin payment confirmation telegram alert error]:', err);
+      }
+    }
+
     revalidatePath('/admin/orders');
     revalidatePath('/admin/dashboard');
     return { success: true, order: updated };

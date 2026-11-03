@@ -4,7 +4,8 @@
 // SERVER ACTIONS: DYNAMIC STORE SECTIONS & CATEGORIES MANAGEMENT
 // ============================================================================
 
-import { createSection, updateSection, db } from '@/lib/db/repository';
+import { createSection, updateSection, updateAllSections, db } from '@/lib/db/repository';
+import { StoreSection } from '@/types';
 import { revalidatePath } from 'next/cache';
 
 export async function createSectionAction(formData: {
@@ -40,6 +41,18 @@ export async function toggleSectionVisibilityAction(id: string, is_nav_visible: 
     revalidatePath('/shop');
     revalidatePath('/admin/catalog/sections');
     return { success: true, section: updated };
+  } catch (err) {
+    return { success: false, error: (err as Error).message };
+  }
+}
+
+export async function saveSectionsAction(sections: StoreSection[]) {
+  try {
+    const updated = await updateAllSections(sections);
+    revalidatePath('/');
+    revalidatePath('/shop');
+    revalidatePath('/admin/catalog/sections');
+    return { success: true, sections: updated };
   } catch (err) {
     return { success: false, error: (err as Error).message };
   }

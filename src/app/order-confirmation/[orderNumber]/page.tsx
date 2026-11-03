@@ -6,7 +6,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getOrderByNumber, getStoreSettings } from '@/lib/db/repository';
+import { getOrderByNumber, getStoreSettings, saveStoreState, db } from '@/lib/db/repository';
+import { verifyChapaTransaction } from '@/lib/payments/chapa';
+import { sendTelegramMessage, buildPaymentVerifiedAlert } from '@/lib/telegram/bot';
+import { syncOrderToSupabase } from '@/lib/db/supabase-sync';
 import { formatETB, formatDate } from '@/lib/utils/format';
 import { CheckCircle2, MapPin, Store, Truck, ArrowRight, ShieldCheck, Building2 } from 'lucide-react';
 
@@ -32,6 +35,36 @@ export default async function OrderConfirmationPage({
 
   if (!order) {
     notFound();
+  }
+
+  // Automatic payment confirmation verification for Chapa checkout
+  if (order.payment_method === 'chapa' && order.payment_status === 'pending') {
+    try {
+      const chapaSecret = settings.chapa_secret_key || process.env.CHAPA_SECRET_KEY;
+      const verifyRes = await verifyChapaTransaction(order.order_number, chapaSecret);
+      if (verifyRes.status === 'success' && verifyRes.data?.status === 'success') {
+        order.payment_status = 'paid';
+        order.order_status = 'preparing';
+        order.updated_at = new Date().toISOString();
+        saveStoreState(db);
+        void syncOrderToSupabase(order);
+
+        // Send payment confirmation alert to Telegram group
+        const botToken = settings.telegram_bot_token || process.env.TELEGRAM_BOT_TOKEN;
+        const chatId = settings.telegram_chat_id || process.env.TELEGRAM_CHAT_ID;
+        const isEnabled = settings.telegram_notifications_enabled ?? true;
+        if (isEnabled && botToken && chatId) {
+          const msg = buildPaymentVerifiedAlert(
+            order,
+            order.total_amount_etb,
+            verifyRes.data.reference || order.order_number
+          );
+          void sendTelegramMessage(msg, botToken, chatId);
+        }
+      }
+    } catch (err) {
+      console.warn('[OrderConfirmation verifyChapaTransaction]:', err);
+    }
   }
 
   // Security check: verify tracking token if provided for guest security

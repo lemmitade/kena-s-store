@@ -105,14 +105,54 @@ ${order.discount_amount_etb > 0 ? `Discount (${escapeHtml(order.applied_coupon_c
 `.trim();
 }
 
-export function buildPaymentVerifiedAlert(orderNumber: string, amountETB: number, txRef: string): string {
-  return `
+export function buildPaymentVerifiedAlert(
+  orderOrNumber: Order | string,
+  amountETB?: number,
+  txRef?: string
+): string {
+  if (typeof orderOrNumber === 'string') {
+    return `
 ✅ <b>ONLINE PAYMENT VERIFIED (CHAPA)</b>
-<b>Order:</b> ${orderNumber}
-<b>Amount:</b> ${formatETB(amountETB)}
-<b>Tx Ref:</b> <code>${txRef}</code>
-<b>Status:</b> PAID & CONFIRMED
-`;
+<b>Order:</b> <code>${escapeHtml(orderOrNumber)}</code>
+<b>Amount:</b> ${formatETB(amountETB || 0)}
+${txRef ? `<b>Tx Ref:</b> <code>${escapeHtml(txRef)}</code>\n` : ''}<b>Status:</b> PAID & CONFIRMED
+`.trim();
+  }
+
+  const order = orderOrNumber;
+  const isPickup = order.fulfillment_type === 'store_pickup';
+  const fulfillmentTitle = isPickup ? '🏬 <b>STORE PICKUP (PAID)</b>' : '🚚 <b>HOME DELIVERY (PAID)</b>';
+  const pickupInfo = isPickup
+    ? `\n<b>Pickup Code:</b> <code>${escapeHtml(order.fulfillment?.pickup_reference_code || 'Pending')}</code>\n<b>Location:</b> ${escapeHtml(order.fulfillment?.pickup_location_name || 'Flagship Store')}`
+    : `\n<b>Delivery Zone:</b> ${escapeHtml(order.fulfillment?.delivery_zone_name || 'N/A')}\n<b>Sub-City:</b> ${escapeHtml(order.fulfillment?.delivery_sub_city || 'Addis Ababa')}\n<b>Address:</b> ${escapeHtml(order.fulfillment?.delivery_address || '—')}`;
+
+  const itemsList = order.items && order.items.length > 0
+    ? order.items
+        .map((i) => `• ${i.quantity}x ${escapeHtml(i.product_name)} (${escapeHtml(i.size || 'STD')}/${escapeHtml(i.color || 'STD')}) — ${formatETB(i.line_total_etb)}`)
+        .join('\n')
+    : 'No items details';
+
+  const method = escapeHtml((order.payment_method || 'CHAPA').toUpperCase());
+
+  return `
+✅ <b>PAYMENT CONFIRMED: ${escapeHtml(order.order_number)}</b>
+${fulfillmentTitle}
+
+<b>Customer:</b> ${escapeHtml(order.customer_name)}
+<b>Phone:</b> ${escapeHtml(order.customer_phone)}
+${pickupInfo}
+
+<b>Ordered Items:</b>
+${itemsList}
+
+<b>Financials:</b>
+Subtotal: ${formatETB(order.subtotal_etb)}
+${order.discount_amount_etb > 0 ? `Discount (${escapeHtml(order.applied_coupon_code || '')}): -${formatETB(order.discount_amount_etb)}\n` : ''}Fulfillment Fee: ${formatETB(order.delivery_fee_etb)}
+<b>Total Paid:</b> <b>${formatETB(order.total_amount_etb)}</b>
+<b>Payment Method:</b> ${method} (CONFIRMED)
+${txRef ? `<b>Tx Reference:</b> <code>${escapeHtml(txRef)}</code>\n` : ''}${order.notes ? `<b>Notes:</b> <code>${escapeHtml(order.notes)}</code>\n` : ''}
+<i>Order marked as PAID & moved to preparation.</i>
+`.trim();
 }
 
 export function buildLowStockAlert(productName: string, sku: string, currentStock: number, threshold: number): string {

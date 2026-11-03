@@ -38,34 +38,37 @@ export async function processCheckoutAction(input: CreateOrderInput): Promise<Ch
 
     const order = result.order;
 
-    // Send Telegram alert in background if configured
-    try {
-      const settings = await getStoreSettings();
-      const botToken = settings.telegram_bot_token || process.env.TELEGRAM_BOT_TOKEN;
-      const chatId = settings.telegram_chat_id || process.env.TELEGRAM_CHAT_ID;
-      const isEnabled = settings.telegram_notifications_enabled ?? true;
+    // For non-online payment (COD or Bank Transfer), dispatch notification in background without blocking checkout
+    if (order.payment_method !== 'chapa') {
+      (async () => {
+        try {
+          const settings = await getStoreSettings();
+          const botToken = settings.telegram_bot_token || process.env.TELEGRAM_BOT_TOKEN;
+          const chatId = settings.telegram_chat_id || process.env.TELEGRAM_CHAT_ID;
+          const isEnabled = settings.telegram_notifications_enabled ?? true;
 
-      if (isEnabled) {
-        const alertMsg = buildNewOrderAlert(order);
-        const sendResult = await sendTelegramMessage(alertMsg, botToken, chatId);
-        if (!sendResult.success) {
-          console.error('[Checkout Telegram Notification] Delivery failed:', sendResult.error);
-        } else {
-          console.log('[Checkout Telegram Notification] Delivered order alert for', order.order_number);
+          if (isEnabled && botToken && chatId) {
+            const alertMsg = buildNewOrderAlert(order);
+            const sendResult = await sendTelegramMessage(alertMsg, botToken, chatId);
+            if (!sendResult.success) {
+              console.error('[Checkout Telegram Notification] Delivery failed:', sendResult.error);
+            } else {
+              console.log('[Checkout Telegram Notification] Delivered order alert for', order.order_number);
+            }
+          }
+        } catch (notifErr) {
+          console.error('[Checkout Telegram Notification] Unexpected error:', notifErr);
         }
-      }
-    } catch (notifErr) {
-      console.error('[Checkout Telegram Notification] Unexpected error:', notifErr);
+      })();
     }
 
-    // Revalidate paths so Orders & Dispatch table displays the new order immediately
+    // Quick non-blocking path revalidations
     try {
       revalidatePath('/admin/orders');
       revalidatePath('/admin/dashboard');
       revalidatePath('/admin');
-      revalidatePath('/order-confirmation/[orderNumber]', 'page');
     } catch {
-      // ignore in tests
+      // ignore
     }
 
     let checkoutUrl: string | undefined;

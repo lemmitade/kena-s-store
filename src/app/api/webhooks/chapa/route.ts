@@ -149,7 +149,7 @@ export async function POST(request: NextRequest) {
         const isEnabled = settings.telegram_notifications_enabled || Boolean(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID);
 
         if (isEnabled && botToken && chatId) {
-          const msg = buildPaymentVerifiedAlert(order.order_number, order.total_amount_etb, txRef);
+          const msg = buildPaymentVerifiedAlert(order, order.total_amount_etb, txRef);
           await sendTelegramMessage(msg, botToken, chatId);
         }
       } catch {

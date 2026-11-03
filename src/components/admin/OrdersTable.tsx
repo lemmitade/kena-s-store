@@ -4,7 +4,7 @@
 // ADMIN ORDERS & DISPATCH TABLE WITH LIVE STATUS UPDATER & DETAILS MODAL
 // ============================================================================
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Order, OrderStatus, PaymentStatus } from '@/types';
 import { formatETB, formatDate } from '@/lib/utils/format';
@@ -47,9 +47,11 @@ export function OrdersTable({ orders }: OrdersTableProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Sync state whenever props update
-  useEffect(() => {
+  const [prevOrders, setPrevOrders] = useState(orders);
+  if (orders !== prevOrders) {
+    setPrevOrders(orders);
     setOrderList(orders);
-  }, [orders]);
+  }
 
   const deliveryStatuses: OrderStatus[] = [
     'confirmed',

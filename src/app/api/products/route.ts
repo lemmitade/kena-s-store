@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getProducts, createProduct } from '@/lib/db/repository';
+import { ProductImage, ProductVariant } from '@/types';
 
 export async function GET(request: NextRequest) {
   try {
@@ -83,11 +84,11 @@ export async function POST(request: NextRequest) {
       is_archived: false,
       low_stock_threshold: Number(body.low_stock_threshold) || 3,
       images: Array.isArray(body.images) && body.images.length > 0
-        ? body.images.map((img: any, idx: number) => ({
-            id: img.id || `img-${Date.now()}-${idx}`,
+        ? body.images.map((img: Partial<ProductImage> | string, idx: number) => ({
+            id: (typeof img === 'object' && img.id) ? img.id : `img-${Date.now()}-${idx}`,
             product_id: '',
-            image_url: img.image_url || img,
-            alt_text: img.alt_text || body.name,
+            image_url: typeof img === 'string' ? img : (img.image_url || ''),
+            alt_text: (typeof img === 'object' && img.alt_text) ? img.alt_text : body.name,
             display_order: idx + 1,
             is_primary: idx === 0,
           }))
@@ -103,7 +104,7 @@ export async function POST(request: NextRequest) {
             },
           ]
         : [],
-      variants: body.variants.map((v: any, idx: number) => ({
+      variants: body.variants.map((v: Partial<ProductVariant>, idx: number) => ({
         id: v.id || `var-${Date.now()}-${idx}`,
         product_id: '',
         sku: (v.sku || `SKU-${Date.now()}-${idx}`).trim().toUpperCase(),

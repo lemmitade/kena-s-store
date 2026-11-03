@@ -266,11 +266,49 @@ export async function loadProductsFromSupabase(): Promise<Product[] | null> {
       `)
       .order('created_at', { ascending: false });
 
+interface SupabaseVariantRecord {
+  id: string;
+  sku: string;
+  size?: string | null;
+  color?: string | null;
+  stock_quantity?: number | null;
+  is_available?: boolean | null;
+  created_at?: string;
+}
+
+interface SupabaseImageRecord {
+  id: string;
+  image_url: string;
+  alt_text?: string | null;
+  display_order?: number | null;
+  is_primary?: boolean | null;
+}
+
+interface SupabaseProductRecord {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string | null;
+  primary_section_id?: string | null;
+  primary_category_id?: string | null;
+  regular_price_etb: number;
+  sale_price_etb?: number | null;
+  is_published?: boolean | null;
+  is_featured?: boolean | null;
+  is_new_arrival?: boolean | null;
+  is_archived?: boolean | null;
+  low_stock_threshold?: number | null;
+  created_at: string;
+  updated_at: string;
+  product_variants?: SupabaseVariantRecord[];
+  product_images?: SupabaseImageRecord[];
+}
+
     if (error || !prods) {
       return null;
     }
 
-    return prods.map((p: any) => ({
+    return (prods as unknown as SupabaseProductRecord[]).map((p) => ({
       id: p.id,
       cloud_id: p.id,
       name: p.name,
@@ -288,7 +326,7 @@ export async function loadProductsFromSupabase(): Promise<Product[] | null> {
       created_at: p.created_at,
       updated_at: p.updated_at,
       variants: Array.isArray(p.product_variants)
-        ? p.product_variants.map((v: any) => ({
+        ? p.product_variants.map((v) => ({
             id: v.id,
             product_id: p.id,
             sku: v.sku,
@@ -296,11 +334,11 @@ export async function loadProductsFromSupabase(): Promise<Product[] | null> {
             color: v.color || undefined,
             stock_quantity: v.stock_quantity ?? 0,
             is_available: v.is_available ?? true,
-            created_at: v.created_at,
+            created_at: v.created_at || new Date().toISOString(),
           }))
         : [],
       images: Array.isArray(p.product_images)
-        ? p.product_images.map((img: any) => ({
+        ? p.product_images.map((img) => ({
             id: img.id,
             product_id: p.id,
             image_url: img.image_url,
@@ -433,7 +471,7 @@ export async function fetchAllOrdersFromSupabase(): Promise<Order[] | null> {
 
     if (error || !rows) return null;
 
-    return rows.map((ord: any) => {
+    return (rows as unknown as Order[]).map((ord) => {
       let items = undefined;
       let fulfillment = undefined;
       let originalNotes = ord.notes;

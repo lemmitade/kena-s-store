@@ -78,52 +78,19 @@ const INITIAL_STORE_SETTINGS: StoreSettings = {
   },
   hero_slides: [
     {
-      id: 'slide-1',
-      tag: 'Autumn / Winter 2026 Collection',
-      title: 'Quiet Tailoring.\nArtisanal Roots.',
+      id: 'slide-video-1',
+      tag: 'Kena Store Collection',
+      title: 'Modern Craftsmanship in Motion.\nOrder & Relax.',
       description:
         'Understated luxury tailored in Addis Ababa. Pure linen drapes, Highland calfskin, and ancient Shemma weaving reinterpreted for the modern wardrobe.',
-      media_type: 'image',
-      media_url:
-        'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=2000&q=85',
+      media_type: 'video',
+      media_url: '/hero-video.mp4',
       cta_primary_label: 'Explore Catalog',
       cta_primary_link: '/shop',
       cta_secondary_label: 'View Competitions',
       cta_secondary_link: '/bids',
       is_active: true,
       display_order: 1,
-    },
-    {
-      id: 'slide-2',
-      tag: 'Cinematic Fashion Showcase',
-      title: 'Modern Craftsmanship in Motion.',
-      description:
-        'Experience the drape and texture of handwoven Ethiopian textiles and bespoke leather essentials in high motion.',
-      media_type: 'video',
-      media_url:
-        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-      cta_primary_label: 'Shop New Arrivals',
-      cta_primary_link: '/shop',
-      cta_secondary_label: 'Artisanal Story',
-      cta_secondary_link: '/about',
-      is_active: true,
-      display_order: 2,
-    },
-    {
-      id: 'slide-3',
-      tag: 'Handspun Luxury',
-      title: 'Tibeb & Heritage Fusion.',
-      description:
-        'Celebrating centuries of handspun Ethiopian cotton tradition elevated into relaxed luxury silhouettes.',
-      media_type: 'image',
-      media_url:
-        'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1600&q=85',
-      cta_primary_label: 'Discover Heritage',
-      cta_primary_link: '/shop/heritage-fusion',
-      cta_secondary_label: 'Track Order',
-      cta_secondary_link: '/track-order',
-      is_active: true,
-      display_order: 3,
     },
   ],
   popup_ad: {
@@ -722,7 +689,7 @@ function loadStoreState(store: MemoryStore, force = false) {
     if (!raw) {
       return;
     }
-    let data: any;
+    let data: Partial<MemoryStore>;
     try {
       data = JSON.parse(raw);
     } catch {
@@ -875,6 +842,23 @@ export async function updateSection(id: string, data: Partial<StoreSection>): Pr
   db.sections[index] = { ...db.sections[index], ...data, updated_at: new Date().toISOString() };
   saveStoreState(db);
   return db.sections[index];
+}
+
+export async function updateAllSections(updatedSections: StoreSection[]): Promise<StoreSection[]> {
+  loadStoreState(db);
+  const map = new Map(updatedSections.map((s) => [s.id, s]));
+  db.sections = db.sections.map((s) => {
+    const updated = map.get(s.id);
+    return updated ? { ...s, ...updated, updated_at: new Date().toISOString() } : s;
+  });
+  // Also preserve any newly added sections not yet in db.sections
+  for (const s of updatedSections) {
+    if (!db.sections.some((existing) => existing.id === s.id)) {
+      db.sections.push({ ...s, updated_at: new Date().toISOString() });
+    }
+  }
+  saveStoreState(db);
+  return db.sections;
 }
 
 export async function getCategories(sectionId?: string, includeArchived = false): Promise<Category[]> {
@@ -1621,11 +1605,10 @@ export async function createOrder(input: CreateOrderInput): Promise<{
 
   db.orders.unshift(order);
   saveStoreState(db);
-  try {
-    await syncOrderToSupabase(order);
-  } catch (err) {
+  // Asynchronously sync to Supabase so checkout response is instantaneous
+  syncOrderToSupabase(order).catch((err) => {
     console.error('Failed to sync order to Supabase:', err);
-  }
+  });
 
   // 9. Queue Telegram Notification Job
   db.notificationJobs.push({

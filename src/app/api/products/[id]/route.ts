@@ -10,6 +10,7 @@ import {
   updateProduct,
   deleteProduct,
 } from '@/lib/db/repository';
+import { Product, ProductImage, ProductVariant } from '@/types';
 
 interface RouteContext {
   params: Promise<{
@@ -62,7 +63,7 @@ async function handleUpdate(
       );
     }
 
-    const updatePayload: any = {};
+    const updatePayload: Partial<Product> = {};
 
     if (body.name !== undefined) {
       if (typeof body.name !== 'string' || !body.name.trim()) {
@@ -134,11 +135,11 @@ async function handleUpdate(
         ...(existing.images?.slice(1) || []),
       ];
     } else if (Array.isArray(body.images)) {
-      updatePayload.images = body.images.map((img: any, idx: number) => ({
-        id: img.id || `img-${Date.now()}-${idx}`,
+      updatePayload.images = body.images.map((img: Partial<ProductImage> | string, idx: number) => ({
+        id: (typeof img === 'object' && img.id) ? img.id : `img-${Date.now()}-${idx}`,
         product_id: existing.id,
-        image_url: img.image_url || img,
-        alt_text: img.alt_text || updatePayload.name || existing.name,
+        image_url: typeof img === 'string' ? img : (img.image_url || ''),
+        alt_text: (typeof img === 'object' && img.alt_text) ? img.alt_text : (updatePayload.name || existing.name),
         display_order: idx + 1,
         is_primary: idx === 0,
       }));
@@ -152,7 +153,7 @@ async function handleUpdate(
         );
       }
 
-      updatePayload.variants = body.variants.map((v: any, idx: number) => ({
+      updatePayload.variants = body.variants.map((v: Partial<ProductVariant>, idx: number) => ({
         id: v.id || `var-${Date.now()}-${idx}`,
         product_id: existing.id,
         sku: (v.sku || `SKU-${Date.now()}-${idx}`).trim().toUpperCase(),

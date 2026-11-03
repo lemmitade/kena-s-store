@@ -35,6 +35,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     try {
       const stored = localStorage.getItem('kenas_cart');
       if (stored) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setItems(JSON.parse(stored));
       }
       const storedCoupon = localStorage.getItem('kenas_coupon');

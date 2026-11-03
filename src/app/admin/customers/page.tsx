@@ -96,7 +96,7 @@ export default async function AdminCustomersPage({ searchParams }: CustomersPage
             <thead>
               <tr className="border-b border-stone-200 text-stone-400 uppercase tracking-wider text-[11px]">
                 <th className="pb-3 font-normal">Customer Name</th>
-                <th className="pb-3 font-normal">Phone (Local / Int'l)</th>
+                <th className="pb-3 font-normal">Phone (Local / Int&apos;l)</th>
                 <th className="pb-3 font-normal">Email</th>
                 <th className="pb-3 font-normal">Orders</th>
                 <th className="pb-3 font-normal">Total Spend</th>

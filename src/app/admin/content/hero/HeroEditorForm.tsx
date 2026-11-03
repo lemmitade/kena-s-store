@@ -59,7 +59,7 @@ export function HeroEditorForm({ initialSlides }: HeroEditorFormProps) {
     setSlides(slides.filter((s) => s.id !== id));
   };
 
-  const handleSlideChange = (id: string, field: keyof HeroSlide, value: any) => {
+  const handleSlideChange = (id: string, field: keyof HeroSlide, value: HeroSlide[keyof HeroSlide]) => {
     setSlides(
       slides.map((s) => (s.id === id ? { ...s, [field]: value } : s))
     );

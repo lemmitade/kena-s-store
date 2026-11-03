@@ -6,7 +6,7 @@
 // and dynamic variant matrix (SKUs, sizes, colors, live stock quantities).
 // ============================================================================
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -99,7 +99,9 @@ export function ProductEditorForm({
   });
 
   // Sync state if initialProduct loads/updates
-  useEffect(() => {
+  const [prevInitialProduct, setPrevInitialProduct] = useState(initialProduct);
+  if (initialProduct !== prevInitialProduct) {
+    setPrevInitialProduct(initialProduct);
     if (initialProduct?.variants && initialProduct.variants.length > 0) {
       setVariants(
         initialProduct.variants.map((v) => ({
@@ -111,7 +113,7 @@ export function ProductEditorForm({
         }))
       );
     }
-  }, [initialProduct]);
+  }
 
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -325,14 +327,16 @@ export function ProductEditorForm({
   }, [primarySectionId, categories]);
 
   // If a category is selected, ensure the section matches that category
-  useEffect(() => {
+  const [prevPrimaryCategorySync, setPrevPrimaryCategorySync] = useState(primaryCategoryId);
+  if (primaryCategoryId !== prevPrimaryCategorySync) {
+    setPrevPrimaryCategorySync(primaryCategoryId);
     if (primaryCategoryId) {
       const cat = categories.find((c) => c.id === primaryCategoryId);
       if (cat && cat.section_id && cat.section_id !== primarySectionId) {
         setPrimarySectionId(cat.section_id);
       }
     }
-  }, [primaryCategoryId, primarySectionId, categories]);
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8 font-mono text-xs">

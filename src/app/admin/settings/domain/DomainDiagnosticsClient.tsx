@@ -18,6 +18,36 @@ import {
   ExternalLink,
 } from 'lucide-react';
 
+interface DiagnosticResults {
+  domain: {
+    apex: string;
+    www: string;
+  };
+  timestamp: string;
+  dns: {
+    management_mode: string;
+    nameservers: {
+      is_godaddy_default: boolean;
+      records?: string[];
+    };
+    a_records: {
+      status: string;
+      records?: string[];
+      error?: string;
+    };
+    cname_records: {
+      status: string;
+      records?: string[];
+    };
+  };
+  ssl_https: {
+    apex_accessible: boolean;
+    apex_error?: string;
+    www_accessible: boolean;
+    www_error?: string;
+  };
+}
+
 interface Props {
   initialDomain: string;
 }
@@ -25,7 +55,7 @@ interface Props {
 export function DomainDiagnosticsClient({ initialDomain }: Props) {
   const [domainInput, setDomainInput] = useState(initialDomain);
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<any>(null);
+  const [results, setResults] = useState<DiagnosticResults | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
   const [copied, setCopied] = useState(false);
 
@@ -187,8 +217,8 @@ CNAME   www     cname.vercel-dns.com  1 Hour (3600s)
                 )}
               </div>
               <div className="text-xs font-mono bg-stone-50 p-2.5 border border-stone-100">
-                {results.dns.a_records.records?.length > 0 ? (
-                  results.dns.a_records.records.map((ip: string) => (
+                {(results.dns.a_records.records?.length ?? 0) > 0 ? (
+                  results.dns.a_records.records?.map((ip: string) => (
                     <div key={ip} className="text-stone-900">
                       IP: <span className="font-bold">{ip}</span>
                     </div>
@@ -224,8 +254,8 @@ CNAME   www     cname.vercel-dns.com  1 Hour (3600s)
                 )}
               </div>
               <div className="text-xs font-mono bg-stone-50 p-2.5 border border-stone-100">
-                {results.dns.cname_records.records?.length > 0 ? (
-                  results.dns.cname_records.records.map((c: string) => (
+                {(results.dns.cname_records.records?.length ?? 0) > 0 ? (
+                  results.dns.cname_records.records?.map((c: string) => (
                     <div key={c} className="text-stone-900">
                       Points to: <span className="font-bold">{c}</span>
                     </div>
@@ -291,8 +321,8 @@ CNAME   www     cname.vercel-dns.com  1 Hour (3600s)
                 </span>
               </div>
               <div className="text-xs font-mono bg-stone-50 p-2.5 border border-stone-100">
-                {results.dns.nameservers.records?.length > 0 ? (
-                  results.dns.nameservers.records.map((ns: string) => (
+                {(results.dns.nameservers.records?.length ?? 0) > 0 ? (
+                  results.dns.nameservers.records?.map((ns: string) => (
                     <div key={ns} className="text-stone-700">
                       {ns}
                     </div>
